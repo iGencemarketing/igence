@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/client", "destination": "/client.html" },
+    { "source": "/admin", "destination": "/admin.html" }
+  ]
+}
