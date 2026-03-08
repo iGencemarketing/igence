@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGence Marketing Inteligente — Crie Sua Landing Page Profissional</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #F5A623;
+    --gold2: #FFD700;
+    --dark: #0A0A0A;
+    --dark2: #111111;
+    --dark3: #1A1A1A;
+    --white: #FFFFFF;
+    --gray: #888;
+    --red: #E53E3E;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--dark); color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(10,10,10,0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid #222;
+    padding: 16px 40px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--gold); }
+  .logo span { color: var(--white); }
+  nav a { color: #ccc; text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: 1px; margin-left: 30px; transition: color .2s; }
+  nav a:hover { color: var(--gold); }
+  .nav-cta { background: var(--gold); color: #000 !important; padding: 10px 22px; border-radius: 4px; font-weight: 800 !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0A0A0A 0%, #1a1000 50%, #0A0A0A 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 20px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+    background: radial-gradient(ellipse at center, rgba(245,166,35,0.08) 0%, transparent 60%);
+    animation: pulse 6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+  .hero-badge {
+    background: linear-gradient(90deg, #1a1000, #3a2800, #1a1000);
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 8px 20px; border-radius: 30px; font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; margin-bottom: 30px; display: inline-block;
+    animation: fadeDown .8s ease both;
+  }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 100px);
+    line-height: 0.95; letter-spacing: 2px;
+    animation: fadeUp 1s ease .2s both;
+  }
+  .hero h1 .gold { color: var(--gold); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 22px); color: #ccc; max-width: 700px;
+    margin: 24px auto 0; line-height: 1.6; font-weight: 400;
+    animation: fadeUp 1s ease .4s both;
+  }
+  .hero-sub strong { color: var(--white); font-weight: 700; }
+  .hero-cta-group { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top: 40px; animation: fadeUp 1s ease .6s both; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #e8940a);
+    color: #000; font-weight: 900; font-size: 16px; letter-spacing: 1px;
+    padding: 18px 44px; border-radius: 4px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    box-shadow: 0 0 40px rgba(245,166,35,0.4);
+    transition: all .3s; position: relative; overflow: hidden;
+  }
+  .btn-primary::after { content:''; position:absolute; top:0;left:-100%;width:100%;height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent); transition:.5s; }
+  .btn-primary:hover::after { left:100%; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 50px rgba(245,166,35,0.5); }
+  .btn-ghost { border: 2px solid #444; color: #fff; font-weight: 700; font-size: 15px; padding: 16px 36px; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .3s; }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats { display:flex; gap:60px; margin-top: 60px; justify-content:center; flex-wrap:wrap; animation: fadeUp 1s ease .8s both; }
+  .stat { text-align:center; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:42px; color:var(--gold); line-height:1; }
+  .stat-label { font-size:12px; color:#888; letter-spacing:1px; margin-top:4px; }
+
+  /* SOCIAL PROOF BAR */
+  .proof-bar { background:#111; border-top:1px solid #222; border-bottom:1px solid #222; padding:20px 40px; display:flex; gap:40px; justify-content:center; align-items:center; flex-wrap:wrap; }
+  .proof-item { display:flex; align-items:center; gap:10px; font-size:13px; color:#aaa; font-weight:600; }
+  .proof-icon { font-size:20px; }
+
+  /* SECTION */
+  section { padding: 90px 20px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-tag { font-size:11px; font-weight:800; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:14px; }
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,62px); line-height:1; margin-bottom:20px; }
+  .section-sub { font-size:17px; color:#aaa; max-width:580px; line-height:1.7; }
+
+  /* HOW IT WORKS */
+  .how { background: var(--dark2); }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:30px; margin-top:60px; }
+  .step { background:var(--dark3); border:1px solid #222; border-radius:8px; padding:36px 28px; position:relative; transition:all .3s; }
+  .step:hover { border-color:var(--gold); transform:translateY(-4px); }
+  .step-num { font-family:'Bebas Neue',sans-serif; font-size:64px; color:rgba(245,166,35,0.12); position:absolute; top:16px; right:20px; line-height:1; }
+  .step-icon { font-size:36px; margin-bottom:16px; }
+  .step h3 { font-size:16px; font-weight:800; margin-bottom:10px; }
+  .step p { font-size:13px; color:#888; line-height:1.7; }
+
+  /* NICHOS */
+  .nichos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-top:50px; }
+  .nicho-card {
+    background: var(--dark3); border: 1px solid #222; border-radius:10px;
+    padding: 0; overflow:hidden; cursor:pointer; transition:all .3s;
+    position:relative;
+  }
+  .nicho-card:hover { border-color:var(--gold); transform:translateY(-4px); box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  .nicho-preview { height:180px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .nicho-preview .preview-inner { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:48px; }
+  .nicho-info { padding:20px; }
+  .nicho-info h3 { font-size:16px; font-weight:800; margin-bottom:6px; }
+  .nicho-info p { font-size:12px; color:#777; }
+  .nicho-templates { display:flex; gap:8px; margin-top:12px; }
+  .template-thumb { flex:1; height:6px; border-radius:3px; }
+  .t-dark { background: #333; }
+  .t-gold { background: linear-gradient(90deg, var(--gold), #e8940a); }
+  .nicho-badge { position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.8); border:1px solid var(--gold); color:var(--gold); font-size:10px; font-weight:800; padding:4px 10px; border-radius:20px; letter-spacing:1px; }
+  .view-templates-btn { display:block; text-align:center; background:transparent; border:1px solid #333; color:#aaa; font-size:12px; font-weight:700; padding:10px; margin-top:10px; border-radius:4px; cursor:pointer; letter-spacing:1px; transition:all .3s; }
+  .view-templates-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* PRICING */
+  .pricing { background:var(--dark2); }
+  .price-card {
+    background: linear-gradient(135deg, #1a1000, #2a1800);
+    border: 2px solid var(--gold); border-radius:12px;
+    padding:50px 40px; max-width:520px; margin:50px auto 0;
+    text-align:center; position:relative;
+    box-shadow: 0 0 60px rgba(245,166,35,0.15);
+  }
+  .price-popular { position:absolute; top:-16px; left:50%; transform:translateX(-50%); background:var(--gold); color:#000; font-size:11px; font-weight:900; padding:6px 20px; border-radius:20px; letter-spacing:2px; }
+  .price-main { font-family:'Bebas Neue',sans-serif; font-size:86px; color:var(--gold); line-height:1; }
+  .price-period { font-size:14px; color:#888; margin-bottom:30px; }
+  .price-features { list-style:none; text-align:left; margin-bottom:36px; }
+  .price-features li { padding:10px 0; border-bottom:1px solid #222; font-size:14px; display:flex; gap:12px; align-items:center; }
+  .price-features li::before { content:'✓'; color:var(--gold); font-weight:900; font-size:16px; }
+  .guarantee { font-size:12px; color:#666; margin-top:20px; }
+
+  /* TESTIMONIALS */
+  .testimonials-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; margin-top:50px; }
+  .testi { background:var(--dark3); border:1px solid #222; border-radius:8px; padding:28px; }
+  .testi-stars { color:var(--gold); font-size:18px; margin-bottom:14px; }
+  .testi-text { font-size:14px; line-height:1.7; color:#ccc; font-style:italic; margin-bottom:20px; }
+  .testi-author { display:flex; align-items:center; gap:12px; }
+  .testi-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#000; }
+  .testi-name { font-size:14px; font-weight:700; }
+  .testi-role { font-size:11px; color:#666; }
+
+  /* FAQ */
+  .faq-item { border-bottom:1px solid #222; }
+  .faq-q { padding:22px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:15px; font-weight:600; }
+  .faq-q:hover { color:var(--gold); }
+  .faq-arrow { font-size:20px; color:var(--gold); transition:transform .3s; }
+  .faq-a { display:none; padding:0 0 20px; font-size:14px; color:#888; line-height:1.7; }
+  .faq-item.open .faq-arrow { transform:rotate(180deg); }
+  .faq-item.open .faq-a { display:block; }
+
+  /* FINAL CTA */
+  .final-cta { background: linear-gradient(135deg, #0d0800, #1a1000, #0d0800); text-align:center; padding:100px 20px; position:relative; overflow:hidden; }
+  .final-cta::before { content:''; position:absolute; top:50%;left:50%;transform:translate(-50%,-50%); width:600px;height:600px; background:radial-gradient(circle,rgba(245,166,35,0.1),transparent 60%); }
+  .urgency { background:rgba(229,62,62,0.1); border:1px solid rgba(229,62,62,0.3); color:#fc8181; font-size:13px; font-weight:700; letter-spacing:1px; padding:10px 24px; border-radius:4px; display:inline-block; margin-bottom:30px; }
+
+  /* FOOTER */
+  footer { background:#050505; border-top:1px solid #1a1a1a; padding:40px 20px; text-align:center; }
+  footer .logo { font-size:22px; margin-bottom:12px; display:block; }
+  footer p { font-size:12px; color:#444; }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:1000; overflow-y:auto; padding:40px 20px; }
+  .modal-overlay.active { display:flex; align-items:flex-start; justify-content:center; }
+  .modal { background:var(--dark2); border:1px solid #333; border-radius:12px; max-width:900px; width:100%; padding:50px; position:relative; animation:modalIn .4s ease; }
+  @keyframes modalIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .modal-close { position:absolute; top:20px; right:24px; background:none; border:none; color:#666; font-size:28px; cursor:pointer; }
+  .modal-close:hover { color:var(--white); }
+  .modal-title { font-family:'Bebas Neue',sans-serif; font-size:42px; margin-bottom:8px; }
+  .modal-sub { font-size:14px; color:#888; margin-bottom:36px; }
+
+  .templates-showcase { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media(max-width:680px){ .templates-showcase{grid-template-columns:1fr;} }
+  .template-card { border-radius:10px; overflow:hidden; border:2px solid #333; cursor:pointer; transition:all .3s; }
+  .template-card:hover,.template-card.selected { border-color:var(--gold); box-shadow:0 0 30px rgba(245,166,35,0.2); }
+  .template-card .tc-label { padding:14px 18px; background:var(--dark3); display:flex; justify-content:space-between; align-items:center; }
+  .tc-name { font-size:14px; font-weight:800; }
+  .tc-badge { font-size:10px; padding:4px 10px; border-radius:20px; font-weight:800; letter-spacing:1px; }
+  .badge-impact { background:rgba(245,166,35,0.15); color:var(--gold); border:1px solid rgba(245,166,35,0.3); }
+  .badge-premium { background:linear-gradient(135deg,#2a1800,#3d2600); color:var(--gold2); border:1px solid var(--gold2); }
+
+  /* TEMPLATE PREVIEWS inside modal - mini site mockup */
+  .mini-site { height:320px; overflow:hidden; position:relative; }
+  .ms-dark { background:#0d0d0d; padding:20px; }
+  .ms-gold { background:#0a0800; padding:20px; }
+
+  /* FORM */
+  .form-section { margin-top:36px; }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:600px){.form-grid{grid-template-columns:1fr;}}
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-group label { font-size:12px; font-weight:700; color:#888; letter-spacing:1px; text-transform:uppercase; }
+  .form-group input, .form-group select, .form-group textarea {
+    background:#1a1a1a; border:1px solid #333; color:var(--white);
+    padding:12px 16px; border-radius:6px; font-size:14px; font-family:'Montserrat',sans-serif;
+    outline:none; transition:border .2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--gold); }
+  .form-group textarea { resize:vertical; min-height:80px; }
+  .form-group select option { background:#1a1a1a; }
+
+  .color-options { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .color-opt { width:36px; height:36px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:all .2s; }
+  .color-opt.active { border-color:var(--white); transform:scale(1.15); }
+
+  .upload-area { border:2px dashed #333; border-radius:8px; padding:30px; text-align:center; cursor:pointer; transition:all .3s; }
+  .upload-area:hover { border-color:var(--gold); background:rgba(245,166,35,0.03); }
+  .upload-area p { font-size:13px; color:#666; margin-top:8px; }
+
+  .modal-footer { margin-top:36px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .price-tag { font-size:13px; color:#888; }
+  .price-tag strong { color:var(--gold); font-size:24px; font-family:'Bebas Neue',sans-serif; letter-spacing:1px; }
+
+  /* PAYMENT MODAL */
+  .payment-modal { background:var(--dark2); border:1px solid #333; border-radius:12px; max-width:500px; width:100%; padding:50px; position:relative; animation:modalIn .4s ease; }
+  .pix-box { background:#0d150d; border:1px solid #2d5a2d; border-radius:8px; padding:24px; text-align:center; margin:24px 0; }
+  .pix-icon { font-size:48px; margin-bottom:8px; }
+  .pix-key { font-family:monospace; font-size:13px; color:#4ade80; background:#0a1a0a; padding:12px; border-radius:4px; word-break:break-all; margin:12px 0; }
+  .pix-amount { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--gold); }
+  .copy-btn { background:#1a3a1a; border:1px solid #2d5a2d; color:#4ade80; padding:10px 20px; border-radius:4px; cursor:pointer; font-size:13px; font-weight:700; transition:all .2s; }
+  .copy-btn:hover { background:#2d5a2d; }
+  .confirm-btn { width:100%; background:linear-gradient(135deg,#16a34a,#15803d); color:#fff; border:none; padding:16px; border-radius:6px; font-size:15px; font-weight:800; cursor:pointer; margin-top:16px; transition:all .3s; }
+  .confirm-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(22,163,74,0.3); }
+
+  /* SUCCESS */
+  .success-modal { background:var(--dark2); border:1px solid #2d5a2d; border-radius:12px; max-width:700px; width:100%; padding:50px; position:relative; animation:modalIn .4s ease; text-align:center; }
+  .success-icon { font-size:72px; margin-bottom:20px; }
+  .panel-preview { background:#111; border:1px solid #333; border-radius:8px; padding:24px; margin:24px 0; text-align:left; }
+  .panel-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #1a1a1a; font-size:13px; }
+  .panel-row:last-child { border:none; }
+  .panel-label { color:#666; }
+  .panel-value { color:var(--white); font-weight:600; }
+  .panel-edit-btn { background:rgba(245,166,35,0.1); border:1px solid rgba(245,166,35,0.3); color:var(--gold); font-size:11px; padding:4px 12px; border-radius:4px; cursor:pointer; transition:all .2s; }
+  .panel-edit-btn:hover { background:rgba(245,166,35,0.2); }
+
+  /* NICHO MINI PREVIEWS */
+  /* ADVOGADO */
+  .preview-adv { background:linear-gradient(135deg,#0a0a14,#0d0d1a); }
+  .preview-adv-gold { background:linear-gradient(135deg,#0d0900,#1a1200); }
+  /* DENTISTA */
+  .preview-dent { background:linear-gradient(135deg,#0a1014,#0a1520); }
+  .preview-dent-white { background:linear-gradient(135deg,#f0f8ff,#e8f4f8); }
+  /* MÉDICO */
+  .preview-med { background:linear-gradient(135deg,#0a1410,#0d1a14); }
+  /* COACH */
+  .preview-coach { background:linear-gradient(135deg,#14100a,#1a1500); }
+  /* ESTETICA */
+  .preview-est { background:linear-gradient(135deg,#14080a,#1a0a0f); }
+  /* IMOBILIÁRIA */
+  .preview-imob { background:linear-gradient(135deg,#08100a,#0d1a0f); }
+  /* ACADEMIA */
+  .preview-acad { background:linear-gradient(135deg,#140a0a,#1a0a0a); }
+  /* RESTAURANTE */
+  .preview-rest { background:linear-gradient(135deg,#140d08,#1a1208); }
+
+  .mini-hero { padding:16px; }
+  .mini-logo { width:40px; height:12px; border-radius:2px; display:inline-block; margin-bottom:8px; }
+  .mini-h1 { font-family:'Bebas Neue',sans-serif; font-size:18px; line-height:1.1; margin-bottom:6px; }
+  .mini-p { font-size:7px; line-height:1.5; opacity:0.7; margin-bottom:10px; }
+  .mini-btn { display:inline-block; padding:4px 12px; border-radius:2px; font-size:7px; font-weight:900; letter-spacing:1px; }
+  .mini-section { padding:12px 16px; }
+  .mini-cards { display:flex; gap:6px; margin-top:8px; }
+  .mini-card { flex:1; padding:8px 6px; border-radius:4px; font-size:7px; text-align:center; }
+  .mini-testi { padding:8px 16px; border-radius:4px; margin-top:6px; font-size:7px; font-style:italic; }
+  .mini-cta { padding:12px 16px; text-align:center; }
+  .mini-cta-h { font-family:'Bebas Neue',sans-serif; font-size:14px; margin-bottom:6px; }
+
+  @media(max-width:768px){
+    nav { padding:14px 20px; }
+    nav .nav-links { display:none; }
+    .hero { padding:100px 20px 50px; }
+    .hero-stats { gap:30px; }
+    .templates-showcase { grid-template-columns:1fr; }
+    .modal { padding:30px 20px; }
+    .form-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">iG<span>ence</span></div>
+  <div class="nav-links">
+    <a href="#como-funciona">Como Funciona</a>
+    <a href="#nichos">Nichos</a>
+    <a href="#preco">Planos</a>
+    <a href="#faq">FAQ</a>
+    <a href="#criar" class="nav-cta">CRIAR MINHA PÁGINA →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🔥 NOVA PLATAFORMA DE MARKETING INTELIGENTE</div>
+  <h1>CRIE SUA<br><span class="gold">LANDING PAGE</span><br>PROFISSIONAL<br>EM MINUTOS</h1>
+  <p class="hero-sub">Sem precisar saber programação. Sem contratar designer. Escolha seu nicho, personalize com suas cores e logo, e <strong>receba uma página de alta conversão pronta</strong> para vender.</p>
+  <div class="hero-cta-group">
+    <a href="#criar" class="btn-primary">🚀 CRIAR MINHA PÁGINA AGORA</a>
+    <a href="#nichos" class="btn-ghost">Ver Exemplos</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1.247</div><div class="stat-label">Páginas Criadas</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Nichos Disponíveis</div></div>
+    <div class="stat"><div class="stat-num">97%</div><div class="stat-label">Satisfação</div></div>
+    <div class="stat"><div class="stat-num" style="color:#4ade80;">3h</div><div class="stat-label">Página no Ar</div></div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<div class="proof-bar">
+  <div class="proof-item"><span class="proof-icon">🔒</span> SSL Grátis</div>
+  <div class="proof-item"><span class="proof-icon">📱</span> 100% Responsivo</div>
+  <div class="proof-item"><span class="proof-icon">⚡</span> Carregamento Ultra-Rápido</div>
+  <div class="proof-item"><span class="proof-icon">🎯</span> Otimizado para Conversão</div>
+  <div class="proof-item"><span class="proof-icon">💬</span> WhatsApp Integrado</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="como-funciona">
+  <div class="container">
+    <div class="section-tag">PROCESSO SIMPLES</div>
+    <h2 class="section-title">COMO FUNCIONA?</h2>
+    <p class="section-sub">Em apenas 4 passos simples sua página profissional fica pronta.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-icon">🎯</div>
+        <h3>Escolha seu Nicho</h3>
+        <p>Selecione a área do seu negócio entre os 8 nichos disponíveis — cada um com templates exclusivos e conteúdo pré-configurado.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-icon">🎨</div>
+        <h3>Selecione o Template</h3>
+        <p>Dois layouts profissionais por nicho: Dark Impact (moderno e poderoso) e Gold Premium (luxo e autoridade). Você escolhe.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-icon">✏️</div>
+        <h3>Personalize</h3>
+        <p>Insira o nome da sua empresa, serviços, número de WhatsApp, faça upload do seu logo e escolha a paleta de cores.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-icon">🚀</div>
+        <h3>Página no Ar</h3>
+        <p>Receba sua landing page profissional em até 3h. Domínio e hospedagem inclusos no plano mensal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NICHOS -->
+<section id="nichos" style="background:var(--dark)">
+  <div class="container">
+    <div class="section-tag">8 NICHOS DISPONÍVEIS</div>
+    <h2 class="section-title">ESCOLHA SEU <span style="color:var(--gold)">SEGMENTO</span></h2>
+    <p class="section-sub">Templates profissionais criados especificamente para cada área. Conteúdo real, linguagem certa, design que converte.</p>
+
+    <div class="nichos-grid" id="nichosGrid">
+      <!-- ADVOGADO -->
+      <div class="nicho-card" onclick="openNichoModal('adv')">
+        <div class="nicho-preview preview-adv-gold">
+          <div class="preview-inner" style="flex-direction:column;padding:16px;">
+            <div style="display:flex;gap:8px;width:100%;">
+              <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(245,166,35,0.2);border-radius:6px;padding:10px;font-size:7px;color:#aaa;">
+                <div style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:14px;margin-bottom:4px;">DR. SILVA</div>
+                <div style="color:#fff;font-size:9px;font-weight:800;margin-bottom:4px;">ADVOGADO TRABALHISTA</div>
+                <div style="color:#888;font-size:6px;margin-bottom:6px;">+ de 500 casos ganhos. Defenda seus direitos agora.</div>
+                <div style="background:var(--gold);color:#000;font-size:6px;font-weight:900;padding:3px 8px;display:inline-block;border-radius:2px;">CONSULTA GRATUITA →</div>
+              </div>
+              <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(245,166,35,0.1);border-radius:6px;padding:10px;font-size:7px;color:#aaa;">
+                <div style="color:#ccc;font-size:8px;font-weight:700;margin-bottom:6px;">NOSSOS SERVIÇOS</div>
+                <div style="display:flex;flex-direction:column;gap:3px;">
+                  <div style="background:rgba(245,166,35,0.08);border-left:2px solid var(--gold);padding:3px 6px;font-size:6px;color:#ccc;">⚖️ Direito Trabalhista</div>
+                  <div style="background:rgba(245,166,35,0.08);border-left:2px solid var(--gold);padding:3px 6px;font-size:6px;color:#ccc;">📋 Direito Civil</div>
+                  <div style="background:rgba(245,166,35,0.08);border-left:2px solid var(--gold);padding:3px 6px;font-size:6px;color:#ccc;">🏢 Direito Empresarial</div>
+                </div>
+              </div>
+            </div>
+            <div style="width:100%;background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.15);border-radius:6px;padding:8px;margin-top:6px;display:flex;gap:10px;justify-content:space-around;">
+              <div style="text-align:center;font-size:6px;color:#888;">
+                <div style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:16px;">500+</div>CASOS GANHOS
+              </div>
+              <div style="text-align:center;font-size:6px;color:#888;">
+                <div style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:16px;">15</div>ANOS EXP.
+              </div>
+              <div style="text-align:center;font-size:6px;color:#888;">
+                <div style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:16px;">98%</div>SATISFAÇÃO
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>⚖️ Advogado / Escritório Jurídico</h3>
+          <p>Direito trabalhista, civil, empresarial e mais</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:#1a1200;border:1px solid #333;"></div>
+            <div class="template-thumb t-gold"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+
+      <!-- DENTISTA -->
+      <div class="nicho-card" onclick="openNichoModal('dent')">
+        <div class="nicho-preview" style="background:linear-gradient(135deg,#00060f,#001020);">
+          <div class="preview-inner" style="flex-direction:column;padding:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:8px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:#38bdf8;letter-spacing:2px;">ODONTO<span style="color:#fff">PRIME</span></div>
+              <div style="font-size:6px;color:#38bdf8;border:1px solid rgba(56,189,248,0.3);padding:2px 8px;border-radius:10px;">★★★★★</div>
+            </div>
+            <div style="width:100%;background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(56,189,248,0.03));border:1px solid rgba(56,189,248,0.15);border-radius:6px;padding:10px;">
+              <div style="font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;">SORRIA COM MAIS CONFIANÇA</div>
+              <div style="font-size:6px;color:#94a3b8;margin-bottom:8px;">Tratamentos modernos com tecnologia de ponta</div>
+              <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;">
+                <span style="background:rgba(56,189,248,0.1);color:#38bdf8;font-size:5px;padding:2px 6px;border-radius:10px;">🦷 Implantes</span>
+                <span style="background:rgba(56,189,248,0.1);color:#38bdf8;font-size:5px;padding:2px 6px;border-radius:10px;">✨ Clareamento</span>
+                <span style="background:rgba(56,189,248,0.1);color:#38bdf8;font-size:5px;padding:2px 6px;border-radius:10px;">😁 Ortodontia</span>
+              </div>
+              <div style="background:linear-gradient(90deg,#0ea5e9,#0284c7);color:#fff;font-size:6px;font-weight:900;padding:4px 10px;display:inline-block;border-radius:2px;">AGENDAR AVALIAÇÃO GRÁTIS →</div>
+            </div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>🦷 Dentista / Clínica Odontológica</h3>
+          <p>Implantes, clareamento, ortodontia e muito mais</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:linear-gradient(90deg,#0ea5e9,#0284c7);"></div>
+            <div class="template-thumb" style="background:linear-gradient(90deg,#f0f9ff,#e0f2fe);"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+
+      <!-- MÉDICO -->
+      <div class="nicho-card" onclick="openNichoModal('med')">
+        <div class="nicho-preview preview-med">
+          <div class="preview-inner" style="flex-direction:column;padding:14px;">
+            <div style="width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(52,211,153,0.2);border-radius:6px;padding:10px;margin-bottom:6px;">
+              <div style="color:#34d399;font-size:8px;font-weight:800;margin-bottom:2px;">DR. CARLOS MÉDICO</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;margin-bottom:4px;">CONSULTAS ONLINE E<br>PRESENCIAIS</div>
+              <div style="font-size:6px;color:#888;margin-bottom:6px;">Especialista com 20 anos de experiência. Agende agora.</div>
+              <div style="background:linear-gradient(90deg,#059669,#047857);color:#fff;font-size:6px;font-weight:900;padding:3px 10px;display:inline-block;border-radius:2px;">AGENDAR CONSULTA</div>
+            </div>
+            <div style="display:flex;gap:4px;width:100%;">
+              <div style="flex:1;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;padding:6px;text-align:center;font-size:6px;">
+                <div style="color:#34d399;font-family:'Bebas Neue',sans-serif;font-size:14px;">20+</div>
+                <div style="color:#666;">anos</div>
+              </div>
+              <div style="flex:1;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;padding:6px;text-align:center;font-size:6px;">
+                <div style="color:#34d399;font-family:'Bebas Neue',sans-serif;font-size:14px;">5mil</div>
+                <div style="color:#666;">pacientes</div>
+              </div>
+              <div style="flex:1;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;padding:6px;text-align:center;font-size:6px;">
+                <div style="color:#34d399;font-family:'Bebas Neue',sans-serif;font-size:14px;">★4.9</div>
+                <div style="color:#666;">nota</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>👨‍⚕️ Médico / Clínica Médica</h3>
+          <p>Clínico geral, especialistas e consultas online</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:linear-gradient(90deg,#059669,#047857);"></div>
+            <div class="template-thumb" style="background:linear-gradient(90deg,#ecfdf5,#d1fae5);"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+
+      <!-- COACH -->
+      <div class="nicho-card" onclick="openNichoModal('coach')">
+        <div class="nicho-preview" style="background:linear-gradient(135deg,#0a0500,#150b00);">
+          <div class="preview-inner" style="flex-direction:column;padding:14px;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;">TRANSFORMAÇÃO TOTAL</div>
+            <div style="font-size:8px;font-weight:800;color:#fff;margin-bottom:4px;">MUDE SUA VIDA EM 90 DIAS</div>
+            <div style="font-size:6px;color:#888;margin-bottom:8px;line-height:1.5;">Método exclusivo que já transformou mais de 2.000 vidas. Coach certificado ICF.</div>
+            <div style="display:flex;gap:4px;margin-bottom:8px;">
+              <div style="flex:1;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:4px;padding:5px;text-align:center;font-size:6px;">
+                <div style="font-size:16px;margin-bottom:2px;">🎯</div>
+                <div style="color:#ccc;">Metas</div>
+              </div>
+              <div style="flex:1;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:4px;padding:5px;text-align:center;font-size:6px;">
+                <div style="font-size:16px;margin-bottom:2px;">💪</div>
+                <div style="color:#ccc;">Mindset</div>
+              </div>
+              <div style="flex:1;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);border-radius:4px;padding:5px;text-align:center;font-size:6px;">
+                <div style="font-size:16px;margin-bottom:2px;">🚀</div>
+                <div style="color:#ccc;">Resultados</div>
+              </div>
+            </div>
+            <div style="background:var(--gold);color:#000;font-size:6px;font-weight:900;padding:4px;text-align:center;border-radius:2px;">QUERO TRANSFORMAR MINHA VIDA →</div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>🎯 Coach / Mentoria</h3>
+          <p>Life coach, business coach, mentoria pessoal</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:linear-gradient(90deg,#92400e,#78350f);"></div>
+            <div class="template-thumb t-gold"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+
+      <!-- ESTETICA -->
+      <div class="nicho-card" onclick="openNichoModal('est')">
+        <div class="nicho-preview" style="background:linear-gradient(135deg,#0f0010,#1a0020);">
+          <div class="preview-inner" style="flex-direction:column;padding:14px;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:#e879f9;letter-spacing:3px;margin-bottom:2px;">BELLA ESTÉTICA</div>
+            <div style="font-size:6px;color:#c084fc;margin-bottom:8px;letter-spacing:2px;">ESPECIALISTAS EM BELEZA</div>
+            <div style="display:flex;gap:4px;margin-bottom:8px;">
+              <div style="flex:1;background:rgba(232,121,249,0.08);border:1px solid rgba(232,121,249,0.2);border-radius:4px;padding:6px;text-align:center;font-size:6px;color:#ccc;">
+                💆 Botox
+              </div>
+              <div style="flex:1;background:rgba(232,121,249,0.08);border:1px solid rgba(232,121,249,0.2);border-radius:4px;padding:6px;text-align:center;font-size:6px;color:#ccc;">
+                ✨ Preenchimento
+              </div>
+              <div style="flex:1;background:rgba(232,121,249,0.08);border:1px solid rgba(232,121,249,0.2);border-radius:4px;padding:6px;text-align:center;font-size:6px;color:#ccc;">
+                🌸 Skincare
+              </div>
+            </div>
+            <div style="background:linear-gradient(90deg,rgba(232,121,249,0.15),rgba(168,85,247,0.15));border:1px solid rgba(232,121,249,0.3);border-radius:4px;padding:6px;font-size:6px;color:#e879f9;text-align:center;font-style:italic;margin-bottom:6px;">
+              "Recuperei minha autoestima em 3 sessões!" — Maria S.
+            </div>
+            <div style="background:linear-gradient(90deg,#9333ea,#7c3aed);color:#fff;font-size:6px;font-weight:900;padding:4px;text-align:center;border-radius:2px;">AGENDAR AVALIAÇÃO GRATUITA →</div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>💆 Estética / Clínica de Beleza</h3>
+          <p>Botox, preenchimento, skincare, harmonização</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:linear-gradient(90deg,#9333ea,#7c3aed);"></div>
+            <div class="template-thumb" style="background:linear-gradient(90deg,#fdf4ff,#fae8ff);"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+
+      <!-- IMOBILIÁRIA -->
+      <div class="nicho-card" onclick="openNichoModal('imob')">
+        <div class="nicho-preview" style="background:linear-gradient(135deg,#050f08,#0a1a0d);">
+          <div class="preview-inner" style="flex-direction:column;padding:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#4ade80;letter-spacing:2px;">PRIME IMÓVEIS</div>
+              <div style="font-size:5px;color:#4ade80;border:1px solid rgba(74,222,128,0.3);padding:2px 6px;border-radius:10px;">CRECI 12345</div>
+            </div>
+            <div style="width:100%;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.15);border-radius:6px;padding:8px;margin-bottom:6px;">
+              <div style="font-size:8px;font-weight:800;color:#fff;margin-bottom:3px;">ENCONTRE O IMÓVEL<br>DOS SEUS SONHOS</div>
+              <div style="font-size:6px;color:#888;margin-bottom:6px;">Mais de 500 imóveis disponíveis. Financiamento facilitado.</div>
+              <div style="background:linear-gradient(90deg,#16a34a,#15803d);color:#fff;font-size:6px;font-weight:900;padding:3px 8px;display:inline-block;border-radius:2px;">VER IMÓVEIS →</div>
+            </div>
+            <div style="display:flex;gap:4px;">
+              <div style="flex:1;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.15);border-radius:3px;padding:4px;text-align:center;font-size:6px;">
+                <div style="color:#4ade80;font-family:'Bebas Neue',sans-serif;font-size:12px;">500+</div>
+                <div style="color:#666;">Imóveis</div>
+              </div>
+              <div style="flex:1;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.15);border-radius:3px;padding:4px;text-align:center;font-size:6px;">
+                <div style="color:#4ade80;font-family:'Bebas Neue',sans-serif;font-size:12px;">10k+</div>
+                <div style="color:#666;">Clientes</div>
+              </div>
+              <div style="flex:1;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.15);border-radius:3px;padding:4px;text-align:center;font-size:6px;">
+                <div style="color:#4ade80;font-family:'Bebas Neue',sans-serif;font-size:12px;">15</div>
+                <div style="color:#666;">Anos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>🏠 Imobiliária / Corretor</h3>
+          <p>Venda, aluguel, lançamentos e captação</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:linear-gradient(90deg,#16a34a,#15803d);"></div>
+            <div class="template-thumb t-gold"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+
+      <!-- ACADEMIA -->
+      <div class="nicho-card" onclick="openNichoModal('acad')">
+        <div class="nicho-preview" style="background:linear-gradient(135deg,#0f0000,#1a0000);">
+          <div class="preview-inner" style="flex-direction:column;padding:14px;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ef4444;letter-spacing:3px;text-shadow:0 0 20px rgba(239,68,68,0.5);margin-bottom:4px;">IRON GYM</div>
+            <div style="font-size:7px;font-weight:800;color:#fff;margin-bottom:6px;">NÃO É SÓ MUSCULAÇÃO.<br>É TRANSFORMAÇÃO.</div>
+            <div style="display:flex;gap:4px;margin-bottom:8px;">
+              <div style="flex:1;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:3px;padding:5px;font-size:5px;text-align:center;color:#ccc;">🏋️<br>Musculação</div>
+              <div style="flex:1;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:3px;padding:5px;font-size:5px;text-align:center;color:#ccc;">🥊<br>Crossfit</div>
+              <div style="flex:1;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:3px;padding:5px;font-size:5px;text-align:center;color:#ccc;">🧘<br>Yoga</div>
+              <div style="flex:1;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:3px;padding:5px;font-size:5px;text-align:center;color:#ccc;">🏊<br>Natação</div>
+            </div>
+            <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:3px;padding:4px;font-size:6px;color:#f87171;text-align:center;margin-bottom:6px;">
+              🔥 PRIMEIRA SEMANA GRÁTIS + AVALIAÇÃO FÍSICA
+            </div>
+            <div style="background:linear-gradient(90deg,#dc2626,#b91c1c);color:#fff;font-size:6px;font-weight:900;padding:4px;text-align:center;border-radius:2px;">QUERO COMEÇAR AGORA →</div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>🏋️ Academia / Personal Trainer</h3>
+          <p>Musculação, crossfit, yoga, personal trainer</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:linear-gradient(90deg,#dc2626,#b91c1c);"></div>
+            <div class="template-thumb" style="background:linear-gradient(90deg,#1c1c1c,#333);"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+
+      <!-- RESTAURANTE -->
+      <div class="nicho-card" onclick="openNichoModal('rest')">
+        <div class="nicho-preview" style="background:linear-gradient(135deg,#0f0800,#1a1000);">
+          <div class="preview-inner" style="flex-direction:column;padding:14px;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fb923c;letter-spacing:3px;margin-bottom:2px;">FOGÃO MINEIRO</div>
+            <div style="font-size:6px;color:#fed7aa;letter-spacing:2px;margin-bottom:8px;">RESTAURANTE & DELIVERY</div>
+            <div style="display:flex;gap:4px;margin-bottom:6px;">
+              <div style="flex:1;background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:4px;padding:6px;font-size:6px;text-align:center;color:#ccc;">🍖<br>Churrasco</div>
+              <div style="flex:1;background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:4px;padding:6px;font-size:6px;text-align:center;color:#ccc;">🫘<br>Feijão Trop</div>
+              <div style="flex:1;background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:4px;padding:6px;font-size:6px;text-align:center;color:#ccc;">🚗<br>Delivery</div>
+            </div>
+            <div style="background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.3);border-radius:4px;padding:5px;margin-bottom:6px;">
+              <div style="font-size:6px;color:#fed7aa;margin-bottom:2px;">⭐⭐⭐⭐⭐ "Melhor restaurante da cidade!"</div>
+              <div style="font-size:5px;color:#888;">— João P., cliente há 3 anos</div>
+            </div>
+            <div style="display:flex;gap:4px;">
+              <div style="flex:1;background:linear-gradient(90deg,#ea580c,#c2410c);color:#fff;font-size:6px;font-weight:900;padding:4px;text-align:center;border-radius:2px;">PEDIR AGORA</div>
+              <div style="flex:1;background:transparent;border:1px solid rgba(251,146,60,0.4);color:#fb923c;font-size:6px;font-weight:700;padding:4px;text-align:center;border-radius:2px;">RESERVAR</div>
+            </div>
+          </div>
+        </div>
+        <div class="nicho-badge">2 TEMPLATES</div>
+        <div class="nicho-info">
+          <h3>🍽️ Restaurante / Delivery</h3>
+          <p>Cardápio online, delivery, reservas e eventos</p>
+          <div class="nicho-templates">
+            <div class="template-thumb" style="background:linear-gradient(90deg,#ea580c,#c2410c);"></div>
+            <div class="template-thumb t-gold"></div>
+          </div>
+          <button class="view-templates-btn">VER TEMPLATES →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="preco">
+  <div class="container" style="text-align:center;">
+    <div class="section-tag">PLANOS E INVESTIMENTO</div>
+    <h2 class="section-title">ESCOLHA SEU <span style="color:var(--gold)">PLANO</span></h2>
+    <p class="section-sub" style="margin:0 auto 30px;">Sem surpresas. Sem taxas escondidas. Cancele quando quiser.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:1000px;margin:0 auto;">
+      <!-- BÁSICO -->
+      <div style="background:var(--dark3);border:1px solid #222;border-radius:12px;padding:36px 28px;text-align:left;position:relative;">
+        <div style="font-size:10px;font-weight:800;color:#9ca3af;letter-spacing:2px;margin-bottom:8px;">BÁSICO</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:#9ca3af;line-height:1;">R$47,90</div>
+        <div style="font-size:13px;color:#555;margin-bottom:20px;">/mês — cancele quando quiser</div>
+        <div style="font-size:13px;color:#777;margin-bottom:20px;line-height:1.6;">Para quem quer começar sem domínio. Página profissional no ar.</div>
+        <ul class="price-features" style="margin-bottom:28px;">
+          <li>Landing page profissional no seu nicho</li>
+          <li>2 templates exclusivos para escolher</li>
+          <li>SSL e hospedagem inclusos</li>
+          <li>WhatsApp integrado</li>
+          <li>Página responsiva (celular, tablet, PC)</li>
+          <li>Entrega em até 3 horas</li>
+          <li style="color:#555;"><span style="color:#555;">✗</span>&nbsp; Sem domínio próprio</li>
+          <li style="color:#555;"><span style="color:#555;">✗</span>&nbsp; Sem painel de edição</li>
+        </ul>
+        <a href="#criar" class="btn-ghost" onclick="setPlan('basico')" style="display:block;text-align:center;font-size:14px;padding:14px;">COMEÇAR BÁSICO</a>
+      </div>
+
+      <!-- PROFISSIONAL -->
+      <div style="background:linear-gradient(135deg,#1a1000,#2a1800);border:2px solid var(--gold);border-radius:12px;padding:36px 28px;text-align:left;position:relative;box-shadow:0 0 60px rgba(245,166,35,0.12);">
+        <div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:11px;font-weight:900;padding:5px 18px;border-radius:20px;letter-spacing:2px;white-space:nowrap;">⚡ MAIS ESCOLHIDO</div>
+        <div style="font-size:10px;font-weight:800;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">PROFISSIONAL</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);line-height:1;">R$97</div>
+        <div style="font-size:13px;color:#888;margin-bottom:20px;">/mês — cancele quando quiser</div>
+        <div style="font-size:13px;color:#aaa;margin-bottom:20px;line-height:1.6;">Completo para profissionais que querem resultado e identidade própria.</div>
+        <ul class="price-features" style="margin-bottom:28px;">
+          <li>Landing page profissional no seu nicho</li>
+          <li>2 templates exclusivos para escolher</li>
+          <li><strong style="color:var(--gold)">Domínio .com.br próprio incluso</strong></li>
+          <li>Hospedagem e SSL inclusos</li>
+          <li><strong style="color:var(--gold)">Painel de edição para você mesmo alterar</strong></li>
+          <li>WhatsApp integrado</li>
+          <li>Página responsiva (celular, tablet, PC)</li>
+          <li>Suporte via WhatsApp</li>
+          <li>Entrega em até 3 horas</li>
+        </ul>
+        <div style="background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.15);border-radius:6px;padding:14px;margin-bottom:16px;">
+          <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">🌐 QUAL DOMÍNIO VOCÊ QUER?</div>
+          <input type="text" id="proDomainInput" placeholder="Ex: drjoaosilva.com.br" style="width:100%;background:#141414;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:4px;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;margin-bottom:6px;">
+          <div style="font-size:10px;color:#666;line-height:1.5;">💬 Após o pagamento, nossa equipe verifica a disponibilidade e te envia as opções pelo WhatsApp em até 30 minutos.</div>
+        </div>
+        <a href="#criar" class="btn-primary" onclick="setPlan('pro')" style="display:block;text-align:center;font-size:15px;padding:16px;">🚀 COMEÇAR AGORA</a>
+        <p class="guarantee" style="margin-top:14px;">🔒 Garantia de 7 dias</p>
+      </div>
+
+      <!-- ELITE -->
+      <div style="background:linear-gradient(135deg,#0d0012,#1a0025);border:2px solid #a855f7;border-radius:12px;padding:36px 28px;text-align:left;position:relative;box-shadow:0 0 60px rgba(168,85,247,0.1);">
+        <div style="font-size:10px;font-weight:800;color:#a855f7;letter-spacing:2px;margin-bottom:8px;">ELITE 👑</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:#a855f7;line-height:1;">R$197</div>
+        <div style="font-size:13px;color:#888;margin-bottom:20px;">/mês — cancele quando quiser</div>
+        <div style="font-size:13px;color:#aaa;margin-bottom:20px;line-height:1.6;">Para quem quer domínio total: analytics, pixel, SEO e muito mais.</div>
+        <ul class="price-features" style="margin-bottom:28px;">
+          <li>Tudo do Profissional</li>
+          <li><strong style="color:#a855f7">Domínio .com internacional incluso</strong></li>
+          <li><strong style="color:#a855f7">2 páginas (principal + captura de leads)</strong></li>
+          <li><strong style="color:#a855f7">Pixel Meta/Facebook configurado</strong></li>
+          <li><strong style="color:#a855f7">Google Analytics 4 integrado</strong></li>
+          <li>SEO básico configurado</li>
+          <li>Suporte prioritário 24h</li>
+          <li>Revisão mensal de textos</li>
+          <li>Relatório mensal de acessos</li>
+        </ul>
+        <a href="#criar" class="btn-primary" onclick="setPlan('elite')" style="display:block;text-align:center;font-size:15px;padding:16px;background:linear-gradient(135deg,#9333ea,#7c3aed);">👑 QUERO O ELITE</a>
+        <p class="guarantee" style="margin-top:14px;">🔒 Garantia de 7 dias</p>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.15);border-radius:8px;padding:20px;max-width:700px;margin-left:auto;margin-right:auto;">
+      <div style="font-size:13px;color:#888;line-height:1.8;">
+        💡 <strong style="color:#fff">Não sabe qual escolher?</strong> A maioria dos nossos clientes começa pelo <strong style="color:var(--gold)">Profissional</strong> — domínio próprio + painel de edição + suporte fazem toda a diferença nos resultados.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="background:var(--dark)">
+  <div class="container">
+    <div class="section-tag">DEPOIMENTOS REAIS</div>
+    <h2 class="section-title">QUEM JÁ <span style="color:var(--gold)">USOU</span> APROVOU</h2>
+    <div class="testimonials-grid">
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Em menos de 24 horas minha página estava no ar. Já recebi 3 consultas novas na primeira semana. O template de advogado é muito profissional, meus clientes ficaram impressionados."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--gold);">DR</div>
+          <div><div class="testi-name">Dr. Roberto Alves</div><div class="testi-role">Advogado Trabalhista • SP</div></div>
+        </div>
+      </div>
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Nunca imaginei que ficaria tão fácil ter uma página profissional. Coloquei minha logo, escolhi as cores da minha clínica e ficou exatamente como eu queria. Recomendo!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#0ea5e9;">DM</div>
+          <div><div class="testi-name">Dra. Mariana Costa</div><div class="testi-role">Dentista • BH</div></div>
+        </div>
+      </div>
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Minha academia triplicou os agendamentos de avaliação depois que coloquei a landing page no ar. O custo-benefício é absurdo — valia muito mais do que R$97."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:#dc2626;">FF</div>
+          <div><div class="testi-name">Felipe Ferreira</div><div class="testi-role">Dono de Academia • RJ</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--dark2)" id="faq">
+  <div class="container">
+    <div class="section-tag">DÚVIDAS FREQUENTES</div>
+    <h2 class="section-title">FAQ</h2>
+    <div style="max-width:700px;margin-top:40px;" id="faqContainer">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Preciso saber programação? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Absolutamente não! O processo é 100% guiado. Você preenche um formulário simples com os dados da sua empresa, faz o upload da logo, escolhe as cores — e nós criamos tudo para você.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Em quanto tempo minha página fica pronta? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Após o pagamento e envio das informações, sua landing page fica pronta em até 3 horas, já com domínio e hospedagem configurados.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Posso alterar minha página depois? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Sim! Você recebe acesso a um painel simples onde pode editar informações básicas como telefone, texto e dados de contato. Para alterações maiores de design, nossa equipe faz em até 24h.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">O domínio e hospedagem já estão inclusos? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Sim! O plano de R$97/mês inclui domínio .com.br ou .com, hospedagem de alta performance e certificado SSL (cadeado de segurança). Tudo configurado e sem custo adicional.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">E se eu não gostar do resultado? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Oferecemos garantia total de 7 dias. Se não ficar satisfeito com o resultado, devolvemos 100% do valor pago, sem questionamentos.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="criar">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="urgency">⏰ ÚLTIMAS VAGAS DESTA SEMANA</div>
+    <h2 class="section-title" style="font-size:clamp(40px,7vw,80px);margin-bottom:20px;">SUA PÁGINA<br><span style="color:var(--gold)">PRONTA EM 48H</span></h2>
+    <p style="font-size:18px;color:#aaa;max-width:560px;margin:0 auto 40px;line-height:1.7;">Escolha seu nicho, personalize com sua identidade e receba uma landing page que converte de verdade.</p>
+    <button class="btn-primary" style="font-size:18px;padding:22px 52px;" onclick="openCreateModal()">
+      🚀 CRIAR MINHA LANDING PAGE AGORA
+    </button>
+    <p style="margin-top:16px;font-size:13px;color:#555;">R$97/mês • Cancele quando quiser • Garantia de 7 dias</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">iG<span style="color:#fff">ence</span></div>
+  <p>© 2025 iGence Marketing Inteligente. Todos os direitos reservados.</p>
+  <p style="margin-top:8px;">Desenvolvido com ❤️ para profissionais que levam seu negócio a sério.</p>
+</footer>
+
+
+<!-- ======== MODAL: NICHO TEMPLATES ======== -->
+<div class="modal-overlay" id="nichoModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('nichoModal')">×</button>
+    <div id="nichoModalContent"></div>
+  </div>
+</div>
+
+<!-- ======== MODAL: CRIAR PÁGINA (FORM) ======== -->
+<div class="modal-overlay" id="createModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('createModal')">×</button>
+    <div class="section-tag">CRIAÇÃO DE LANDING PAGE</div>
+    <div class="modal-title">VAMOS CRIAR SUA PÁGINA</div>
+    <div class="modal-sub">Preencha as informações abaixo. Nossa equipe cria tudo pra você em até 3h.</div>
+
+    <div style="margin-bottom:30px;">
+      <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">1. Escolha seu Nicho</div>
+      <div id="nichoSelector" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;"></div>
+    </div>
+
+    <div style="margin-bottom:30px;" id="templateSelector" style="display:none;">
+      <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">2. Escolha o Template</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div class="template-card" id="tmpl1" onclick="selectTemplate('dark')" style="flex:1;min-width:200px;">
+          <div style="height:80px;background:linear-gradient(135deg,#0a0a0a,#1a1a1a);display:flex;align-items:center;justify-content:center;font-size:24px;">🌑</div>
+          <div class="tc-label">
+            <span class="tc-name">Dark Impact</span>
+            <span class="tc-badge badge-impact">MODERNO</span>
+          </div>
+        </div>
+        <div class="template-card" id="tmpl2" onclick="selectTemplate('gold')" style="flex:1;min-width:200px;">
+          <div style="height:80px;background:linear-gradient(135deg,#1a1000,#2a1800);display:flex;align-items:center;justify-content:center;font-size:24px;">👑</div>
+          <div class="tc-label">
+            <span class="tc-name">Gold Premium</span>
+            <span class="tc-badge badge-premium">LUXO</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:16px;text-transform:uppercase;">3. Dados da Sua Empresa</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome da Empresa *</label>
+          <input type="text" id="inp_empresa" placeholder="Ex: Dr. João Silva Advocacia">
+        </div>
+        <div class="form-group">
+          <label>WhatsApp de Contato *</label>
+          <input type="text" id="inp_whats" placeholder="(11) 99999-9999">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label>O que você oferece? (Serviços principais) *</label>
+          <textarea id="inp_servicos" placeholder="Ex: Defesa em processos trabalhistas, consultoria jurídica, rescisão de contrato..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Qual a ação que o cliente deve tomar?</label>
+          <select id="inp_cta">
+            <option>Agendar Consulta Gratuita</option>
+            <option>Entrar em Contato</option>
+            <option>Solicitar Orçamento</option>
+            <option>Agendar Avaliação</option>
+            <option>Fazer Pedido</option>
+            <option>Quero Saber Mais</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Quantos clientes/casos você já atendeu?</label>
+          <input type="text" id="inp_clientes" placeholder="Ex: +500 clientes, +200 casos">
+        </div>
+        <div class="form-group">
+          <label>Anos de experiência</label>
+          <input type="text" id="inp_anos" placeholder="Ex: 15 anos">
+        </div>
+        <div class="form-group">
+          <label>Diferenciais / Destaques</label>
+          <input type="text" id="inp_diff" placeholder="Ex: Atendimento 24h, consultoria gratuita">
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">4. Sua Logo</div>
+        <div class="upload-area" onclick="document.getElementById('logoInput').click()">
+          <div style="font-size:40px;">📁</div>
+          <p>Clique para fazer upload da sua logo</p>
+          <p style="font-size:11px;margin-top:4px;">PNG, JPG ou SVG • Fundo transparente recomendado</p>
+          <input type="file" id="logoInput" style="display:none;" accept="image/*" onchange="previewLogo(this)">
+        </div>
+        <div id="logoPreview" style="display:none;margin-top:12px;padding:12px;background:#1a1a1a;border-radius:6px;text-align:center;">
+          <img id="logoImg" style="max-height:60px;max-width:200px;">
+          <p style="font-size:11px;color:#4ade80;margin-top:6px;">✓ Logo carregada com sucesso!</p>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">5. Paleta de Cores</div>
+        <div style="font-size:13px;color:#777;margin-bottom:10px;">Escolha a combinação que representa sua marca:</div>
+        <div class="color-options" id="colorOptions">
+          <div class="color-opt active" style="background:linear-gradient(135deg,#F5A623,#e8940a);" data-palette="gold" title="Dourado Profissional"></div>
+          <div class="color-opt" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);" data-palette="blue" title="Azul Confiança"></div>
+          <div class="color-opt" style="background:linear-gradient(135deg,#059669,#047857);" data-palette="green" title="Verde Saúde"></div>
+          <div class="color-opt" style="background:linear-gradient(135deg,#9333ea,#7c3aed);" data-palette="purple" title="Roxo Luxo"></div>
+          <div class="color-opt" style="background:linear-gradient(135deg,#dc2626,#b91c1c);" data-palette="red" title="Vermelho Energia"></div>
+          <div class="color-opt" style="background:linear-gradient(135deg,#1e3a5f,#0f2040);" data-palette="navy" title="Azul Marinho Autoridade"></div>
+          <div class="color-opt" style="background:linear-gradient(135deg,#fb923c,#ea580c);" data-palette="orange" title="Laranja Moderno"></div>
+          <div class="color-opt" style="background:linear-gradient(135deg,#ec4899,#db2777);" data-palette="pink" title="Rosa Estética"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="price-tag">Plano Mensal: <strong>R$97</strong><span style="font-size:11px;">/mês</span></div>
+      <button class="btn-primary" onclick="proceedToPayment()" style="font-size:15px;padding:16px 36px;">CONTINUAR PARA PAGAMENTO →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======== MODAL: PAGAMENTO ======== -->
+<div class="modal-overlay" id="paymentModal">
+  <div style="display:flex;align-items:flex-start;justify-content:center;min-height:100%;padding:40px 20px;">
+  <div class="payment-modal">
+    <button class="modal-close" onclick="closeModal('paymentModal')">×</button>
+    <div class="section-tag">PAGAMENTO SEGURO</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:4px;">FINALIZAR PEDIDO</div>
+    <div style="font-size:13px;color:#888;margin-bottom:24px;">Escolha a forma de pagamento</div>
+
+    <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
+      <button onclick="showPaymentMethod('pix')" id="btnPix" style="flex:1;padding:12px;background:#0d150d;border:2px solid #2d5a2d;color:#4ade80;font-weight:800;font-size:14px;border-radius:6px;cursor:pointer;transition:all .2s;">
+        🟩 PIX
+      </button>
+      <button onclick="showPaymentMethod('cartao')" id="btnCartao" style="flex:1;padding:12px;background:#1a1a1a;border:2px solid #333;color:#888;font-weight:800;font-size:14px;border-radius:6px;cursor:pointer;transition:all .2s;">
+        💳 CARTÃO
+      </button>
+      <button onclick="showPaymentMethod('boleto')" id="btnBoleto" style="flex:1;padding:12px;background:#1a1a1a;border:2px solid #333;color:#888;font-weight:800;font-size:14px;border-radius:6px;cursor:pointer;transition:all .2s;">
+        📄 BOLETO
+      </button>
+    </div>
+
+    <!-- PIX -->
+    <div id="pixSection">
+      <div class="pix-box">
+        <div class="pix-icon">🟩</div>
+        <div style="font-size:12px;color:#4ade80;font-weight:700;margin-bottom:8px;">PAGAMENTO VIA PIX</div>
+        <div class="pix-amount">R$ 97,00</div>
+        <div style="font-size:12px;color:#888;margin-bottom:12px;">Primeiro mês • Cobrado mensalmente</div>
+        <div style="font-size:11px;color:#888;margin-bottom:6px;">Chave PIX (CNPJ):</div>
+        <div class="pix-key" id="pixKey">12.345.678/0001-99 — iGence Marketing Inteligente</div>
+        <button class="copy-btn" onclick="copyPix()">📋 Copiar Chave PIX</button>
+        <div style="font-size:11px;color:#555;margin-top:10px;">Após o pagamento, clique em "Confirmar Pagamento"</div>
+      </div>
+      <button class="confirm-btn" onclick="confirmPayment()">✅ CONFIRMAR PAGAMENTO</button>
+    </div>
+
+    <!-- CARTÃO -->
+    <div id="cartaoSection" style="display:none;">
+      <div class="form-grid">
+        <div class="form-group" style="grid-column:1/-1;">
+          <label>Número do Cartão</label>
+          <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label>Nome no Cartão</label>
+          <input type="text" placeholder="Como está impresso no cartão">
+        </div>
+        <div class="form-group">
+          <label>Validade</label>
+          <input type="text" placeholder="MM/AA" maxlength="5">
+        </div>
+        <div class="form-group">
+          <label>CVV</label>
+          <input type="text" placeholder="123" maxlength="4">
+        </div>
+      </div>
+      <button class="confirm-btn" style="margin-top:16px;" onclick="confirmPayment()">💳 PAGAR R$97,00</button>
+    </div>
+
+    <!-- BOLETO -->
+    <div id="boletoSection" style="display:none;">
+      <div style="background:#1a1000;border:1px solid #333;border-radius:8px;padding:24px;text-align:center;margin-bottom:16px;">
+        <div style="font-size:40px;margin-bottom:10px;">📄</div>
+        <div style="font-size:14px;color:#ccc;margin-bottom:6px;">Boleto Bancário</div>
+        <div class="pix-amount">R$ 97,00</div>
+        <div style="font-size:12px;color:#666;margin-top:8px;">Vencimento em 3 dias úteis</div>
+        <div style="font-size:11px;color:#555;margin-top:6px;">⚠️ Boleto demora até 3 dias úteis para compensar</div>
+      </div>
+      <button class="confirm-btn" onclick="confirmPayment()">📄 GERAR BOLETO</button>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+      <div style="font-size:11px;color:#555;display:flex;align-items:center;gap:4px;">🔒 Pagamento 100% Seguro</div>
+      <div style="font-size:11px;color:#555;display:flex;align-items:center;gap:4px;">↩️ Garantia 7 dias</div>
+      <div style="font-size:11px;color:#555;display:flex;align-items:center;gap:4px;">📱 SSL Certificado</div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ======== MODAL: SUCESSO ======== -->
+<div class="modal-overlay" id="successModal">
+  <div style="display:flex;align-items:flex-start;justify-content:center;min-height:100%;padding:40px 20px;">
+  <div class="success-modal">
+    <button class="modal-close" onclick="closeModal('successModal')">×</button>
+    <div class="success-icon">🎉</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--gold);line-height:1;margin-bottom:10px;">PAGAMENTO CONFIRMADO!</div>
+    <p style="font-size:15px;color:#aaa;margin-bottom:24px;">Sua landing page está sendo criada. Em até <strong style="color:#4ade80;">3 horas</strong> você receberá o link da sua página no ar!</p>
+
+    <div class="panel-preview">
+      <div style="font-size:13px;font-weight:800;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">📊 Seu Painel de Controle</div>
+      <div class="panel-row">
+        <span class="panel-label">Status da página</span>
+        <span style="color:#fbbf24;font-weight:700;font-size:13px;">⏳ Em produção</span>
+      </div>
+      <div class="panel-row">
+        <span class="panel-label">Previsão de entrega</span>
+        <span class="panel-value">Em até 3 horas</span>
+      </div>
+      <div class="panel-row">
+        <span class="panel-label">Telefone de contato</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="panel-value" id="panelWhats">—</span>
+          <button class="panel-edit-btn" onclick="editField('whatsapp')">Editar</button>
+        </div>
+      </div>
+      <div class="panel-row">
+        <span class="panel-label">Nome da empresa</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="panel-value" id="panelEmpresa">—</span>
+          <button class="panel-edit-btn" onclick="editField('empresa')">Editar</button>
+        </div>
+      </div>
+      <div class="panel-row" style="border:none;">
+        <span class="panel-label">Plano ativo</span>
+        <span style="color:#4ade80;font-weight:700;font-size:13px;">✓ R$97/mês</span>
+      </div>
+    </div>
+
+    <div style="background:#1a0500;border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:20px;margin:20px 0;text-align:left;">
+      <div style="font-size:13px;font-weight:800;color:var(--gold);margin-bottom:10px;">📱 PRÓXIMOS PASSOS:</div>
+      <div style="font-size:13px;color:#ccc;line-height:2;">
+        <div>1️⃣ Guarde o comprovante de pagamento</div>
+        <div>2️⃣ Nossa equipe entrará em contato via WhatsApp</div>
+        <div>3️⃣ Confirmaremos os dados da sua página</div>
+        <div>4️⃣ Em até 3h sua página estará no ar!</div>
+      </div>
+    </div>
+
+    <a href="https://wa.me/5519974038092?text=Olá! Acabei de contratar o plano iGence. Minha empresa é: " target="_blank" style="display:block;background:linear-gradient(90deg,#16a34a,#15803d);color:#fff;text-decoration:none;text-align:center;padding:16px;border-radius:6px;font-size:15px;font-weight:800;margin-bottom:12px;">
+      📲 FALAR COM A EQUIPE NO WHATSAPP
+    </a>
+
+    <button onclick="closeModal('successModal')" style="width:100%;background:transparent;border:1px solid #333;color:#888;padding:14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;">
+      Fechar e voltar ao site
+    </button>
+  </div>
+  </div>
+</div>
+
+
+<script>
+// ===== PLAN SELECTION =====
+let selectedPlanGlobal = 'pro';
+function setPlan(plan){
+  selectedPlanGlobal = plan;
+  openCreateModal();
+}
+
+// ===== NICHO DATA =====
+const nichos = {
+  adv: { name: 'Advogado', icon: '⚖️', color: '#F5A623', colorName: 'Dourado Jurídico' },
+  dent: { name: 'Dentista', icon: '🦷', color: '#0ea5e9', colorName: 'Azul Saúde' },
+  med: { name: 'Médico', icon: '👨‍⚕️', color: '#34d399', colorName: 'Verde Clínico' },
+  coach: { name: 'Coach', icon: '🎯', color: '#F5A623', colorName: 'Dourado Motivacional' },
+  est: { name: 'Estética', icon: '💆', color: '#e879f9', colorName: 'Roxo Beleza' },
+  imob: { name: 'Imobiliária', icon: '🏠', color: '#4ade80', colorName: 'Verde Imóveis' },
+  acad: { name: 'Academia', icon: '🏋️', color: '#ef4444', colorName: 'Vermelho Energia' },
+  rest: { name: 'Restaurante', icon: '🍽️', color: '#fb923c', colorName: 'Laranja Gourmet' }
+};
+
+let selectedNicho = null;
+let selectedTemplate = null;
+
+// Populate nicho selector in create modal
+function populateNichoSelector() {
+  const el = document.getElementById('nichoSelector');
+  el.innerHTML = '';
+  Object.entries(nichos).forEach(([key, n]) => {
+    el.innerHTML += `
+      <div onclick="selectNicho('${key}')" id="ns_${key}"
+        style="background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;">
+        <div style="font-size:22px;margin-bottom:4px;">${n.icon}</div>
+        <div style="font-size:11px;font-weight:700;">${n.name}</div>
+      </div>`;
+  });
+}
+
+function selectNicho(key) {
+  selectedNicho = key;
+  document.querySelectorAll('#nichoSelector > div').forEach(el => {
+    el.style.borderColor = '#333'; el.style.background = '#1a1a1a';
+  });
+  const el = document.getElementById('ns_' + key);
+  el.style.borderColor = nichos[key].color;
+  el.style.background = 'rgba(0,0,0,0.3)';
+  document.getElementById('templateSelector').style.display = 'block';
+}
+
+function selectTemplate(t) {
+  selectedTemplate = t;
+  document.getElementById('tmpl1').classList.remove('selected');
+  document.getElementById('tmpl2').classList.remove('selected');
+  document.getElementById(t === 'dark' ? 'tmpl1' : 'tmpl2').classList.add('selected');
+}
+
+// Open modals
+function openCreateModal() {
+  populateNichoSelector();
+  document.getElementById('createModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function proceedToPayment() {
+  const empresa = document.getElementById('inp_empresa').value;
+  const whats = document.getElementById('inp_whats').value;
+  if (!empresa || !whats) {
+    alert('Por favor, preencha pelo menos o nome da empresa e o WhatsApp.');
+    return;
+  }
+  closeModal('createModal');
+  document.getElementById('paymentModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function confirmPayment() {
+  const empresa = document.getElementById('inp_empresa').value || 'Empresa';
+  const whats = document.getElementById('inp_whats').value || '—';
+  document.getElementById('panelEmpresa').textContent = empresa;
+  document.getElementById('panelWhats').textContent = whats;
+  closeModal('paymentModal');
+  document.getElementById('successModal').classList.add('active');
+}
+
+function showPaymentMethod(m) {
+  ['pix','cartao','boleto'].forEach(k => {
+    document.getElementById(k + 'Section').style.display = k === m ? 'block' : 'none';
+    const btn = document.getElementById('btn' + k.charAt(0).toUpperCase() + k.slice(1));
+    if(btn) {
+      btn.style.background = k === m ? '#0d150d' : '#1a1a1a';
+      btn.style.borderColor = k === m ? '#2d5a2d' : '#333';
+      btn.style.color = k === m ? '#4ade80' : '#888';
+    }
+  });
+}
+
+function copyPix() {
+  const key = document.getElementById('pixKey').textContent;
+  navigator.clipboard.writeText(key).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => btn.textContent = '📋 Copiar Chave PIX', 2000);
+  });
+}
+
+function formatCard(input) {
+  input.value = input.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim();
+}
+
+function previewLogo(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('logoImg').src = e.target.result;
+    document.getElementById('logoPreview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// Color selector
+document.querySelectorAll('.color-opt').forEach(el => {
+  el.addEventListener('click', function() {
+    document.querySelectorAll('.color-opt').forEach(e => e.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// FAQ
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// NICHO MODAL with full template previews
+const nichoTemplateData = {
+  adv: {
+    name: 'Advogado / Escritório Jurídico',
+    icon: '⚖️',
+    templates: [
+      {
+        name: 'Dark Impact',
+        badge: 'MODERNO',
+        badgeClass: 'badge-impact',
+        bg: '#0d0d0d',
+        preview: `
+          <div style="background:linear-gradient(135deg,#0a0a14,#0d0d1a);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #1a1a2e;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F5A623;letter-spacing:2px;">DR. SILVA<span style="color:#fff"> ADVOGADOS</span></div>
+              <div style="font-size:8px;color:#888;border:1px solid #333;padding:3px 8px;border-radius:10px;">OAB/SP 12.345</div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <div style="font-size:8px;color:#F5A623;font-weight:800;letter-spacing:2px;margin-bottom:4px;">⚖️ ESCRITÓRIO JURÍDICO</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;line-height:1.1;margin-bottom:6px;">SEUS DIREITOS MERECEM<br>A MELHOR DEFESA</div>
+              <div style="font-size:8px;color:#888;line-height:1.6;margin-bottom:12px;">Com mais de 15 anos de experiência e 500+ casos ganhos, somos especialistas em defender os direitos dos trabalhadores.</div>
+              <div style="background:linear-gradient(135deg,#F5A623,#e8940a);color:#000;font-size:9px;font-weight:900;padding:8px 16px;display:inline-block;border-radius:3px;letter-spacing:1px;">CONSULTA GRATUITA →</div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:12px;">
+              <div style="flex:1;text-align:center;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F5A623;">500+</div>
+                <div style="font-size:7px;color:#666;">Casos Ganhos</div>
+              </div>
+              <div style="flex:1;text-align:center;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F5A623;">15</div>
+                <div style="font-size:7px;color:#666;">Anos Exp.</div>
+              </div>
+              <div style="flex:1;text-align:center;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F5A623;">98%</div>
+                <div style="font-size:7px;color:#666;">Satisfação</div>
+              </div>
+            </div>
+            <div style="background:#0d0d1a;border:1px solid #1a1a2e;border-radius:6px;padding:10px;">
+              <div style="font-size:8px;font-weight:800;color:#fff;margin-bottom:8px;">NOSSAS ESPECIALIDADES</div>
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <div style="display:flex;align-items:center;gap:6px;font-size:7px;color:#aaa;background:rgba(245,166,35,0.04);border-left:2px solid #F5A623;padding:4px 8px;">⚖️ Direito Trabalhista — Rescisão, FGTS, Horas Extras</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:7px;color:#aaa;background:rgba(245,166,35,0.04);border-left:2px solid #F5A623;padding:4px 8px;">📋 Direito Civil — Contratos, Família, Sucessões</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:7px;color:#aaa;background:rgba(245,166,35,0.04);border-left:2px solid #F5A623;padding:4px 8px;">🏢 Direito Empresarial — Abertura, Contratos, Fusões</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.1);border-radius:4px;padding:8px;font-size:7px;font-style:italic;color:#aaa;">
+              "Recuperei meu FGTS e ainda recebi indenização. Dr. Silva é excelente profissional!" — Carlos R.
+            </div>
+          </div>`
+      },
+      {
+        name: 'Gold Premium',
+        badge: 'LUXO',
+        badgeClass: 'badge-premium',
+        bg: '#0a0800',
+        preview: `
+          <div style="background:linear-gradient(180deg,#0a0800 0%,#1a1000 50%,#0a0800 100%);padding:20px;font-family:'Montserrat',sans-serif;position:relative;">
+            <div style="text-align:center;margin-bottom:16px;">
+              <div style="display:inline-block;border:1px solid rgba(245,166,35,0.3);padding:4px 16px;border-radius:20px;font-size:7px;color:#F5A623;letter-spacing:3px;font-weight:800;margin-bottom:8px;">ADVOCACIA DE EXCELÊNCIA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#F5A623;letter-spacing:4px;margin-bottom:2px;">DR. SILVA</div>
+              <div style="font-size:8px;color:#888;letter-spacing:3px;">ADVOGADO & CONSULTOR JURÍDICO</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(245,166,35,0.08),rgba(245,166,35,0.03));border:1px solid rgba(245,166,35,0.2);border-radius:6px;padding:12px;margin-bottom:10px;text-align:center;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;margin-bottom:4px;">DEFENDA SEUS DIREITOS COM QUEM ENTENDE</div>
+              <div style="font-size:7px;color:#888;line-height:1.6;margin-bottom:10px;">Mais de uma década defendendo com excelência. Consulta inicial gratuita e sigilosa.</div>
+              <div style="display:flex;gap:6px;justify-content:center;">
+                <div style="background:linear-gradient(135deg,#F5A623,#e8940a);color:#000;font-size:8px;font-weight:900;padding:7px 14px;border-radius:2px;letter-spacing:1px;">AGENDAR CONSULTA</div>
+                <div style="border:1px solid rgba(245,166,35,0.4);color:#F5A623;font-size:8px;font-weight:700;padding:7px 14px;border-radius:2px;">(11) 9999-9999</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+              <div style="flex:1;background:rgba(245,166,35,0.05);border-top:2px solid #F5A623;padding:8px;text-align:center;">
+                <div style="font-size:7px;color:#F5A623;font-weight:800;margin-bottom:3px;">⚖️ TRABALHISTA</div>
+                <div style="font-size:6px;color:#666;">Rescisões, FGTS, Danos morais</div>
+              </div>
+              <div style="flex:1;background:rgba(245,166,35,0.05);border-top:2px solid #F5A623;padding:8px;text-align:center;">
+                <div style="font-size:7px;color:#F5A623;font-weight:800;margin-bottom:3px;">📜 CIVIL</div>
+                <div style="font-size:6px;color:#666;">Família, herança, contratos</div>
+              </div>
+              <div style="flex:1;background:rgba(245,166,35,0.05);border-top:2px solid #F5A623;padding:8px;text-align:center;">
+                <div style="font-size:7px;color:#F5A623;font-weight:800;margin-bottom:3px;">🏛️ EMPRESARIAL</div>
+                <div style="font-size:6px;color:#666;">Contratos, fusões, compliance</div>
+              </div>
+            </div>
+            <div style="border-top:1px solid rgba(245,166,35,0.15);padding-top:10px;text-align:center;">
+              <div style="font-size:7px;color:#666;font-style:italic;">"O maior investimento que você pode fazer é na proteção dos seus direitos."</div>
+              <div style="font-size:6px;color:#F5A623;margin-top:3px;">★★★★★ 4.9/5 — mais de 200 avaliações</div>
+            </div>
+          </div>`
+      }
+    ]
+  },
+  dent: {
+    name: 'Dentista / Clínica Odontológica',
+    icon: '🦷',
+    templates: [
+      {
+        name: 'Blue Tech',
+        badge: 'MODERNO',
+        badgeClass: 'badge-impact',
+        preview: `
+          <div style="background:linear-gradient(135deg,#00060f,#001020);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#38bdf8;letter-spacing:2px;">ODONTO<span style="color:#fff">PRIME</span></div>
+              <div style="font-size:7px;color:#38bdf8;border:1px solid rgba(56,189,248,0.3);padding:2px 8px;border-radius:10px;">CRO 12345</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(14,165,233,0.04));border:1px solid rgba(56,189,248,0.15);border-radius:8px;padding:14px;margin-bottom:12px;">
+              <div style="font-size:8px;color:#38bdf8;font-weight:800;letter-spacing:2px;margin-bottom:4px;">🦷 CLÍNICA ODONTOLÓGICA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;line-height:1.1;margin-bottom:6px;">SORRIA COM MAIS<br>CONFIANÇA</div>
+              <div style="font-size:7px;color:#94a3b8;line-height:1.6;margin-bottom:10px;">Tratamentos modernos com tecnologia de ponta. Transformamos sorrisos há mais de 10 anos.</div>
+              <div style="background:linear-gradient(90deg,#0ea5e9,#0284c7);color:#fff;font-size:8px;font-weight:900;padding:7px 14px;display:inline-block;border-radius:3px;letter-spacing:1px;">AGENDAR AVALIAÇÃO GRÁTIS →</div>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+              <span style="background:rgba(56,189,248,0.1);color:#38bdf8;font-size:7px;padding:3px 8px;border-radius:10px;border:1px solid rgba(56,189,248,0.2);">🦷 Implantes</span>
+              <span style="background:rgba(56,189,248,0.1);color:#38bdf8;font-size:7px;padding:3px 8px;border-radius:10px;border:1px solid rgba(56,189,248,0.2);">✨ Clareamento</span>
+              <span style="background:rgba(56,189,248,0.1);color:#38bdf8;font-size:7px;padding:3px 8px;border-radius:10px;border:1px solid rgba(56,189,248,0.2);">😁 Ortodontia</span>
+              <span style="background:rgba(56,189,248,0.1);color:#38bdf8;font-size:7px;padding:3px 8px;border-radius:10px;border:1px solid rgba(56,189,248,0.2);">💉 Botox Facial</span>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <div style="flex:1;background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#38bdf8;">2000+</div>
+                <div style="font-size:6px;color:#666;">Pacientes</div>
+              </div>
+              <div style="flex:1;background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#38bdf8;">10+</div>
+                <div style="font-size:6px;color:#666;">Anos</div>
+              </div>
+              <div style="flex:1;background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#38bdf8;">★4.9</div>
+                <div style="font-size:6px;color:#666;">Google</div>
+              </div>
+            </div>
+          </div>`
+      },
+      {
+        name: 'Clean White',
+        badge: 'CLEAN',
+        badgeClass: 'badge-premium',
+        preview: `
+          <div style="background:linear-gradient(180deg,#f0f9ff,#e0f2fe);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#0284c7;letter-spacing:2px;">SMILE<span style="color:#0f172a"> CLINIC</span></div>
+              <div style="font-size:7px;color:#0284c7;border:1px solid rgba(2,132,199,0.3);background:rgba(2,132,199,0.06);padding:2px 8px;border-radius:10px;">CRO 54321</div>
+            </div>
+            <div style="background:#fff;border:1px solid #e0f2fe;border-radius:8px;padding:14px;margin-bottom:10px;box-shadow:0 4px 20px rgba(2,132,199,0.1);">
+              <div style="font-size:7px;color:#0284c7;font-weight:800;letter-spacing:2px;margin-bottom:4px;">ODONTOLOGIA ESTÉTICA E GERAL</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#0f172a;line-height:1.1;margin-bottom:6px;">O SORRISO QUE VOCÊ<br>SEMPRE QUIS TER</div>
+              <div style="font-size:7px;color:#64748b;line-height:1.6;margin-bottom:10px;">Avaliação gratuita. Atendimento humanizado. Parcelamento em até 12x sem juros.</div>
+              <div style="background:linear-gradient(90deg,#0284c7,#0369a1);color:#fff;font-size:8px;font-weight:900;padding:8px 14px;display:inline-block;border-radius:20px;letter-spacing:1px;">📅 AGENDAR AGORA</div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+              <div style="flex:1;background:#fff;border:1px solid #bae6fd;border-radius:6px;padding:8px;text-align:center;">
+                <div style="font-size:16px;margin-bottom:3px;">🦷</div>
+                <div style="font-size:7px;color:#0284c7;font-weight:700;">Implante</div>
+                <div style="font-size:6px;color:#94a3b8;">A partir de R$1.200</div>
+              </div>
+              <div style="flex:1;background:#fff;border:1px solid #bae6fd;border-radius:6px;padding:8px;text-align:center;">
+                <div style="font-size:16px;margin-bottom:3px;">✨</div>
+                <div style="font-size:7px;color:#0284c7;font-weight:700;">Clareamento</div>
+                <div style="font-size:6px;color:#94a3b8;">A partir de R$350</div>
+              </div>
+              <div style="flex:1;background:#fff;border:1px solid #bae6fd;border-radius:6px;padding:8px;text-align:center;">
+                <div style="font-size:16px;margin-bottom:3px;">😁</div>
+                <div style="font-size:7px;color:#0284c7;font-weight:700;">Aparelho</div>
+                <div style="font-size:6px;color:#94a3b8;">A partir de R$180/mês</div>
+              </div>
+            </div>
+            <div style="background:#fff;border-left:3px solid #0284c7;padding:8px 10px;border-radius:0 6px 6px 0;font-size:7px;color:#64748b;font-style:italic;">
+              "Finalmente tenho o sorriso que sempre sonhei! Atendimento incrível." — Ana C. ★★★★★
+            </div>
+          </div>`
+      }
+    ]
+  },
+  med: {
+    name: 'Médico / Clínica Médica',
+    icon: '👨‍⚕️',
+    templates: [
+      {
+        name: 'Dark Clinical',
+        badge: 'MODERNO',
+        badgeClass: 'badge-impact',
+        preview: `
+          <div style="background:linear-gradient(135deg,#050f08,#0a1a0d);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#34d399;letter-spacing:2px;">DR. CARLOS<span style="color:#fff"> MÉDICO</span></div>
+              <div style="font-size:7px;color:#34d399;border:1px solid rgba(52,211,153,0.3);padding:2px 8px;border-radius:10px;">CRM 12345/SP</div>
+            </div>
+            <div style="background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.15);border-radius:8px;padding:14px;margin-bottom:12px;">
+              <div style="font-size:7px;color:#34d399;font-weight:800;letter-spacing:2px;margin-bottom:4px;">👨‍⚕️ CLÍNICA MÉDICA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;line-height:1.1;margin-bottom:6px;">SUA SAÚDE EM<br>BOAS MÃOS</div>
+              <div style="font-size:7px;color:#94a3b8;line-height:1.6;margin-bottom:10px;">Consultas presenciais e online. Especialista com 20 anos de experiência e atendimento humanizado.</div>
+              <div style="background:linear-gradient(90deg,#059669,#047857);color:#fff;font-size:8px;font-weight:900;padding:7px 14px;display:inline-block;border-radius:3px;">AGENDAR CONSULTA →</div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+              <div style="flex:1;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#34d399;">20+</div>
+                <div style="font-size:6px;color:#666;">Anos Exp.</div>
+              </div>
+              <div style="flex:1;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#34d399;">5mil+</div>
+                <div style="font-size:6px;color:#666;">Pacientes</div>
+              </div>
+              <div style="flex:1;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#34d399;">★4.9</div>
+                <div style="font-size:6px;color:#666;">Avaliação</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="background:rgba(52,211,153,0.05);border-left:2px solid #34d399;padding:5px 8px;font-size:7px;color:#aaa;">🏥 Clínico Geral — Consultas e acompanhamento</div>
+              <div style="background:rgba(52,211,153,0.05);border-left:2px solid #34d399;padding:5px 8px;font-size:7px;color:#aaa;">💻 Telemedicina — Consulta online 24h</div>
+              <div style="background:rgba(52,211,153,0.05);border-left:2px solid #34d399;padding:5px 8px;font-size:7px;color:#aaa;">📋 Check-up Completo — Exames e laudos</div>
+            </div>
+          </div>`
+      },
+      {
+        name: 'Clean Health',
+        badge: 'CLEAN',
+        badgeClass: 'badge-premium',
+        preview: `
+          <div style="background:linear-gradient(180deg,#ecfdf5,#d1fae5);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="text-align:center;margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#059669;letter-spacing:3px;">SAÚDE<span style="color:#0f172a">TOTAL</span></div>
+              <div style="font-size:7px;color:#64748b;letter-spacing:2px;">CLÍNICA MÉDICA INTEGRADA</div>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 8px 24px rgba(5,150,105,0.12);">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#0f172a;text-align:center;margin-bottom:6px;">CUIDADO INTEGRAL PARA<br>TODA A FAMÍLIA</div>
+              <div style="font-size:7px;color:#64748b;text-align:center;line-height:1.6;margin-bottom:10px;">Médicos especialistas, tecnologia avançada e atendimento humanizado para sua saúde.</div>
+              <div style="text-align:center;"><div style="background:linear-gradient(90deg,#059669,#047857);color:#fff;font-size:8px;font-weight:900;padding:8px 20px;display:inline-block;border-radius:20px;">📅 AGENDAR CONSULTA</div></div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <div style="flex:1;background:#fff;border-radius:6px;padding:8px;text-align:center;box-shadow:0 2px 8px rgba(5,150,105,0.08);">
+                <div style="font-size:14px;">🩺</div>
+                <div style="font-size:6px;color:#059669;font-weight:700;margin-top:2px;">Clínico Geral</div>
+              </div>
+              <div style="flex:1;background:#fff;border-radius:6px;padding:8px;text-align:center;box-shadow:0 2px 8px rgba(5,150,105,0.08);">
+                <div style="font-size:14px;">❤️</div>
+                <div style="font-size:6px;color:#059669;font-weight:700;margin-top:2px;">Cardiologia</div>
+              </div>
+              <div style="flex:1;background:#fff;border-radius:6px;padding:8px;text-align:center;box-shadow:0 2px 8px rgba(5,150,105,0.08);">
+                <div style="font-size:14px;">💻</div>
+                <div style="font-size:6px;color:#059669;font-weight:700;margin-top:2px;">Telemedicina</div>
+              </div>
+            </div>
+          </div>`
+      }
+    ]
+  },
+  coach: {
+    name: 'Coach / Mentoria',
+    icon: '🎯',
+    templates: [
+      {
+        name: 'Dark Power',
+        badge: 'IMPACTO',
+        badgeClass: 'badge-impact',
+        preview: `
+          <div style="background:linear-gradient(135deg,#0a0500,#150b00);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="text-align:center;margin-bottom:12px;">
+              <div style="display:inline-block;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:#F5A623;font-size:7px;font-weight:800;padding:4px 14px;border-radius:20px;letter-spacing:2px;margin-bottom:8px;">COACH CERTIFICADO ICF</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;line-height:1;margin-bottom:4px;">MUDE SUA VIDA<br><span style="color:#F5A623">EM 90 DIAS</span></div>
+              <div style="font-size:7px;color:#888;line-height:1.6;margin-bottom:10px;">Método exclusivo que já transformou mais de 2.000 vidas. Da estagnação ao resultado extraordinário.</div>
+              <div style="background:linear-gradient(135deg,#F5A623,#e8940a);color:#000;font-size:9px;font-weight:900;padding:8px 20px;display:inline-block;border-radius:3px;letter-spacing:1px;">QUERO TRANSFORMAR MINHA VIDA →</div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+              <div style="flex:1;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-size:16px;margin-bottom:3px;">🎯</div>
+                <div style="font-size:6px;color:#F5A623;font-weight:700;">Definição de Metas</div>
+              </div>
+              <div style="flex:1;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-size:16px;margin-bottom:3px;">💪</div>
+                <div style="font-size:6px;color:#F5A623;font-weight:700;">Mindset Vencedor</div>
+              </div>
+              <div style="flex:1;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px;text-align:center;">
+                <div style="font-size:16px;margin-bottom:3px;">🚀</div>
+                <div style="font-size:6px;color:#F5A623;font-weight:700;">Resultados Reais</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+              <div style="flex:1;min-width:80px;background:rgba(245,166,35,0.04);border:1px solid rgba(245,166,35,0.1);border-radius:4px;padding:6px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">2000+</div>
+                <div style="color:#666;">Vidas Transformadas</div>
+              </div>
+              <div style="flex:1;min-width:80px;background:rgba(245,166,35,0.04);border:1px solid rgba(245,166,35,0.1);border-radius:4px;padding:6px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">90</div>
+                <div style="color:#666;">Dias de Método</div>
+              </div>
+              <div style="flex:1;min-width:80px;background:rgba(245,166,35,0.04);border:1px solid rgba(245,166,35,0.1);border-radius:4px;padding:6px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">★4.9</div>
+                <div style="color:#666;">Satisfação</div>
+              </div>
+            </div>
+          </div>`
+      },
+      {
+        name: 'Gold Authority',
+        badge: 'AUTORIDADE',
+        badgeClass: 'badge-premium',
+        preview: `
+          <div style="background:linear-gradient(180deg,#0d0900,#1a1100,#0d0900);padding:20px;font-family:'Montserrat',sans-serif;text-align:center;">
+            <div style="margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:#F5A623;letter-spacing:4px;margin-bottom:2px;">PAULO MENTOR</div>
+              <div style="font-size:7px;color:#888;letter-spacing:3px;margin-bottom:10px;">BUSINESS & LIFE COACH</div>
+              <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,#F5A623,transparent);margin:0 auto 12px;"></div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(245,166,35,0.08),rgba(245,166,35,0.03));border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:14px;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;margin-bottom:6px;">DO CAOS À CLAREZA.<br><span style="color:#F5A623">DA IDEIA AO RESULTADO.</span></div>
+              <div style="font-size:7px;color:#888;line-height:1.6;margin-bottom:10px;">Mentoria individual e em grupo para líderes e empreendedores que não aceitam o medíocre.</div>
+              <div style="display:flex;gap:6px;justify-content:center;">
+                <div style="background:linear-gradient(135deg,#F5A623,#e8940a);color:#000;font-size:8px;font-weight:900;padding:7px 14px;border-radius:2px;">AGENDAR SESSÃO</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;justify-content:center;">
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px 12px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">ICF</div>
+                <div style="color:#666;">Certificado</div>
+              </div>
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px 12px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">500+</div>
+                <div style="color:#666;">Mentorados</div>
+              </div>
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:8px 12px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">10+</div>
+                <div style="color:#666;">Anos</div>
+              </div>
+            </div>
+          </div>`
+      }
+    ]
+  },
+  est: {
+    name: 'Estética / Clínica de Beleza',
+    icon: '💆',
+    templates: [
+      {
+        name: 'Dark Glam',
+        badge: 'GLAMOUR',
+        badgeClass: 'badge-impact',
+        preview: `
+          <div style="background:linear-gradient(135deg,#0f0010,#1a0020);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="text-align:center;margin-bottom:12px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#e879f9;letter-spacing:3px;margin-bottom:2px;">BELLA ESTÉTICA</div>
+              <div style="font-size:7px;color:#c084fc;letter-spacing:3px;margin-bottom:10px;">CLÍNICA DE HARMONIZAÇÃO</div>
+            </div>
+            <div style="background:rgba(232,121,249,0.06);border:1px solid rgba(232,121,249,0.2);border-radius:8px;padding:12px;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;text-align:center;margin-bottom:6px;">REALCE SUA BELEZA<br><span style="color:#e879f9">NATURAL</span></div>
+              <div style="font-size:7px;color:#94a3b8;text-align:center;line-height:1.6;margin-bottom:10px;">Especialistas em harmonização facial. Procedimentos seguros com resultados naturais e duradouros.</div>
+              <div style="text-align:center;"><div style="background:linear-gradient(90deg,#9333ea,#7c3aed);color:#fff;font-size:8px;font-weight:900;padding:7px 16px;display:inline-block;border-radius:20px;">AGENDAR AVALIAÇÃO GRATUITA →</div></div>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+              <span style="background:rgba(232,121,249,0.08);color:#e879f9;border:1px solid rgba(232,121,249,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">💉 Botox</span>
+              <span style="background:rgba(232,121,249,0.08);color:#e879f9;border:1px solid rgba(232,121,249,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">💋 Preenchimento</span>
+              <span style="background:rgba(232,121,249,0.08);color:#e879f9;border:1px solid rgba(232,121,249,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🌸 Skincare</span>
+              <span style="background:rgba(232,121,249,0.08);color:#e879f9;border:1px solid rgba(232,121,249,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">✨ Limpeza</span>
+            </div>
+            <div style="background:rgba(232,121,249,0.05);border:1px solid rgba(232,121,249,0.15);border-radius:4px;padding:8px;font-size:7px;color:#d4a3ff;font-style:italic;text-align:center;">
+              "Recuperei minha autoestima em 3 sessões. Profissionalismo incrível!" — Maria S. ★★★★★
+            </div>
+          </div>`
+      },
+      {
+        name: 'Rose Luxury',
+        badge: 'LUXO',
+        badgeClass: 'badge-premium',
+        preview: `
+          <div style="background:linear-gradient(180deg,#fff5f8,#fce7f3);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="text-align:center;margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#be185d;letter-spacing:3px;margin-bottom:2px;">ROSE BEAUTY</div>
+              <div style="font-size:7px;color:#9d174d;letter-spacing:2px;">CLÍNICA ESTÉTICA PREMIUM</div>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 8px 24px rgba(190,24,93,0.1);">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#1e1b4b;text-align:center;margin-bottom:6px;">BELEZA QUE<br>TRANSFORMA</div>
+              <div style="font-size:7px;color:#64748b;text-align:center;line-height:1.6;margin-bottom:10px;">Tratamentos exclusivos para realçar sua beleza única. Ambiente sofisticado e acolhedor.</div>
+              <div style="text-align:center;"><div style="background:linear-gradient(90deg,#be185d,#9d174d);color:#fff;font-size:8px;font-weight:900;padding:8px 18px;display:inline-block;border-radius:20px;">🌸 AGENDAR AGORA</div></div>
+            </div>
+            <div style="display:flex;gap:5px;margin-bottom:8px;">
+              <div style="flex:1;background:#fff;border-top:2px solid #be185d;border-radius:0 0 6px 6px;padding:7px;text-align:center;font-size:7px;">
+                <div style="font-size:14px;">💉</div>
+                <div style="color:#be185d;font-weight:700;">Botox</div>
+              </div>
+              <div style="flex:1;background:#fff;border-top:2px solid #be185d;border-radius:0 0 6px 6px;padding:7px;text-align:center;font-size:7px;">
+                <div style="font-size:14px;">💋</div>
+                <div style="color:#be185d;font-weight:700;">Lábios</div>
+              </div>
+              <div style="flex:1;background:#fff;border-top:2px solid #be185d;border-radius:0 0 6px 6px;padding:7px;text-align:center;font-size:7px;">
+                <div style="font-size:14px;">🌸</div>
+                <div style="color:#be185d;font-weight:700;">Facial</div>
+              </div>
+            </div>
+          </div>`
+      }
+    ]
+  },
+  imob: {
+    name: 'Imobiliária / Corretor',
+    icon: '🏠',
+    templates: [
+      {
+        name: 'Dark Estate',
+        badge: 'MODERNO',
+        badgeClass: 'badge-impact',
+        preview: `
+          <div style="background:linear-gradient(135deg,#050f08,#0a1a0d);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#4ade80;letter-spacing:2px;">PRIME<span style="color:#fff"> IMÓVEIS</span></div>
+              <div style="font-size:7px;color:#4ade80;border:1px solid rgba(74,222,128,0.3);padding:2px 8px;border-radius:10px;">CRECI 12345</div>
+            </div>
+            <div style="background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.15);border-radius:8px;padding:12px;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;margin-bottom:6px;">ENCONTRE O IMÓVEL<br><span style="color:#4ade80">DOS SEUS SONHOS</span></div>
+              <div style="font-size:7px;color:#94a3b8;line-height:1.6;margin-bottom:10px;">+500 imóveis disponíveis. Financiamento facilitado. Atendimento personalizado do início ao fim.</div>
+              <div style="display:flex;gap:6px;">
+                <div style="background:linear-gradient(90deg,#16a34a,#15803d);color:#fff;font-size:8px;font-weight:900;padding:7px 12px;border-radius:3px;">VER IMÓVEIS →</div>
+                <div style="border:1px solid rgba(74,222,128,0.4);color:#4ade80;font-size:8px;font-weight:700;padding:7px 12px;border-radius:3px;">FALAR CORRETOR</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+              <span style="background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🏠 Casas</span>
+              <span style="background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🏢 Apartamentos</span>
+              <span style="background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🏭 Comercial</span>
+              <span style="background:rgba(74,222,128,0.08);color:#4ade80;border:1px solid rgba(74,222,128,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🌾 Terrenos</span>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <div style="flex:1;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.12);border-radius:4px;padding:7px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#4ade80;">500+</div>
+                <div style="color:#666;">Imóveis</div>
+              </div>
+              <div style="flex:1;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.12);border-radius:4px;padding:7px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#4ade80;">10k+</div>
+                <div style="color:#666;">Clientes</div>
+              </div>
+              <div style="flex:1;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.12);border-radius:4px;padding:7px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#4ade80;">15</div>
+                <div style="color:#666;">Anos</div>
+              </div>
+            </div>
+          </div>`
+      },
+      {
+        name: 'Gold Prestige',
+        badge: 'PRESTÍGIO',
+        badgeClass: 'badge-premium',
+        preview: `
+          <div style="background:linear-gradient(180deg,#0a0800,#1a1200,#0a0800);padding:20px;font-family:'Montserrat',sans-serif;text-align:center;">
+            <div style="margin-bottom:12px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F5A623;letter-spacing:4px;margin-bottom:2px;">CASA NOBRE</div>
+              <div style="font-size:7px;color:#888;letter-spacing:3px;margin-bottom:8px;">IMÓVEIS DE ALTO PADRÃO</div>
+              <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,#F5A623,transparent);margin:0 auto;"></div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(245,166,35,0.08),rgba(245,166,35,0.03));border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:12px;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;margin-bottom:5px;">EXCLUSIVIDADE<br><span style="color:#F5A623">EM CADA DETALHE</span></div>
+              <div style="font-size:7px;color:#888;line-height:1.6;margin-bottom:8px;">Imóveis selecionados para clientes que exigem o melhor. Discrição e excelência no atendimento.</div>
+              <div style="background:linear-gradient(135deg,#F5A623,#e8940a);color:#000;font-size:8px;font-weight:900;padding:7px 16px;display:inline-block;border-radius:2px;letter-spacing:1px;">VER PORTFÓLIO</div>
+            </div>
+            <div style="display:flex;gap:5px;justify-content:center;">
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:7px 10px;font-size:7px;">
+                <div style="color:#F5A623;font-family:'Bebas Neue',sans-serif;font-size:14px;">R$500k+</div>
+                <div style="color:#666;">Portfólio Médio</div>
+              </div>
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:7px 10px;font-size:7px;">
+                <div style="color:#F5A623;font-family:'Bebas Neue',sans-serif;font-size:14px;">100%</div>
+                <div style="color:#666;">Discrição</div>
+              </div>
+            </div>
+          </div>`
+      }
+    ]
+  },
+  acad: {
+    name: 'Academia / Personal Trainer',
+    icon: '🏋️',
+    templates: [
+      {
+        name: 'Fire Impact',
+        badge: 'ENERGIA',
+        badgeClass: 'badge-impact',
+        preview: `
+          <div style="background:linear-gradient(135deg,#0f0000,#1a0000);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="text-align:center;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ef4444;letter-spacing:4px;text-shadow:0 0 20px rgba(239,68,68,0.5);">IRON GYM</div>
+              <div style="font-size:7px;color:#888;letter-spacing:3px;">TREINE. EVOLUA. SUPERE.</div>
+            </div>
+            <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;padding:12px;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;text-align:center;margin-bottom:6px;">NÃO É SÓ MUSCULAÇÃO.<br><span style="color:#ef4444">É TRANSFORMAÇÃO.</span></div>
+              <div style="font-size:7px;color:#888;text-align:center;line-height:1.6;margin-bottom:10px;">Estrutura completa, instrutores qualificados e o ambiente certo para você alcançar seus objetivos.</div>
+              <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:3px;padding:6px;font-size:8px;color:#f87171;text-align:center;font-weight:800;margin-bottom:8px;">🔥 PRIMEIRA SEMANA GRÁTIS + AVALIAÇÃO FÍSICA</div>
+              <div style="text-align:center;"><div style="background:linear-gradient(90deg,#dc2626,#b91c1c);color:#fff;font-size:9px;font-weight:900;padding:8px 18px;display:inline-block;border-radius:3px;">QUERO COMEÇAR AGORA →</div></div>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+              <div style="flex:1;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:3px;padding:6px;text-align:center;font-size:7px;color:#ccc;">🏋️<br>Musculação</div>
+              <div style="flex:1;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:3px;padding:6px;text-align:center;font-size:7px;color:#ccc;">🥊<br>Crossfit</div>
+              <div style="flex:1;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:3px;padding:6px;text-align:center;font-size:7px;color:#ccc;">🧘<br>Yoga</div>
+              <div style="flex:1;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:3px;padding:6px;text-align:center;font-size:7px;color:#ccc;">🏊<br>Natação</div>
+            </div>
+          </div>`
+      },
+      {
+        name: 'Steel Dark',
+        badge: 'FORÇA',
+        badgeClass: 'badge-premium',
+        preview: `
+          <div style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;letter-spacing:2px;">STEEL <span style="color:#F5A623">FIT</span></div>
+              <div style="font-size:7px;color:#888;border:1px solid #333;padding:2px 8px;border-radius:3px;">DESDE 2010</div>
+            </div>
+            <div style="border-left:3px solid #F5A623;padding:10px 12px;background:rgba(245,166,35,0.03);margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;margin-bottom:4px;">FORGE YOUR BODY.<br><span style="color:#F5A623">BUILD YOUR LIFE.</span></div>
+              <div style="font-size:7px;color:#666;line-height:1.6;">Personal trainers certificados. Acompanhamento nutricional. Resultados comprovados em 60 dias.</div>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+              <div style="flex:1;background:#141414;border:1px solid #2a2a2a;padding:8px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">1200+</div>
+                <div style="color:#555;">Alunos Ativos</div>
+              </div>
+              <div style="flex:1;background:#141414;border:1px solid #2a2a2a;padding:8px;text-align:center;font-size:7px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#F5A623;">60</div>
+                <div style="color:#555;">Dias de Resultado</div>
+              </div>
+            </div>
+            <div style="background:linear-gradient(90deg,#F5A623,#e8940a);color:#000;font-size:9px;font-weight:900;padding:10px;text-align:center;border-radius:2px;letter-spacing:1px;">AVALIAÇÃO GRATUITA →</div>
+          </div>`
+      }
+    ]
+  },
+  rest: {
+    name: 'Restaurante / Delivery',
+    icon: '🍽️',
+    templates: [
+      {
+        name: 'Dark Gourmet',
+        badge: 'GOURMET',
+        badgeClass: 'badge-impact',
+        preview: `
+          <div style="background:linear-gradient(135deg,#0f0800,#1a1000);padding:20px;font-family:'Montserrat',sans-serif;">
+            <div style="text-align:center;margin-bottom:12px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fb923c;letter-spacing:3px;margin-bottom:2px;">FOGÃO MINEIRO</div>
+              <div style="font-size:7px;color:#fed7aa;letter-spacing:3px;">RESTAURANTE & DELIVERY</div>
+            </div>
+            <div style="background:rgba(251,146,60,0.06);border:1px solid rgba(251,146,60,0.15);border-radius:8px;padding:12px;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;text-align:center;margin-bottom:5px;">SABOR QUE AQUECE<br><span style="color:#fb923c">O CORAÇÃO</span></div>
+              <div style="font-size:7px;color:#888;text-align:center;line-height:1.6;margin-bottom:8px;">Culinária mineira autêntica. Ingredientes frescos. Receitas de família há 3 gerações.</div>
+              <div style="display:flex;gap:6px;justify-content:center;">
+                <div style="background:linear-gradient(90deg,#ea580c,#c2410c);color:#fff;font-size:8px;font-weight:900;padding:7px 14px;border-radius:3px;">🍽️ PEDIR AGORA</div>
+                <div style="border:1px solid rgba(251,146,60,0.4);color:#fb923c;font-size:8px;font-weight:700;padding:7px 12px;border-radius:3px;">RESERVAR MESA</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+              <span style="background:rgba(251,146,60,0.08);color:#fb923c;border:1px solid rgba(251,146,60,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🍖 Churrasco</span>
+              <span style="background:rgba(251,146,60,0.08);color:#fb923c;border:1px solid rgba(251,146,60,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🫘 Feijão Tropeiro</span>
+              <span style="background:rgba(251,146,60,0.08);color:#fb923c;border:1px solid rgba(251,146,60,0.2);font-size:7px;padding:3px 8px;border-radius:10px;">🚗 Delivery</span>
+            </div>
+            <div style="background:rgba(251,146,60,0.05);border:1px solid rgba(251,146,60,0.12);border-radius:4px;padding:8px;font-size:7px;color:#fed7aa;font-style:italic;text-align:center;">
+              "Melhor restaurante da cidade!" — ★★★★★ João P., cliente há 3 anos
+            </div>
+          </div>`
+      },
+      {
+        name: 'Gold Fine Dining',
+        badge: 'REQUINTE',
+        badgeClass: 'badge-premium',
+        preview: `
+          <div style="background:linear-gradient(180deg,#0a0800,#1a1200,#0a0800);padding:20px;font-family:'Montserrat',sans-serif;text-align:center;">
+            <div style="margin-bottom:14px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F5A623;letter-spacing:4px;margin-bottom:2px;">LE BISTROT</div>
+              <div style="font-size:7px;color:#888;letter-spacing:3px;margin-bottom:8px;">GASTRONOMIA FRANCESA</div>
+              <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,#F5A623,transparent);margin:0 auto;"></div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(245,166,35,0.08),rgba(245,166,35,0.03));border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:12px;margin-bottom:10px;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;margin-bottom:5px;">UMA EXPERIÊNCIA<br><span style="color:#F5A623">INESQUECÍVEL</span></div>
+              <div style="font-size:7px;color:#888;line-height:1.6;margin-bottom:8px;">Alta gastronomia em ambiente sofisticado. Chef premiado. Menu degustação exclusivo.</div>
+              <div style="background:linear-gradient(135deg,#F5A623,#e8940a);color:#000;font-size:8px;font-weight:900;padding:7px 16px;display:inline-block;border-radius:2px;letter-spacing:1px;">RESERVAR MESA</div>
+            </div>
+            <div style="display:flex;gap:5px;justify-content:center;">
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:7px 10px;font-size:7px;">
+                <div style="font-size:14px;">👨‍🍳</div>
+                <div style="color:#F5A623;font-weight:700;">Chef Premiado</div>
+              </div>
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:7px 10px;font-size:7px;">
+                <div style="font-size:14px;">🍷</div>
+                <div style="color:#F5A623;font-weight:700;">Carta de Vinhos</div>
+              </div>
+              <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);border-radius:4px;padding:7px 10px;font-size:7px;">
+                <div style="font-size:14px;">⭐</div>
+                <div style="color:#F5A623;font-weight:700;">Guia Michelin</div>
+              </div>
+            </div>
+          </div>`
+      }
+    ]
+  }
+};
+
+function openNichoModal(key) {
+  const data = nichoTemplateData[key];
+  if(!data) return;
+  const content = document.getElementById('nichoModalContent');
+  content.innerHTML = `
+    <div class="section-tag">${data.icon} ${data.name}</div>
+    <div class="modal-title">ESCOLHA SEU TEMPLATE</div>
+    <div class="modal-sub">Pré-visualize como ficará sua página — personalizada com seu logo, cores e dados.</div>
+    <div class="templates-showcase">
+      ${data.templates.map((t, i) => `
+        <div class="template-card" id="tc_${key}_${i}">
+          <div class="mini-site">${t.preview}</div>
+          <div class="tc-label">
+            <span class="tc-name">${t.name}</span>
+            <span class="tc-badge ${t.badgeClass}">${t.badge}</span>
+          </div>
+          <div style="padding:14px;">
+            <button onclick="chooseTemplate('${key}', '${i}', '${t.name}')" 
+              style="width:100%;background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;padding:12px;border-radius:4px;font-weight:900;font-size:13px;cursor:pointer;letter-spacing:1px;transition:all .3s;"
+              onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+              USAR ESTE TEMPLATE →
+            </button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  document.getElementById('nichoModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function chooseTemplate(nichoKey, tmplIndex, tmplName) {
+  selectedNicho = nichoKey;
+  selectedTemplate = tmplIndex;
+  closeModal('nichoModal');
+  populateNichoSelector();
+  openCreateModal();
+  // Pre-select the nicho
+  setTimeout(() => {
+    selectNicho(nichoKey);
+    // Also highlight template
+    const tmplEl = document.getElementById(tmplIndex == 0 ? 'tmpl1' : 'tmpl2');
+    if(tmplEl) tmplEl.classList.add('selected');
+  }, 100);
+}
+
+function editField(field) {
+  let newVal;
+  if(field === 'whatsapp') {
+    newVal = prompt('Novo número de WhatsApp:');
+    if(newVal) document.getElementById('panelWhats').textContent = newVal;
+  } else if(field === 'empresa') {
+    newVal = prompt('Novo nome da empresa:');
+    if(newVal) document.getElementById('panelEmpresa').textContent = newVal;
+  }
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if(e.target === this) {
+      this.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+// Init payment method
+showPaymentMethod('pix');
+</script>
+</body>
+</html>

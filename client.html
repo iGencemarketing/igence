@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGence — Minha Página</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#F5A623;--dark:#0A0A0A;--dark2:#111;--dark3:#1A1A1A;--white:#fff;--green:#22c55e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0d0d0d;color:var(--white);font-family:'Montserrat',sans-serif;min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;}
+.login-box{background:var(--dark2);border:1px solid #222;border-radius:12px;padding:44px 36px;width:360px;text-align:center;}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--gold);letter-spacing:3px;margin-bottom:2px;}
+.login-logo span{color:var(--white);}
+.login-sub{font-size:11px;color:#555;margin-bottom:8px;letter-spacing:1px;}
+.plan-badge{display:inline-block;font-size:10px;font-weight:800;padding:4px 14px;border-radius:20px;margin-bottom:24px;}
+.login-input{width:100%;background:#1a1a1a;border:1px solid #333;color:#fff;padding:12px 16px;border-radius:6px;font-size:14px;font-family:'Montserrat',sans-serif;outline:none;margin-bottom:12px;transition:border .2s;}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{width:100%;background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;padding:14px;border-radius:6px;font-weight:900;font-size:15px;cursor:pointer;letter-spacing:1px;}
+.login-hint{font-size:11px;color:#444;margin-top:12px;}
+.login-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:12px;padding:10px;border-radius:6px;margin-top:10px;display:none;}
+
+/* APP */
+#app{display:none;}
+header{background:var(--dark2);border-bottom:1px solid #1a1a1a;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.h-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:2px;}
+.h-logo span{color:#fff;}
+.h-right{display:flex;align-items:center;gap:12px;}
+.h-empresa{font-size:13px;font-weight:700;color:#ccc;}
+.h-plan{font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px;}
+.h-plan.basico{background:rgba(156,163,175,0.1);color:#9ca3af;border:1px solid rgba(156,163,175,0.2);}
+.h-plan.pro{background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.2);}
+.h-plan.elite{background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2);}
+.logout-btn{background:transparent;border:1px solid #333;color:#666;padding:7px 14px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;}
+
+.main-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 57px);}
+@media(max-width:900px){.main-wrap{grid-template-columns:1fr;}}
+
+/* LEFT PANEL */
+.panel-left{padding:28px;border-right:1px solid #1a1a1a;overflow-y:auto;max-height:calc(100vh - 57px);}
+.panel-section{margin-bottom:28px;}
+.ps-title{font-size:11px;font-weight:800;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:8px;}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.fg label{font-size:11px;font-weight:700;color:#666;letter-spacing:1px;}
+.fg input,.fg select,.fg textarea{background:#141414;border:1px solid #2a2a2a;color:#fff;padding:11px 14px;border-radius:6px;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;transition:border .2s;width:100%;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.fg textarea{resize:vertical;min-height:70px;}
+.fg select option{background:#1a1a1a;}
+
+/* COLOR PICKER */
+.color-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.c-opt{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative;}
+.c-opt.active{border-color:#fff;transform:scale(1.2);}
+.c-opt:hover{transform:scale(1.1);}
+
+/* UPLOAD */
+.upload-box{border:2px dashed #2a2a2a;border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;}
+.upload-box:hover{border-color:var(--gold);background:rgba(245,166,35,0.02);}
+.upload-box p{font-size:12px;color:#555;margin-top:6px;}
+
+/* LOCK OVERLAY */
+.lock-overlay{background:rgba(0,0,0,0.7);border-radius:8px;padding:20px;text-align:center;position:relative;}
+.lock-icon{font-size:32px;margin-bottom:8px;}
+.lock-text{font-size:13px;color:#888;margin-bottom:12px;}
+.upgrade-btn{background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;padding:10px 20px;border-radius:4px;font-weight:900;font-size:12px;cursor:pointer;letter-spacing:1px;}
+
+/* RIGHT PANEL - PREVIEW */
+.panel-right{background:#141414;display:flex;flex-direction:column;position:relative;}
+.preview-header{padding:14px 20px;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center;background:var(--dark2);}
+.preview-title{font-size:12px;font-weight:800;color:#888;letter-spacing:1px;}
+.device-btns{display:flex;gap:6px;}
+.dev-btn{background:#1a1a1a;border:1px solid #2a2a2a;color:#666;padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;}
+.dev-btn.active,.dev-btn:hover{border-color:var(--gold);color:var(--gold);}
+.preview-wrap{flex:1;overflow-y:auto;padding:20px;display:flex;justify-content:center;}
+.preview-container{transition:width .3s;}
+.preview-container.desktop{width:100%;}
+.preview-container.tablet{width:768px;max-width:100%;}
+.preview-container.mobile{width:375px;max-width:100%;}
+.preview-site{border-radius:8px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+
+/* SITE PREVIEW STYLES */
+.site-nav{padding:14px 20px;display:flex;justify-content:space-between;align-items:center;}
+.site-hero{padding:50px 24px;text-align:center;position:relative;}
+.site-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,48px);line-height:1;margin-bottom:10px;}
+.site-hero p{font-size:clamp(12px,1.5vw,15px);line-height:1.6;margin-bottom:20px;opacity:0.8;max-width:500px;margin-left:auto;margin-right:auto;}
+.site-btn{display:inline-block;padding:12px 28px;border-radius:4px;font-weight:900;font-size:13px;letter-spacing:1px;cursor:pointer;text-decoration:none;}
+.site-stats{display:flex;gap:0;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);}
+.site-stat{flex:1;padding:18px 12px;text-align:center;border-right:1px solid rgba(255,255,255,0.05);}
+.site-stat:last-child{border:none;}
+.site-stat-n{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;}
+.site-stat-l{font-size:9px;opacity:0.5;margin-top:3px;}
+.site-services{padding:32px 20px;}
+.site-services h2{font-family:'Bebas Neue',sans-serif;font-size:24px;margin-bottom:16px;}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.service-card{padding:14px;border-radius:6px;font-size:11px;}
+.site-testi{padding:24px 20px;text-align:center;}
+.site-testi blockquote{font-style:italic;font-size:12px;opacity:0.8;max-width:400px;margin:0 auto 10px;line-height:1.7;}
+.site-testi cite{font-size:11px;opacity:0.5;}
+.site-cta{padding:40px 20px;text-align:center;}
+.site-cta h2{font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:10px;}
+.site-cta p{font-size:12px;opacity:0.6;margin-bottom:20px;}
+.site-footer{padding:16px 20px;text-align:center;font-size:10px;opacity:0.4;border-top:1px solid rgba(255,255,255,0.05);}
+.whats-float{position:fixed;bottom:20px;right:20px;width:50px;height:50px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;box-shadow:0 4px 20px rgba(37,211,102,0.4);}
+
+/* SAVE BTN */
+.save-bar{padding:16px 20px;border-top:1px solid #1a1a1a;background:var(--dark2);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.save-btn{background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;padding:12px 28px;border-radius:6px;font-weight:900;font-size:13px;cursor:pointer;letter-spacing:1px;transition:all .2s;}
+.save-btn:hover{transform:translateY(-1px);}
+.page-url{font-size:12px;color:#4ade80;font-family:monospace;}
+
+/* NOTIFICATION */
+.notif{position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:14px 20px;font-size:13px;font-weight:600;z-index:9999;display:none;}
+.notif.success{border-color:rgba(34,197,94,0.4);color:var(--green);}
+
+/* STATUS CARD */
+.status-card{background:var(--dark3);border:1px solid #2a2a2a;border-radius:8px;padding:18px;margin-bottom:20px;}
+.sc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1a1a1a;font-size:13px;}
+.sc-row:last-child{border:none;}
+.sc-label{color:#666;font-size:12px;}
+.sc-val{font-weight:600;}
+
+/* PHOTOS */
+.photo-drop{border:2px dashed #2a2a2a;border-radius:8px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .3s;position:relative;}
+.photo-drop:hover,.photo-drop.drag-over{border-color:var(--gold);background:rgba(245,166,35,0.03);}
+.photo-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.photo-thumb{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:1;background:#141414;border:1px solid #2a2a2a;}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-thumb-overlay{position:absolute;inset:0;background:rgba(0,0,0,0;display:flex;flex-direction:column;justify-content:space-between;padding:6px;opacity:0;transition:opacity .2s;}
+.photo-thumb:hover .photo-thumb-overlay{opacity:1;background:rgba(0,0,0,0.55);}
+.photo-remove{background:rgba(239,68,68,0.9);border:none;color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:3px;cursor:pointer;align-self:flex-end;}
+.photo-caption-input{background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:10px;padding:3px 6px;border-radius:3px;width:100%;font-family:'Montserrat',sans-serif;outline:none;}
+.photo-section-type{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.pst-btn{flex:1;min-width:90px;background:#141414;border:1px solid #2a2a2a;color:#888;padding:8px 6px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;font-family:'Montserrat',sans-serif;}
+.pst-btn.active{background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.4);color:var(--gold);}
+.pending-badge{background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:#fbbf24;font-size:11px;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">iG<span>ence</span></div>
+    <div class="login-sub">PAINEL DO CLIENTE</div>
+    <input class="login-input" type="email" id="cEmail" placeholder="Seu email" value="">
+    <input class="login-input" type="password" id="cPass" placeholder="Sua senha" value="">
+    <button class="login-btn" onclick="doClientLogin()">ENTRAR NO MEU PAINEL</button>
+    <p class="login-hint">Recebeu os dados de acesso por WhatsApp</p>
+    <div class="login-error" id="loginError">Email ou senha incorretos. Verifique os dados enviados por WhatsApp.</div>
+    <p class="login-hint" style="margin-top:16px;color:#333;">Demo: use qualquer email/senha</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="h-logo">iG<span>ence</span></div>
+    <div class="h-right">
+      <span class="h-empresa" id="hEmpresa">Minha Empresa</span>
+      <span class="h-plan" id="hPlan">Pro</span>
+      <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <div class="main-wrap">
+    <!-- LEFT -->
+    <div class="panel-left">
+
+      <!-- STATUS -->
+      <div class="panel-section">
+        <div class="ps-title">📊 Status da Minha Página</div>
+        <div class="status-card">
+          <div class="sc-row"><span class="sc-label">Status</span><span style="color:#4ade80;font-weight:700;">✓ Online</span></div>
+          <div class="sc-row"><span class="sc-label">Domínio</span><span class="sc-val page-url" id="scDomain">—</span></div>
+          <div class="sc-row"><span class="sc-label">Plano</span><span class="sc-val" id="scPlan">—</span></div>
+          <div class="sc-row"><span class="sc-label">Criada em</span><span class="sc-val" id="scDate">—</span></div>
+          <div class="sc-row"><span class="sc-label">Validade do plano</span><span class="sc-val" id="scExpiry" style="color:#fbbf24;">—</span></div>
+          <div class="sc-row"><span class="sc-label">Renovação em</span><span class="sc-val" id="scDaysLeft">—</span></div>
+          <div class="sc-row" style="border:none;padding-top:12px;">
+            <a id="scViewLink" href="#" target="_blank" style="color:#4ade80;font-size:12px;font-family:monospace;text-decoration:none;">Abrir minha página ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOMAIN SECTION (shown for pro/elite) -->
+      <div class="panel-section" id="domainSection" style="display:none;">
+        <div class="ps-title">🌐 Meu Domínio</div>
+        <div class="status-card" style="margin-bottom:14px;">
+          <div class="sc-row"><span class="sc-label">Domínio atual</span><span class="sc-val" style="color:#4ade80;font-family:monospace;font-size:12px;" id="currentDomain">—</span></div>
+          <div class="sc-row"><span class="sc-label">Status DNS</span><span style="color:#4ade80;font-weight:700;font-size:12px;">✓ Propagado</span></div>
+          <div class="sc-row" style="border:none;"><span class="sc-label">SSL</span><span style="color:#4ade80;font-weight:700;font-size:12px;">🔒 Ativo</span></div>
+        </div>
+        <div class="fg">
+          <label>Solicitar troca de domínio</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="newDomainInput" placeholder="Ex: meunegocio.com.br" style="flex:1;">
+            <button onclick="requestDomain()" style="background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:var(--gold);padding:0 16px;border-radius:6px;font-weight:800;font-size:12px;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;">SOLICITAR</button>
+          </div>
+          <div style="font-size:11px;color:#555;margin-top:4px;">Nossa equipe verificará a disponibilidade e configurará em até 24h</div>
+        </div>
+      </div>
+
+      <!-- PAYMENT EXPIRY -->
+      <div class="panel-section" id="paymentSection">
+        <div class="ps-title">💳 Assinatura</div>
+        <div class="status-card">
+          <div class="sc-row"><span class="sc-label">Próxima cobrança</span><span class="sc-val" id="nextCharge">—</span></div>
+          <div class="sc-row"><span class="sc-label">Valor</span><span class="sc-val" id="planValue">—</span></div>
+          <div class="sc-row"><span class="sc-label">Método</span><span class="sc-val">💳 Cartão / PIX</span></div>
+          <div class="sc-row" style="border:none;padding-top:10px;">
+            <div id="expiryWarning" style="display:none;width:100%;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:6px;padding:10px;font-size:12px;color:#f87171;">
+              ⚠️ Sua assinatura vence em breve! Renove para não perder acesso à sua página.
+            </div>
+          </div>
+        </div>
+        <button onclick="openRenew()" style="width:100%;background:transparent;border:1px solid #333;color:#888;padding:10px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;font-family:'Montserrat',sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='#333';this.style.color='#888'">🔄 Gerenciar Assinatura</button>
+      </div>
+
+      <!-- BÁSICO: info -->
+      <div id="basicBlock">
+        <div class="panel-section">
+          <div class="ps-title">✏️ Informações de Contato</div>
+          <div class="fg"><label>WhatsApp de Contato</label><input type="text" id="e_whats" placeholder="(11) 99999-9999" oninput="updatePreview()"></div>
+          <div class="fg"><label>Horário de Atendimento</label><input type="text" id="e_horario" placeholder="Seg a Sex, 8h às 18h" oninput="updatePreview()"></div>
+        </div>
+        <div class="lock-overlay" id="lockOverlay">
+          <div class="lock-icon">🔒</div>
+          <div class="lock-text">Edição completa disponível no plano <b style="color:var(--gold)">Profissional</b> ou superior</div>
+          <button class="upgrade-btn" onclick="showUpgrade()">FAZER UPGRADE → R$97/mês</button>
+        </div>
+      </div>
+
+      <!-- PRO + ELITE: full edit -->
+      <div id="proBlock" style="display:none;">
+        <div class="panel-section">
+          <div class="ps-title">🏢 Informações da Empresa</div>
+          <div class="fg"><label>Nome da Empresa *</label><input type="text" id="e_empresa" placeholder="Ex: Dr. João Silva Advocacia" oninput="updatePreview()"></div>
+          <div class="fg"><label>WhatsApp *</label><input type="text" id="e_whats2" placeholder="(11) 99999-9999" oninput="updatePreview()"></div>
+          <div class="fg"><label>Slogan / Subtítulo</label><input type="text" id="e_slogan" placeholder="Ex: Seus direitos, nossa missão" oninput="updatePreview()"></div>
+          <div class="fg"><label>Chamada Principal (Headline)</label><input type="text" id="e_headline" placeholder="Ex: DEFENDEMOS SEUS DIREITOS" oninput="updatePreview()"></div>
+          <div class="fg"><label>Texto de apresentação</label><textarea id="e_desc" oninput="updatePreview()" placeholder="Descreva brevemente seus serviços e diferenciais..."></textarea></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="ps-title">📋 Seus Serviços</div>
+          <div id="servicesInputs"></div>
+          <button onclick="addService()" style="background:transparent;border:1px dashed #333;color:#666;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:700;width:100%;margin-top:4px;">+ Adicionar Serviço</button>
+        </div>
+
+        <div class="panel-section">
+          <div class="ps-title">📊 Números de Destaque</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="fg"><label>Número 1 (Ex: 500)</label><input type="text" id="stat1n" value="500+" oninput="updatePreview()"></div>
+            <div class="fg"><label>Label 1 (Ex: Casos Ganhos)</label><input type="text" id="stat1l" value="Casos Ganhos" oninput="updatePreview()"></div>
+            <div class="fg"><label>Número 2</label><input type="text" id="stat2n" value="15" oninput="updatePreview()"></div>
+            <div class="fg"><label>Label 2</label><input type="text" id="stat2l" value="Anos Exp." oninput="updatePreview()"></div>
+            <div class="fg"><label>Número 3</label><input type="text" id="stat3n" value="98%" oninput="updatePreview()"></div>
+            <div class="fg"><label>Label 3</label><input type="text" id="stat3l" value="Satisfação" oninput="updatePreview()"></div>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div class="ps-title">💬 Depoimento em Destaque</div>
+          <div class="fg"><label>Texto do Depoimento</label><textarea id="e_testi" oninput="updatePreview()" placeholder='"Excelente profissional! Resultado incrível."'></textarea></div>
+          <div class="fg"><label>Autor</label><input type="text" id="e_testi_autor" placeholder="— Maria S., cliente" oninput="updatePreview()"></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="ps-title">🎨 Paleta de Cores</div>
+          <div class="color-row" id="colorRow"></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="ps-title">🖼 Logo</div>
+          <div class="upload-box" onclick="document.getElementById('logoUpload').click()">
+            <div style="font-size:32px;">📁</div>
+            <p>Clique para trocar sua logo</p>
+            <p style="font-size:10px;margin-top:2px;">PNG com fundo transparente recomendado</p>
+            <input type="file" id="logoUpload" style="display:none" accept="image/*" onchange="uploadLogo(this)">
+          </div>
+          <div id="logoPreviewBox" style="display:none;text-align:center;padding:12px;background:#141414;border-radius:6px;margin-top:8px;">
+            <img id="logoPreviewImg" style="max-height:50px;max-width:160px;">
+            <p style="font-size:10px;color:#4ade80;margin-top:4px;">✓ Logo atualizada!</p>
+          </div>
+        </div>
+
+        <div class="panel-section" id="eliteBlock" style="display:none;">
+          <div class="ps-title">⭐ Elite — SEO & Analytics</div>
+          <div class="fg"><label>Palavras-chave (SEO)</label><input type="text" id="e_seo" placeholder="advogado trabalhista são paulo" oninput="updatePreview()"></div>
+          <div class="fg"><label>Pixel Meta/Facebook</label><input type="text" id="e_pixel" placeholder="Seu ID do Pixel"></div>
+          <div class="fg"><label>Google Analytics (GA4)</label><input type="text" id="e_ga" placeholder="G-XXXXXXXXXX"></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="ps-title">📞 Botão de Ação Principal (CTA)</div>
+          <div class="fg"><label>Texto do Botão</label><input type="text" id="e_cta" value="Agendar Consulta Gratuita" oninput="updatePreview()"></div>
+          <div class="fg"><label>Texto de Urgência (opcional)</label><input type="text" id="e_urgency" placeholder="Ex: Últimas vagas esta semana!" oninput="updatePreview()"></div>
+        </div>
+      </div>
+
+        <div class="panel-section">
+          <div class="ps-title">📸 Fotos da Página</div>
+
+          <!-- Type selector -->
+          <div style="font-size:12px;color:#888;margin-bottom:10px;">Escolha como as fotos vão aparecer na sua página:</div>
+          <div class="photo-section-type" id="photoTypeSelector">
+            <button class="pst-btn active" onclick="selectPhotoType('gallery',this)">🖼 Galeria</button>
+            <button class="pst-btn" onclick="selectPhotoType('before_after',this)">↔️ Antes/Depois</button>
+            <button class="pst-btn" onclick="selectPhotoType('banner',this)">🖥 Banner Hero</button>
+          </div>
+
+          <!-- Dica contextual -->
+          <div id="photoTypeTip" style="background:#141414;border:1px solid #2a2a2a;border-radius:6px;padding:10px;font-size:11px;color:#666;margin-bottom:14px;line-height:1.6;">
+            📌 <b style="color:#ccc">Galeria:</b> Grade de fotos dos seus trabalhos/procedimentos. Ideal para portfólio.
+          </div>
+
+          <!-- Upload zone -->
+          <div class="photo-drop" id="photoDropZone" onclick="document.getElementById('photoFileInput').click()">
+            <input type="file" id="photoFileInput" accept="image/*" multiple onchange="handlePhotoUpload(this.files)">
+            <div style="font-size:36px;margin-bottom:8px;pointer-events:none;">📷</div>
+            <div style="font-size:13px;font-weight:700;color:#ccc;pointer-events:none;">Clique ou arraste fotos aqui</div>
+            <div style="font-size:11px;color:#555;margin-top:4px;pointer-events:none;">JPG, PNG, WEBP • Máx 5MB por foto • Até 9 fotos</div>
+          </div>
+
+          <!-- Grid de fotos -->
+          <div class="photo-grid" id="photoGrid"></div>
+
+          <!-- Status -->
+          <div id="photoStatus" style="margin-top:10px;display:none;">
+            <div class="pending-badge">⏳ Aguardando aprovação da equipe iGence</div>
+            <div style="font-size:11px;color:#555;margin-top:6px;">As fotos aparecerão na sua página após revisão e aprovação (geralmente em até 2h).</div>
+          </div>
+
+          <div id="photoApprovedMsg" style="margin-top:10px;display:none;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:6px;padding:10px;font-size:12px;color:#4ade80;">
+            ✅ Fotos aprovadas e publicadas na sua página!
+          </div>
+
+          <!-- Request via WA fallback -->
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid #1a1a1a;">
+            <div style="font-size:11px;color:#555;margin-bottom:8px;">Prefere enviar pelo WhatsApp?</div>
+            <button onclick="sendPhotosViaWhats()" style="width:100%;background:#0d1a0d;border:1px solid rgba(37,211,102,0.3);color:#4ade80;padding:10px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .2s;" onmouseover="this.style.background='rgba(37,211,102,0.1)'" onmouseout="this.style.background='#0d1a0d'">
+              📲 Enviar fotos pelo WhatsApp
+            </button>
+          </div>
+        </div>
+
+      </div><!-- end proBlock -->
+
+      <div class="save-bar">
+        <div>
+          <div style="font-size:11px;color:#555;margin-bottom:3px;">Suas alterações são salvas automaticamente</div>
+          <div class="page-url" id="footerUrl">—</div>
+        </div>
+        <button class="save-btn" onclick="saveChanges()">💾 SALVAR ALTERAÇÕES</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: PREVIEW -->
+    <div class="panel-right">
+      <div class="preview-header">
+        <span class="preview-title">👁 PRÉVIA AO VIVO</span>
+        <div class="device-btns">
+          <button class="dev-btn active" onclick="setDevice('desktop',this)">🖥 Desktop</button>
+          <button class="dev-btn" onclick="setDevice('tablet',this)">📱 Tablet</button>
+          <button class="dev-btn" onclick="setDevice('mobile',this)">📲 Mobile</button>
+        </div>
+      </div>
+      <div class="preview-wrap">
+        <div class="preview-container desktop" id="previewContainer">
+          <div class="preview-site" id="liveSite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ===== CLIENT DATA (in real app, loaded from backend) =====
+let clientData = {
+  empresa: 'Dr. João Silva Advocacia',
+  whats: '(11) 98765-4321',
+  nicho: 'adv',
+  template: '1',
+  plano: 'pro',
+  slogan: 'Seus Direitos, Nossa Missão',
+  headline: 'DEFENDEMOS SEUS DIREITOS COM EXCELÊNCIA',
+  desc: 'Com mais de 15 anos de experiência e 500+ casos ganhos, somos especialistas em defender os direitos dos trabalhadores e empresários.',
+  services: ['Direito Trabalhista', 'Direito Civil', 'Direito Empresarial', 'Consultoria Jurídica'],
+  stat1n: '500+', stat1l: 'Casos Ganhos',
+  stat2n: '15', stat2l: 'Anos Exp.',
+  stat3n: '98%', stat3l: 'Satisfação',
+  testi: '"Recuperei meu FGTS e ainda recebi indenização. Profissionalismo exemplar!"',
+  testiAutor: '— Carlos R., cliente',
+  cta: 'Agendar Consulta Gratuita',
+  urgency: 'Consulta inicial GRATUITA e sigilosa!',
+  horario: 'Seg a Sex, 8h às 19h',
+  cores: 'gold',
+  pageUrl: 'https://drjoaosilva.com.br',
+  date: '15/01/2025',
+  logo: null,
+  seo: '', pixel: '', ga: '',
+  photos: [],           // [{src, caption, approved}]
+  photoType: 'gallery', // gallery | before_after | banner
+  photosPending: false
+};
+
+const palettes = {
+  gold: {bg:'#0a0800',accent:'#F5A623',text:'#fff',card:'rgba(245,166,35,0.06)',cardBorder:'rgba(245,166,35,0.15)'},
+  blue: {bg:'#00060f',accent:'#38bdf8',text:'#fff',card:'rgba(56,189,248,0.06)',cardBorder:'rgba(56,189,248,0.15)'},
+  green: {bg:'#050f08',accent:'#34d399',text:'#fff',card:'rgba(52,211,153,0.06)',cardBorder:'rgba(52,211,153,0.15)'},
+  red: {bg:'#0f0000',accent:'#ef4444',text:'#fff',card:'rgba(239,68,68,0.06)',cardBorder:'rgba(239,68,68,0.15)'},
+  purple: {bg:'#0f0010',accent:'#e879f9',text:'#fff',card:'rgba(232,121,249,0.06)',cardBorder:'rgba(232,121,249,0.15)'},
+  orange: {bg:'#0f0800',accent:'#fb923c',text:'#fff',card:'rgba(251,146,60,0.06)',cardBorder:'rgba(251,146,60,0.15)'},
+  white: {bg:'#f8fafc',accent:'#0284c7',text:'#0f172a',card:'#fff',cardBorder:'#e0f2fe'}
+};
+
+// ===== LOGIN =====
+function doClientLogin(){
+  const email = document.getElementById('cEmail').value;
+  const pass = document.getElementById('cPass').value;
+  // In production: validate against backend. Demo: accept any
+  if(email.length < 3 || pass.length < 3){
+    document.getElementById('loginError').style.display='block';
+    return;
+  }
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  initClient();
+}
+document.getElementById('cPass').addEventListener('keyup',e=>{if(e.key==='Enter')doClientLogin();});
+
+function logout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+}
+
+// ===== INIT =====
+function initClient(){
+  const d = clientData;
+  document.getElementById('hEmpresa').textContent = d.empresa;
+  document.getElementById('hPlan').textContent = {basico:'Básico',pro:'Profissional',elite:'Elite'}[d.plano];
+  document.getElementById('hPlan').className = 'h-plan '+d.plano;
+  document.getElementById('scDomain').textContent = d.pageUrl;
+  document.getElementById('scPlan').textContent = {basico:'Básico — R$47,90/mês',pro:'Profissional — R$97/mês',elite:'Elite — R$197/mês'}[d.plano];
+  document.getElementById('scDate').textContent = d.date;
+  document.getElementById('scViewLink').href = d.pageUrl;
+  document.getElementById('footerUrl').textContent = d.pageUrl;
+
+  if(d.plano === 'basico'){
+    document.getElementById('basicBlock').style.display='block';
+    document.getElementById('proBlock').style.display='none';
+    document.getElementById('e_whats').value = d.whats;
+    document.getElementById('e_horario').value = d.horario;
+  } else {
+    document.getElementById('basicBlock').style.display='none';
+    document.getElementById('proBlock').style.display='block';
+    fillProFields(d);
+  }
+  if(d.plano === 'elite') document.getElementById('eliteBlock').style.display='block';
+  // Payment expiry
+  const payDate = new Date();
+  payDate.setDate(payDate.getDate() + 22); // 22 days left example
+  const expDate = new Date();
+  expDate.setDate(expDate.getDate() + 30);
+  const daysLeft = 22;
+  document.getElementById('scExpiry').textContent = expDate.toLocaleDateString('pt-BR');
+  document.getElementById('scDaysLeft').textContent = daysLeft + ' dias restantes';
+  if(daysLeft <= 7) document.getElementById('scDaysLeft').style.color = '#ef4444';
+  else if(daysLeft <= 14) document.getElementById('scDaysLeft').style.color = '#fbbf24';
+  else document.getElementById('scDaysLeft').style.color = '#4ade80';
+  document.getElementById('nextCharge').textContent = expDate.toLocaleDateString('pt-BR');
+  document.getElementById('planValue').textContent = {basico:'R$ 47,90/mês',pro:'R$ 97,00/mês',elite:'R$ 197,00/mês'}[d.plano];
+  if(daysLeft <= 5) document.getElementById('expiryWarning').style.display='block';
+
+  // Domain section
+  if(d.plano !== 'basico'){
+    document.getElementById('domainSection').style.display='block';
+    document.getElementById('currentDomain').textContent = d.pageUrl || d.domain || '—';
+  }
+
+  buildColorPicker();
+  buildServices();
+  updatePreview();
+}
+
+function fillProFields(d){
+  document.getElementById('e_empresa').value = d.empresa;
+  document.getElementById('e_whats2').value = d.whats;
+  document.getElementById('e_slogan').value = d.slogan;
+  document.getElementById('e_headline').value = d.headline;
+  document.getElementById('e_desc').value = d.desc;
+  document.getElementById('stat1n').value = d.stat1n;
+  document.getElementById('stat1l').value = d.stat1l;
+  document.getElementById('stat2n').value = d.stat2n;
+  document.getElementById('stat2l').value = d.stat2l;
+  document.getElementById('stat3n').value = d.stat3n;
+  document.getElementById('stat3l').value = d.stat3l;
+  document.getElementById('e_testi').value = d.testi;
+  document.getElementById('e_testi_autor').value = d.testiAutor;
+  document.getElementById('e_cta').value = d.cta;
+  document.getElementById('e_urgency').value = d.urgency||'';
+}
+
+function buildServices(){
+  const container = document.getElementById('servicesInputs');
+  container.innerHTML = clientData.services.map((s,i)=>`
+    <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <input type="text" value="${s}" oninput="updateService(${i},this.value)" style="flex:1;background:#141414;border:1px solid #2a2a2a;color:#fff;padding:10px 12px;border-radius:6px;font-size:12px;font-family:'Montserrat',sans-serif;outline:none;">
+      <button onclick="removeService(${i})" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#666;padding:8px 12px;border-radius:6px;cursor:pointer;">✕</button>
+    </div>`).join('');
+}
+function updateService(i,v){ clientData.services[i]=v; updatePreview(); }
+function addService(){ clientData.services.push('Novo Serviço'); buildServices(); updatePreview(); }
+function removeService(i){ clientData.services.splice(i,1); buildServices(); updatePreview(); }
+
+function buildColorPicker(){
+  const row = document.getElementById('colorRow');
+  const cols = {gold:'linear-gradient(135deg,#F5A623,#e8940a)',blue:'linear-gradient(135deg,#38bdf8,#0284c7)',green:'linear-gradient(135deg,#34d399,#059669)',red:'linear-gradient(135deg,#ef4444,#dc2626)',purple:'linear-gradient(135deg,#e879f9,#9333ea)',orange:'linear-gradient(135deg,#fb923c,#ea580c)',white:'linear-gradient(135deg,#f8fafc,#e2e8f0)'};
+  row.innerHTML = Object.entries(cols).map(([k,v])=>`
+    <div class="c-opt ${clientData.cores===k?'active':''}" style="background:${v};" title="${k}" onclick="selectColor('${k}',this)"></div>`).join('');
+}
+function selectColor(key, el){
+  document.querySelectorAll('.c-opt').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  clientData.cores = key;
+  updatePreview();
+}
+
+function uploadLogo(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    clientData.logo = e.target.result;
+    document.getElementById('logoPreviewImg').src = e.target.result;
+    document.getElementById('logoPreviewBox').style.display='block';
+    updatePreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ===== READ FORM =====
+function readForm(){
+  if(clientData.plano==='basico'){
+    clientData.whats = document.getElementById('e_whats').value || clientData.whats;
+    clientData.horario = document.getElementById('e_horario').value || clientData.horario;
+  } else {
+    clientData.empresa = document.getElementById('e_empresa').value || clientData.empresa;
+    clientData.whats = document.getElementById('e_whats2').value || clientData.whats;
+    clientData.slogan = document.getElementById('e_slogan').value;
+    clientData.headline = document.getElementById('e_headline').value || clientData.headline;
+    clientData.desc = document.getElementById('e_desc').value || clientData.desc;
+    clientData.stat1n = document.getElementById('stat1n').value;
+    clientData.stat1l = document.getElementById('stat1l').value;
+    clientData.stat2n = document.getElementById('stat2n').value;
+    clientData.stat2l = document.getElementById('stat2l').value;
+    clientData.stat3n = document.getElementById('stat3n').value;
+    clientData.stat3l = document.getElementById('stat3l').value;
+    clientData.testi = document.getElementById('e_testi').value;
+    clientData.testiAutor = document.getElementById('e_testi_autor').value;
+    clientData.cta = document.getElementById('e_cta').value || clientData.cta;
+    clientData.urgency = document.getElementById('e_urgency').value;
+  }
+}
+
+// ===== PREVIEW =====
+function updatePreview(){
+  readForm();
+  const d = clientData;
+  const p = palettes[d.cores] || palettes.gold;
+  const isDark = p.bg.startsWith('#0');
+  const logoHtml = d.logo ? `<img src="${d.logo}" style="max-height:32px;max-width:120px;">` : `<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:${p.accent};letter-spacing:2px;">${d.empresa.split(' ').slice(0,2).join(' ')}</div>`;
+
+  document.getElementById('liveSite').innerHTML = `
+    <div style="background:${p.bg};color:${p.text};font-family:'Montserrat',sans-serif;min-width:0;">
+
+      <!-- NAV -->
+      <div style="padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.05);">
+        ${logoHtml}
+        <div style="font-size:8px;font-weight:800;color:${p.accent};border:1px solid ${p.accent};padding:4px 10px;border-radius:2px;letter-spacing:1px;cursor:pointer;">${d.cta}</div>
+      </div>
+
+      <!-- HERO -->
+      <div style="padding:44px 24px;text-align:center;background:linear-gradient(180deg,${p.bg},rgba(0,0,0,0.2),${p.bg});">
+        ${d.urgency?`<div style="display:inline-block;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);font-size:9px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:1px;">${d.urgency}</div>`:''}
+        <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,5vw,40px);line-height:1;margin-bottom:10px;color:${p.text};">${d.headline}</h1>
+        ${d.slogan?`<div style="font-size:11px;color:${p.accent};letter-spacing:2px;font-weight:700;margin-bottom:10px;">${d.slogan}</div>`:''}
+        <p style="font-size:11px;line-height:1.7;opacity:0.75;max-width:440px;margin:0 auto 20px;">${d.desc}</p>
+        <div style="background:linear-gradient(135deg,${p.accent},${p.accent}dd);color:${isDark?'#000':'#fff'};font-size:11px;font-weight:900;padding:12px 24px;display:inline-block;border-radius:3px;letter-spacing:1px;cursor:pointer;">${d.cta} →</div>
+      </div>
+
+      <!-- STATS -->
+      <div style="display:flex;gap:0;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="flex:1;padding:16px 8px;text-align:center;border-right:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${p.accent};">${d.stat1n}</div>
+          <div style="font-size:8px;opacity:0.5;margin-top:2px;">${d.stat1l}</div>
+        </div>
+        <div style="flex:1;padding:16px 8px;text-align:center;border-right:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${p.accent};">${d.stat2n}</div>
+          <div style="font-size:8px;opacity:0.5;margin-top:2px;">${d.stat2l}</div>
+        </div>
+        <div style="flex:1;padding:16px 8px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${p.accent};">${d.stat3n}</div>
+          <div style="font-size:8px;opacity:0.5;margin-top:2px;">${d.stat3l}</div>
+        </div>
+      </div>
+
+      <!-- SERVICES -->
+      <div style="padding:28px 20px;">
+        <div style="font-size:9px;font-weight:800;color:${p.accent};letter-spacing:2px;margin-bottom:6px;">NOSSOS SERVIÇOS</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;margin-bottom:16px;">O QUE OFERECEMOS</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">
+          ${d.services.map(s=>`
+            <div style="background:${p.card};border:1px solid ${p.cardBorder};border-radius:4px;padding:10px;font-size:10px;border-left:2px solid ${p.accent};">${s}</div>`).join('')}
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL -->
+      <div style="padding:24px 20px;text-align:center;background:${p.card};border-top:1px solid ${p.cardBorder};border-bottom:1px solid ${p.cardBorder};">
+        <div style="font-size:24px;color:${p.accent};margin-bottom:6px;">★★★★★</div>
+        <blockquote style="font-style:italic;font-size:11px;opacity:0.8;max-width:380px;margin:0 auto 8px;line-height:1.7;">${d.testi}</blockquote>
+        <cite style="font-size:10px;opacity:0.5;">${d.testiAutor}</cite>
+      </div>
+
+      <!-- PHOTOS SECTION -->
+      ${buildPhotosPreview(d, p)}
+
+      <!-- CTA FINAL -->
+      <div style="padding:36px 20px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:8px;">PRONTO PARA COMEÇAR?</div>
+        <p style="font-size:11px;opacity:0.6;margin-bottom:18px;">Entre em contato agora e descubra como podemos ajudar.</p>
+        <div style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:${isDark?'#000':'#fff'};font-size:12px;font-weight:900;padding:14px 30px;display:inline-block;border-radius:3px;letter-spacing:1px;cursor:pointer;">${d.cta} →</div>
+        <div style="margin-top:14px;font-size:10px;opacity:0.5;">📱 ${d.whats} • ${d.horario}</div>
+      </div>
+
+      <!-- FOOTER -->
+      <div style="padding:14px 20px;text-align:center;font-size:9px;opacity:0.35;border-top:1px solid rgba(255,255,255,0.05);">
+        © 2025 ${d.empresa} • Powered by iGence Marketing Inteligente
+      </div>
+    </div>`;
+
+  // WhatsApp button
+  const existing = document.getElementById('whatsBtn');
+  if(existing) existing.remove();
+}
+
+function buildPhotosPreview(d, p) {
+  const photos = d.photos || [];
+  if (!photos.length) return '';
+
+  const approvedPhotos = photos.filter(ph => ph.approved);
+  const pendingPhotos = photos.filter(ph => !ph.approved);
+  // Show all in preview (approved in full color, pending dimmed)
+  const showPhotos = photos;
+
+  if (!showPhotos.length) return '';
+
+  if (d.photoType === 'banner') {
+    return `
+      <div style="position:relative;height:200px;overflow:hidden;">
+        <img src="${showPhotos[0].src}" style="width:100%;height:100%;object-fit:cover;display:block;${pendingPhotos.length?'opacity:0.4;filter:grayscale(50%)':''}" alt="Banner">
+        ${pendingPhotos.length ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);">
+          <div style="background:rgba(251,191,36,0.9);color:#000;font-size:11px;font-weight:800;padding:8px 16px;border-radius:4px;">⏳ Aguardando aprovação</div>
+        </div>` : ''}
+      </div>`;
+  }
+
+  if (d.photoType === 'before_after') {
+    const pairs = [];
+    for (let i = 0; i < showPhotos.length - 1; i += 2) pairs.push([showPhotos[i], showPhotos[i+1]]);
+    return `
+      <div style="padding:24px 20px;">
+        <div style="font-size:9px;font-weight:800;color:${p.accent};letter-spacing:2px;margin-bottom:6px;">RESULTADOS</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:16px;">ANTES & DEPOIS</div>
+        ${pairs.map(([a, b]) => `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:10px;border-radius:6px;overflow:hidden;">
+            <div style="position:relative;">
+              <img src="${a.src}" style="width:100%;height:120px;object-fit:cover;display:block;${!a.approved?'opacity:0.4;filter:grayscale(50%)':''}" alt="Antes">
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);color:#fff;font-size:9px;font-weight:800;padding:4px;text-align:center;">ANTES</div>
+            </div>
+            <div style="position:relative;">
+              <img src="${b.src}" style="width:100%;height:120px;object-fit:cover;display:block;${!b.approved?'opacity:0.4;filter:grayscale(50%)':''}" alt="Depois">
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);color:${p.accent};font-size:9px;font-weight:800;padding:4px;text-align:center;">DEPOIS</div>
+            </div>
+          </div>`).join('')}
+        ${pendingPhotos.length ? `<div style="font-size:10px;color:#fbbf24;text-align:center;margin-top:6px;">⏳ ${pendingPhotos.length} foto(s) aguardando aprovação</div>` : ''}
+      </div>`;
+  }
+
+  // Gallery default
+  return `
+    <div style="padding:24px 20px;">
+      <div style="font-size:9px;font-weight:800;color:${p.accent};letter-spacing:2px;margin-bottom:6px;">PORTFÓLIO</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:14px;">NOSSO TRABALHO</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+        ${showPhotos.slice(0,9).map(ph => `
+          <div style="position:relative;border-radius:4px;overflow:hidden;aspect-ratio:1;">
+            <img src="${ph.src}" style="width:100%;height:100%;object-fit:cover;display:block;${!ph.approved?'opacity:0.35;filter:grayscale(60%)':''}" alt="${ph.caption||''}">
+            ${ph.caption ? `<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.65);color:#fff;font-size:8px;padding:4px 5px;">${ph.caption}</div>` : ''}
+            ${!ph.approved ? `<div style="position:absolute;top:4px;right:4px;background:rgba(251,191,36,0.9);color:#000;font-size:8px;font-weight:800;padding:2px 5px;border-radius:2px;">⏳</div>` : ''}
+          </div>`).join('')}
+      </div>
+      ${pendingPhotos.length ? `<div style="font-size:10px;color:#fbbf24;text-align:center;margin-top:8px;">⏳ ${pendingPhotos.length} foto(s) aguardando aprovação da equipe</div>` : ''}
+    </div>`;
+}
+
+// ===== DEVICE =====
+function setDevice(d, el){
+  document.querySelectorAll('.dev-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const container = document.getElementById('previewContainer');
+  container.className = 'preview-container '+d;
+}
+
+// ===== SAVE =====
+function saveChanges(){
+  readForm();
+  // In production: POST to backend
+  showNotif('✅ Alterações salvas com sucesso!');
+}
+
+function showNotif(msg){
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.className = 'notif success';
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none',3000);
+}
+
+// ===== PHOTOS =====
+function selectPhotoType(type, btn) {
+  clientData.photoType = type;
+  document.querySelectorAll('.pst-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const tips = {
+    gallery: '📌 <b style="color:#ccc">Galeria:</b> Grade de fotos dos seus trabalhos/procedimentos. Ideal para portfólio.',
+    before_after: '📌 <b style="color:#ccc">Antes/Depois:</b> Exibe pares de fotos lado a lado. Máximo 3 pares (6 fotos). Muito eficaz para estética e academia.',
+    banner: '📌 <b style="color:#ccc">Banner Hero:</b> Uma foto de destaque no topo da página como fundo. Use uma imagem de alta qualidade.'
+  };
+  document.getElementById('photoTypeTip').innerHTML = tips[type];
+  updatePreview();
+}
+
+function handlePhotoUpload(files) {
+  const maxPhotos = clientData.photoType === 'banner' ? 1 : 9;
+  const remaining = maxPhotos - clientData.photos.length;
+  if (remaining <= 0) { showNotif('Limite de fotos atingido!'); return; }
+
+  const toProcess = Math.min(files.length, remaining);
+  let processed = 0;
+
+  Array.from(files).slice(0, toProcess).forEach(file => {
+    if (file.size > 5 * 1024 * 1024) { showNotif('Foto muito grande! Máx 5MB.'); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      clientData.photos.push({ src: e.target.result, caption: '', approved: false });
+      processed++;
+      if (processed === toProcess) {
+        clientData.photosPending = true;
+        renderPhotoGrid();
+        document.getElementById('photoStatus').style.display = 'block';
+        document.getElementById('photoApprovedMsg').style.display = 'none';
+        updatePreview();
+        showNotif(`✅ ${processed} foto(s) adicionada(s)! Aguarde aprovação.`);
+        // Save to localStorage so admin can see
+        savePendingPhotos();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function savePendingPhotos() {
+  // Store photos pending review — admin reads from here
+  const pending = JSON.parse(localStorage.getItem('igence_photos_pending') || '[]');
+  const entry = {
+    clientId: 'demo',
+    empresa: clientData.empresa,
+    whats: clientData.whats,
+    photoType: clientData.photoType,
+    photos: clientData.photos,
+    sentAt: new Date().toLocaleString('pt-BR'),
+    status: 'pending'
+  };
+  // Replace if exists, else push
+  const idx = pending.findIndex(p => p.clientId === 'demo');
+  if (idx >= 0) pending[idx] = entry; else pending.push(entry);
+  localStorage.setItem('igence_photos_pending', JSON.stringify(pending));
+}
+
+function renderPhotoGrid() {
+  const grid = document.getElementById('photoGrid');
+  if (!clientData.photos.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = clientData.photos.map((p, i) => `
+    <div class="photo-thumb">
+      <img src="${p.src}" alt="Foto ${i+1}">
+      <div class="photo-thumb-overlay">
+        <input class="photo-caption-input" value="${p.caption}" placeholder="Legenda..." oninput="updateCaption(${i},this.value)">
+        <button class="photo-remove" onclick="removePhoto(${i})">✕ remover</button>
+      </div>
+      ${p.approved ? '<div style="position:absolute;top:4px;left:4px;background:rgba(34,197,94,0.9);color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:3px;">✓ APROVADA</div>' : ''}
+    </div>`).join('');
+}
+
+function updateCaption(i, val) {
+  clientData.photos[i].caption = val;
+  savePendingPhotos();
+}
+
+function removePhoto(i) {
+  clientData.photos.splice(i, 1);
+  renderPhotoGrid();
+  updatePreview();
+  savePendingPhotos();
+  if (!clientData.photos.length) {
+    document.getElementById('photoStatus').style.display = 'none';
+  }
+}
+
+function sendPhotosViaWhats() {
+  const msg = encodeURIComponent(
+    `Olá! Sou ${clientData.empresa}. Gostaria de adicionar fotos na minha landing page.\n\n` +
+    `Tipo de exibição desejada: ${clientData.photoType === 'gallery' ? 'Galeria' : clientData.photoType === 'before_after' ? 'Antes/Depois' : 'Banner Hero'}\n\n` +
+    `Vou enviar as fotos em seguida. Por favor, adicione-as à minha página!`
+  );
+  window.open(`https://wa.me/5519974038092?text=${msg}`, '_blank');
+}
+
+function showUpgrade(){
+  alert('Para fazer upgrade para o plano Profissional (R$97/mês), entre em contato via WhatsApp com nossa equipe!');
+}
+
+function requestDomain(){
+  const val = document.getElementById('newDomainInput').value.trim();
+  if(!val){ showNotif('Digite um domínio!'); return; }
+  const whats = clientData.whats.replace(/\D/g,'');
+  const msg = encodeURIComponent('Olá! Gostaria de solicitar a troca do meu domínio para: ' + val + '. Minha empresa: ' + clientData.empresa);
+  window.open('https://wa.me/55' + whats + '?text=' + msg, '_blank');
+  showNotif('✅ Solicitação enviada via WhatsApp!');
+}
+
+function openRenew(){
+  const whats = clientData.whats.replace(/\D/g,'');
+  const msg = encodeURIComponent('Olá! Gostaria de gerenciar minha assinatura iGence. Minha empresa: ' + clientData.empresa);
+  window.open('https://wa.me/5519974038092?text=' + msg, '_blank');
+}
+</script>
+</body>
+</html>

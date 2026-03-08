@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGence — Painel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#F5A623;--dark:#0A0A0A;--dark2:#111;--dark3:#1A1A1A;--white:#fff;--green:#22c55e;--red:#ef4444;--blue:#38bdf8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--white);font-family:'Montserrat',sans-serif;min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:999;}
+.login-box{background:var(--dark2);border:1px solid #222;border-radius:12px;padding:50px 40px;width:360px;text-align:center;}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);letter-spacing:3px;margin-bottom:4px;}
+.login-logo span{color:var(--white);}
+.login-sub{font-size:12px;color:#555;margin-bottom:32px;letter-spacing:1px;}
+.login-input{width:100%;background:#1a1a1a;border:1px solid #333;color:#fff;padding:13px 16px;border-radius:6px;font-size:14px;font-family:'Montserrat',sans-serif;outline:none;margin-bottom:12px;transition:border .2s;}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{width:100%;background:linear-gradient(135deg,var(--gold),#e8940a);color:#000;border:none;padding:14px;border-radius:6px;font-weight:900;font-size:15px;cursor:pointer;letter-spacing:1px;}
+.login-hint{font-size:11px;color:#444;margin-top:12px;}
+
+/* LAYOUT */
+#app{display:none;min-height:100vh;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--dark2);border-right:1px solid #1a1a1a;padding:24px 0;display:flex;flex-direction:column;}
+.sb-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:2px;padding:0 24px 24px;border-bottom:1px solid #1a1a1a;}
+.sb-logo span{color:var(--white);}
+.sb-label{font-size:9px;font-weight:800;color:#444;letter-spacing:2px;padding:20px 24px 8px;text-transform:uppercase;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:12px 24px;font-size:13px;font-weight:600;color:#888;cursor:pointer;transition:all .2s;border-left:3px solid transparent;}
+.sb-item:hover{color:var(--white);background:rgba(255,255,255,0.03);}
+.sb-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(245,166,35,0.05);}
+.sb-item .icon{font-size:16px;}
+.sb-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:900;padding:2px 7px;border-radius:10px;}
+.sb-footer{margin-top:auto;padding:16px 24px;border-top:1px solid #1a1a1a;font-size:11px;color:#444;}
+
+.main{margin-left:220px;padding:32px;min-height:100vh;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* TOPBAR */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;}
+.topbar-title span{color:var(--gold);}
+.topbar-right{display:flex;gap:12px;align-items:center;}
+.pill{background:var(--dark3);border:1px solid #2a2a2a;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px;}
+.stat-card{background:var(--dark2);border:1px solid #1a1a1a;border-radius:10px;padding:22px 20px;}
+.stat-card-num{font-family:'Bebas Neue',sans-serif;font-size:42px;line-height:1;}
+.stat-card-label{font-size:11px;color:#666;margin-top:4px;letter-spacing:1px;}
+.stat-card-sub{font-size:11px;margin-top:8px;font-weight:600;}
+
+/* TABLES */
+.section-box{background:var(--dark2);border:1px solid #1a1a1a;border-radius:10px;overflow:hidden;margin-bottom:24px;}
+.section-box-head{padding:18px 24px;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center;}
+.section-box-head h3{font-size:14px;font-weight:800;letter-spacing:.5px;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:10px;font-weight:800;color:#555;letter-spacing:1px;text-transform:uppercase;padding:10px 20px;text-align:left;border-bottom:1px solid #1a1a1a;}
+td{font-size:13px;padding:14px 20px;border-bottom:1px solid #111;vertical-align:middle;}
+tr:last-child td{border:none;}
+tr:hover td{background:rgba(255,255,255,0.02);}
+.badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:.5px;}
+.badge-pending{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);}
+.badge-active{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+.badge-done{background:rgba(56,189,248,0.1);color:var(--blue);border:1px solid rgba(56,189,248,0.2);}
+.badge-basic{background:rgba(156,163,175,0.1);color:#9ca3af;border:1px solid rgba(156,163,175,0.2);}
+.badge-pro{background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.2);}
+.badge-elite{background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2);}
+.action-btn{background:var(--dark3);border:1px solid #333;color:#fff;padding:6px 12px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif;}
+.action-btn:hover{border-color:var(--gold);color:var(--gold);}
+.action-btn.primary{background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.4);color:var(--gold);}
+.action-btn.primary:hover{background:rgba(245,166,35,0.2);}
+.action-btn.green{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.3);color:var(--green);}
+.action-btn.red{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:var(--red);}
+
+/* GENERATE MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;overflow-y:auto;align-items:flex-start;justify-content:center;padding:40px 20px;}
+.modal-overlay.active{display:flex;}
+.modal{background:var(--dark2);border:1px solid #333;border-radius:12px;max-width:860px;width:100%;padding:44px;position:relative;animation:mIn .3s ease;}
+@keyframes mIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{position:absolute;top:18px;right:22px;background:none;border:none;color:#555;font-size:26px;cursor:pointer;}
+.modal-close:hover{color:#fff;}
+.m-title{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:6px;}
+.m-sub{font-size:13px;color:#666;margin-bottom:28px;}
+
+/* FORM */
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.fg label{font-size:11px;font-weight:700;color:#666;letter-spacing:1px;text-transform:uppercase;}
+.fg input,.fg select,.fg textarea{background:#141414;border:1px solid #2a2a2a;color:#fff;padding:11px 14px;border-radius:6px;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;transition:border .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.fg textarea{min-height:70px;resize:vertical;}
+.fg select option{background:#141414;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+
+/* GENERATE PROGRESS */
+.progress-wrap{margin-top:20px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;}
+.progress-bar{height:6px;background:linear-gradient(90deg,var(--gold),#e8940a);width:0%;transition:width .5s ease;}
+.progress-log{padding:16px;font-size:12px;font-family:monospace;color:#4ade80;max-height:160px;overflow-y:auto;}
+.progress-log p{margin-bottom:4px;}
+
+/* PREVIEW FRAME */
+.preview-frame{width:100%;height:300px;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;margin-top:16px;}
+.preview-frame iframe{width:100%;height:100%;border:none;background:#fff;}
+
+/* CLIENT CARD */
+.client-card{background:var(--dark2);border:1px solid #1a1a1a;border-radius:10px;padding:24px;margin-bottom:16px;}
+.client-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.client-name{font-size:16px;font-weight:800;}
+.client-meta{font-size:12px;color:#666;margin-top:3px;}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px;}
+.info-item{background:#141414;border:1px solid #1a1a1a;border-radius:6px;padding:10px 14px;}
+.info-label{font-size:10px;color:#555;font-weight:700;letter-spacing:1px;margin-bottom:3px;}
+.info-val{font-size:13px;font-weight:600;}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;background:#141414;border:1px solid #2a2a2a;border-radius:6px;overflow:hidden;width:fit-content;margin-bottom:24px;}
+.toggle-opt{padding:10px 20px;font-size:12px;font-weight:700;cursor:pointer;color:#666;transition:all .2s;}
+.toggle-opt.active{background:var(--gold);color:#000;}
+
+/* NOTIFICATION */
+.notif{position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:14px 20px;font-size:13px;font-weight:600;z-index:9999;display:none;animation:slideUp .3s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.notif.success{border-color:rgba(34,197,94,0.4);color:var(--green);}
+.notif.error{border-color:rgba(239,68,68,0.4);color:var(--red);}
+
+.empty-state{text-align:center;padding:50px 20px;color:#444;}
+.empty-state div{font-size:48px;margin-bottom:12px;}
+.empty-state p{font-size:14px;}
+
+/* GENERATED PAGE LINK */
+.page-link-box{background:#0d1a0d;border:1px solid rgba(34,197,94,0.3);border-radius:6px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+.page-link-url{font-size:12px;color:#4ade80;font-family:monospace;}
+
+/* PHOTO ADMIN */
+.fotos-type-card{background:#141414;border:2px solid #2a2a2a;border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;}
+.fotos-type-card:hover{border-color:rgba(245,166,35,0.4);}
+.fotos-type-card.active{border-color:var(--gold);background:rgba(245,166,35,0.06);}
+.fotos-img-card{background:#141414;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;position:relative;}
+.fotos-img-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.fotos-img-caption{padding:8px;}
+.fotos-img-caption input{width:100%;background:#1a1a1a;border:1px solid #333;color:#fff;padding:7px 10px;border-radius:4px;font-size:11px;font-family:'Montserrat',sans-serif;outline:none;}
+.fotos-img-remove{position:absolute;top:6px;right:6px;background:rgba(239,68,68,0.9);border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+
+/* PLAN OVERVIEW */
+.plans-row{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;}
+.plan-mini{flex:1;min-width:140px;background:var(--dark2);border:1px solid #1a1a1a;border-radius:8px;padding:16px;text-align:center;}
+.plan-mini-name{font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:4px;}
+.plan-mini-price{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);}
+.plan-mini-count{font-size:11px;color:#555;margin-top:4px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">iG<span>ence</span></div>
+    <div class="login-sub">PAINEL ADMINISTRATIVO</div>
+    <input class="login-input" type="text" placeholder="Usuário" id="loginUser">
+    <input class="login-input" type="password" placeholder="Senha" id="loginPass">
+    <button class="login-btn" onclick="doLogin()">ENTRAR NO PAINEL</button>
+    <p class="login-hint">admin / igence2025</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo">iG<span>ence</span></div>
+    <div class="sb-label">Principal</div>
+    <div class="sb-item active" onclick="goPage('dashboard',this)"><span class="icon">📊</span> Dashboard</div>
+    <div class="sb-item" onclick="goPage('pedidos',this)">
+      <span class="icon">📋</span> Pedidos
+      <span class="sb-badge" id="pendBadge">0</span>
+    </div>
+    <div class="sb-item" onclick="goPage('clientes',this)"><span class="icon">👥</span> Clientes</div>
+    <div class="sb-item" onclick="goPage('paginas',this)"><span class="icon">🌐</span> Páginas Geradas</div>
+    <div class="sb-label">Ferramentas</div>
+    <div class="sb-item" onclick="goPage('gerar',this)"><span class="icon">⚡</span> Gerar Página</div>
+    <div class="sb-item" onclick="goPage('planos',this)"><span class="icon">💰</span> Planos</div>
+    <div class="sb-item" onclick="goPage('fotos',this)">
+      <span class="icon">📸</span> Fotos Pendentes
+      <span class="sb-badge" id="fotosBadge" style="display:none;">0</span>
+    </div>
+    <div class="sb-footer">v2.0 — iGence Admin<br>Logado como <b style="color:#fff">admin</b></div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="pg-dashboard">
+      <div class="topbar">
+        <div class="topbar-title">DASH<span>BOARD</span></div>
+        <div class="topbar-right">
+          <span class="pill">📅 <span id="todayDate"></span></span>
+          <button class="action-btn primary" onclick="goPage('gerar', document.querySelector('[onclick*=gerar]'))">⚡ Nova Página</button>
+        </div>
+      </div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-card-num" style="color:var(--gold)" id="sTotal">0</div><div class="stat-card-label">TOTAL DE CLIENTES</div><div class="stat-card-sub" style="color:#4ade80">↑ crescendo</div></div>
+        <div class="stat-card"><div class="stat-card-num" style="color:#fbbf24" id="sPending">0</div><div class="stat-card-label">AGUARDANDO GERAÇÃO</div><div class="stat-card-sub" style="color:#fbbf24">⏳ pendente</div></div>
+        <div class="stat-card"><div class="stat-card-num" style="color:#4ade80" id="sActive">0</div><div class="stat-card-label">PÁGINAS ATIVAS</div><div class="stat-card-sub" style="color:#4ade80">✓ online</div></div>
+        <div class="stat-card"><div class="stat-card-num" style="color:#38bdf8" id="sRevenue">R$0</div><div class="stat-card-label">RECEITA MENSAL</div><div class="stat-card-sub" style="color:#38bdf8">MRR</div></div>
+      </div>
+      <div class="plans-row" id="plansRow"></div>
+      <div class="section-box">
+        <div class="section-box-head"><h3>📋 Últimos Pedidos</h3><button class="action-btn" onclick="goPage('pedidos',document.querySelectorAll('.sb-item')[1])">Ver todos →</button></div>
+        <table><thead><tr><th>Cliente</th><th>Nicho</th><th>Plano</th><th>Template</th><th>Status</th><th>Ação</th></tr></thead>
+        <tbody id="dashRecentOrders"><tr><td colspan="6" style="text-align:center;color:#444;padding:30px;">Nenhum pedido ainda</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- PEDIDOS -->
+    <div class="page" id="pg-pedidos">
+      <div class="topbar"><div class="topbar-title">PEDI<span>DOS</span></div></div>
+      <div class="section-box">
+        <div class="section-box-head"><h3>Todos os Pedidos</h3>
+          <div style="display:flex;gap:8px;">
+            <select onchange="filterOrders(this.value)" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:6px 10px;border-radius:4px;font-size:12px;font-family:'Montserrat',sans-serif;outline:none;">
+              <option value="all">Todos</option>
+              <option value="pending">Pendente</option>
+              <option value="active">Ativo</option>
+              <option value="done">Entregue</option>
+            </select>
+          </div>
+        </div>
+        <table><thead><tr><th>Cliente</th><th>Empresa</th><th>Nicho</th><th>Plano</th><th>Template</th><th>WhatsApp</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="ordersTableBody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- CLIENTES -->
+    <div class="page" id="pg-clientes">
+      <div class="topbar"><div class="topbar-title">CLIEN<span>TES</span></div></div>
+      <div id="clientesContainer"></div>
+    </div>
+
+    <!-- PÁGINAS GERADAS -->
+    <div class="page" id="pg-paginas">
+      <div class="topbar"><div class="topbar-title">PÁGINAS <span>GERADAS</span></div></div>
+      <div class="section-box">
+        <div class="section-box-head"><h3>🌐 Páginas Ativas</h3></div>
+        <table><thead><tr><th>Cliente</th><th>Domínio</th><th>Nicho</th><th>Template</th><th>Plano</th><th>Criada em</th><th>Ações</th></tr></thead>
+        <tbody id="paginasTableBody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- GERAR PÁGINA -->
+    <div class="page" id="pg-gerar">
+      <div class="topbar"><div class="topbar-title">⚡ GERAR <span>PÁGINA</span></div></div>
+      <div class="section-box">
+        <div class="section-box-head"><h3>Selecione um pedido para gerar ou crie manualmente</h3></div>
+        <div style="padding:24px;">
+          <div class="toggle-wrap" id="gerarToggle">
+            <div class="toggle-opt active" onclick="switchGerar('pedido',this)">📋 A partir de Pedido</div>
+            <div class="toggle-opt" onclick="switchGerar('manual',this)">✏️ Manual</div>
+          </div>
+
+          <!-- FROM ORDER -->
+          <div id="gerarFromPedido">
+            <div class="fg">
+              <label>Selecionar Pedido Pendente</label>
+              <select id="selectOrderToGenerate" onchange="loadOrderData()">
+                <option value="">-- Selecione um pedido --</option>
+              </select>
+            </div>
+            <div id="orderDataPreview" style="display:none;">
+              <div class="info-grid" id="orderInfoGrid"></div>
+            </div>
+          </div>
+
+          <!-- MANUAL -->
+          <div id="gerarManual" style="display:none;">
+            <div class="grid2">
+              <div class="fg"><label>Nome da Empresa *</label><input type="text" id="m_empresa" placeholder="Ex: Dr. João Silva Advocacia"></div>
+              <div class="fg"><label>WhatsApp *</label><input type="text" id="m_whats" placeholder="(11) 99999-9999"></div>
+            </div>
+            <div class="grid3">
+              <div class="fg"><label>Nicho *</label>
+                <select id="m_nicho">
+                  <option value="adv">⚖️ Advogado</option>
+                  <option value="dent">🦷 Dentista</option>
+                  <option value="med">👨‍⚕️ Médico</option>
+                  <option value="coach">🎯 Coach</option>
+                  <option value="est">💆 Estética</option>
+                  <option value="imob">🏠 Imobiliária</option>
+                  <option value="acad">🏋️ Academia</option>
+                  <option value="rest">🍽️ Restaurante</option>
+                </select>
+              </div>
+              <div class="fg"><label>Template *</label>
+                <select id="m_template">
+                  <option value="0">Dark Impact / Principal</option>
+                  <option value="1">Gold Premium / Alternativo</option>
+                </select>
+              </div>
+              <div class="fg"><label>Plano</label>
+                <select id="m_plano">
+                  <option value="basico">Básico R$47,90</option>
+                  <option value="pro">Profissional R$97</option>
+                  <option value="elite">Elite R$197</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="fg"><label>Serviços / Especialidades</label><textarea id="m_servicos" placeholder="Ex: Direito trabalhista, civil, empresarial..."></textarea></div>
+              <div class="fg"><label>Diferenciais</label><textarea id="m_diff" placeholder="Ex: 500 casos ganhos, 15 anos exp., atendimento 24h..."></textarea></div>
+            </div>
+            <div class="grid3">
+              <div class="fg"><label>Nº de Clientes/Casos</label><input type="text" id="m_clientes" placeholder="Ex: 500+ clientes"></div>
+              <div class="fg"><label>Anos de Experiência</label><input type="text" id="m_anos" placeholder="Ex: 15 anos"></div>
+              <div class="fg"><label>CTA (chamada para ação)</label>
+                <select id="m_cta">
+                  <option>Agendar Consulta Gratuita</option>
+                  <option>Entrar em Contato</option>
+                  <option>Solicitar Orçamento</option>
+                  <option>Agendar Avaliação</option>
+                  <option>Ver Imóveis</option>
+                  <option>Fazer Pedido</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="fg"><label>Domínio desejado</label><input type="text" id="m_domain" placeholder="Ex: drjoaosilva.com.br"></div>
+              <div class="fg"><label>Paleta de Cores</label>
+                <select id="m_cores">
+                  <option value="gold">Dourado Profissional</option>
+                  <option value="blue">Azul Confiança</option>
+                  <option value="green">Verde Saúde</option>
+                  <option value="red">Vermelho Energia</option>
+                  <option value="purple">Roxo Luxo</option>
+                  <option value="orange">Laranja Moderno</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <button class="action-btn primary" style="padding:14px 32px;font-size:14px;" onclick="generatePage()">⚡ GERAR PÁGINA AGORA</button>
+            <span style="font-size:12px;color:#555;">A página será gerada e o cliente receberá acesso ao painel</span>
+          </div>
+
+          <div class="progress-wrap" id="progressWrap" style="display:none;margin-top:20px;">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-log" id="progressLog"></div>
+          </div>
+
+          <div id="generatedResult" style="display:none;margin-top:24px;">
+            <div style="background:#0d1a0d;border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:20px;">
+              <div style="font-size:16px;font-weight:800;color:#4ade80;margin-bottom:12px;">✅ PÁGINA GERADA COM SUCESSO!</div>
+              <div class="grid2" style="gap:12px;margin-bottom:16px;">
+                <div><div style="font-size:11px;color:#666;margin-bottom:4px;">LINK DA PÁGINA</div><div style="font-size:13px;color:#4ade80;font-family:monospace;" id="genLink">—</div></div>
+                <div><div style="font-size:11px;color:#666;margin-bottom:4px;">LOGIN DO CLIENTE</div><div style="font-size:13px;color:#fff;font-family:monospace;" id="genLogin">—</div></div>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="action-btn green" onclick="copyClientAccess()">📋 Copiar Acesso do Cliente</button>
+                <button class="action-btn primary" onclick="openClientPage()">👁 Ver Página Gerada</button>
+                <button class="action-btn" onclick="sendWhatsApp()">📲 Enviar por WhatsApp</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANOS -->
+    <div class="page" id="pg-planos">
+      <div class="topbar"><div class="topbar-title">PILA<span>NOS</span></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;" id="planosDetailed"></div>
+    </div>
+
+    <!-- FOTOS -->
+    <div class="page" id="pg-fotos">
+      <div class="topbar">
+        <div class="topbar-title">📸 FOTOS <span>DOS CLIENTES</span></div>
+      </div>
+
+      <!-- Intro box -->
+      <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:10px;padding:20px 24px;margin-bottom:28px;display:flex;gap:20px;align-items:flex-start;">
+        <div style="font-size:32px;">📲</div>
+        <div>
+          <div style="font-weight:800;font-size:14px;margin-bottom:6px;">Como funciona o fluxo de fotos</div>
+          <div style="font-size:13px;color:#888;line-height:1.8;">
+            1. O cliente envia as fotos pelo WhatsApp para você<br>
+            2. Você seleciona o cliente aqui, faz upload das fotos recebidas<br>
+            3. Escolhe como exibir (Galeria / Antes & Depois / Banner), adiciona legendas<br>
+            4. Clica <b style="color:var(--gold)">Aprovar e Publicar</b> — a página do cliente atualiza na hora
+          </div>
+        </div>
+      </div>
+
+      <!-- Client selector -->
+      <div style="background:var(--dark2);border:1px solid #222;border-radius:10px;padding:24px;margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:800;color:#555;letter-spacing:2px;margin-bottom:14px;">SELECIONAR CLIENTE</div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <select id="fotosClientSelect" onchange="onFotosClientChange()" style="background:#141414;border:1px solid #333;color:#fff;padding:12px 16px;border-radius:6px;font-size:14px;font-family:'Montserrat',sans-serif;outline:none;min-width:260px;">
+            <option value="">— Selecione um cliente —</option>
+          </select>
+          <div id="fotosClientInfo" style="display:none;background:#141414;border:1px solid #2a2a2a;border-radius:6px;padding:10px 16px;font-size:12px;color:#888;"></div>
+        </div>
+      </div>
+
+      <!-- Upload & Config panel (hidden until client selected) -->
+      <div id="fotosWorkspace" style="display:none;">
+
+        <!-- Display type -->
+        <div style="background:var(--dark2);border:1px solid #222;border-radius:10px;padding:24px;margin-bottom:20px;">
+          <div style="font-size:11px;font-weight:800;color:#555;letter-spacing:2px;margin-bottom:16px;">TIPO DE EXIBIÇÃO</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="fotosTypeGrid">
+            <div class="fotos-type-card active" onclick="selectFotosType('gallery',this)" data-type="gallery">
+              <div style="font-size:28px;margin-bottom:8px;">🖼</div>
+              <div style="font-weight:800;font-size:13px;">Galeria</div>
+              <div style="font-size:11px;color:#888;margin-top:4px;">Grade de fotos do portfólio. Até 9 fotos.</div>
+            </div>
+            <div class="fotos-type-card" onclick="selectFotosType('before_after',this)" data-type="before_after">
+              <div style="font-size:28px;margin-bottom:8px;">↔️</div>
+              <div style="font-weight:800;font-size:13px;">Antes & Depois</div>
+              <div style="font-size:11px;color:#888;margin-top:4px;">Pares lado a lado. Máx 3 pares (6 fotos).</div>
+            </div>
+            <div class="fotos-type-card" onclick="selectFotosType('banner',this)" data-type="banner">
+              <div style="font-size:28px;margin-bottom:8px;">🖥</div>
+              <div style="font-weight:800;font-size:13px;">Banner Hero</div>
+              <div style="font-size:11px;color:#888;margin-top:4px;">Foto de destaque no topo. 1 foto.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload zone -->
+        <div style="background:var(--dark2);border:1px solid #222;border-radius:10px;padding:24px;margin-bottom:20px;">
+          <div style="font-size:11px;font-weight:800;color:#555;letter-spacing:2px;margin-bottom:16px;">UPLOAD DAS FOTOS RECEBIDAS</div>
+          <div id="fotosDropZone" onclick="document.getElementById('fotosFileInput').click()"
+               style="border:2px dashed #2a2a2a;border-radius:8px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .3s;"
+               onmouseover="this.style.borderColor='var(--gold)';this.style.background='rgba(245,166,35,0.03)'"
+               onmouseout="this.style.borderColor='#2a2a2a';this.style.background='transparent'"
+               ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
+               ondragleave="this.style.borderColor='#2a2a2a'"
+               ondrop="event.preventDefault();handleAdminPhotoUpload(event.dataTransfer.files)">
+            <input type="file" id="fotosFileInput" accept="image/*" multiple style="display:none" onchange="handleAdminPhotoUpload(this.files)">
+            <div style="font-size:48px;margin-bottom:12px;pointer-events:none;">📁</div>
+            <div style="font-size:15px;font-weight:700;color:#ccc;pointer-events:none;">Clique ou arraste as fotos do cliente</div>
+            <div style="font-size:12px;color:#555;margin-top:6px;pointer-events:none;">JPG, PNG, WEBP • Máx 5MB por foto</div>
+          </div>
+
+          <!-- Foto grid -->
+          <div id="fotosAdminGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:16px;"></div>
+
+          <!-- Before/after pairing hint -->
+          <div id="fotosBeforeAfterHint" style="display:none;background:#141414;border:1px solid #2a2a2a;border-radius:6px;padding:12px;margin-top:12px;font-size:12px;color:#888;line-height:1.7;">
+            💡 <b style="color:#ccc">Dica Antes & Depois:</b> Faça upload das fotos em pares — a primeira de cada par é o "Antes", a segunda é o "Depois". Ordem: Antes₁, Depois₁, Antes₂, Depois₂...
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div id="fotosPreviewSection" style="background:var(--dark2);border:1px solid #222;border-radius:10px;padding:24px;margin-bottom:20px;display:none;">
+          <div style="font-size:11px;font-weight:800;color:#555;letter-spacing:2px;margin-bottom:16px;">PRÉVIA NA PÁGINA DO CLIENTE</div>
+          <div id="fotosPagePreview" style="border-radius:8px;overflow:hidden;"></div>
+        </div>
+
+        <!-- Actions -->
+        <div style="background:var(--dark2);border:1px solid #222;border-radius:10px;padding:20px 24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+          <button class="action-btn green" style="font-size:14px;padding:14px 28px;" onclick="publishClientPhotos()">
+            ✅ APROVAR E PUBLICAR
+          </button>
+          <button class="action-btn" onclick="fotosPreviewPage()">👁 Ver Prévia Completa</button>
+          <button class="action-btn" onclick="notifyClientPhotos()">📲 Avisar Cliente pelo WhatsApp</button>
+          <button class="action-btn red" onclick="clearFotosWorkspace()">🗑 Limpar</button>
+          <div id="fotosPublishedMsg" style="display:none;color:var(--green);font-size:13px;font-weight:700;">✅ Publicado com sucesso!</div>
+        </div>
+      </div>
+
+      <!-- Already published clients -->
+      <div style="margin-top:32px;">
+        <div style="font-size:11px;font-weight:800;color:#333;letter-spacing:2px;margin-bottom:16px;">PÁGINAS COM FOTOS PUBLICADAS</div>
+        <div id="fotosPublishedList"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: Cliente Detalhado -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal" style="max-width:700px;">
+    <button class="modal-close" onclick="closeModal('clientModal')">×</button>
+    <div id="clientModalContent"></div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<!-- PAGE PREVIEW MODAL -->
+<div class="modal-overlay" id="pagePreviewModal">
+  <div class="modal" style="max-width:1100px;padding:0;overflow:hidden;">
+    <div style="background:#111;border-bottom:1px solid #222;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);" id="previewModalTitle">Prévia da Página</div>
+        <div style="font-size:12px;color:#4ade80;font-family:monospace;margin-top:2px;" id="previewModalUrl"></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div style="display:flex;gap:6px;">
+          <button onclick="setPreviewDevice('100%',this)" class="action-btn primary" id="pvDesk" style="font-size:11px;">🖥 Desktop</button>
+          <button onclick="setPreviewDevice('768px',this)" class="action-btn" id="pvTab" style="font-size:11px;">📱 Tablet</button>
+          <button onclick="setPreviewDevice('375px',this)" class="action-btn" id="pvMob" style="font-size:11px;">📲 Mobile</button>
+        </div>
+        <button class="modal-close" style="position:static;font-size:22px;color:#666;" onclick="closeModal('pagePreviewModal')">×</button>
+      </div>
+    </div>
+    <div style="background:#0a0a0a;padding:20px;display:flex;justify-content:center;overflow-y:auto;max-height:80vh;">
+      <div id="previewDeviceWrap" style="width:100%;transition:width .3s;max-width:100%;">
+        <div id="pagePreviewContent" style="border-radius:8px;overflow:hidden;box-shadow:0 20px 80px rgba(0,0,0,0.6);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function setPreviewDevice(w, btn){
+  document.getElementById('previewDeviceWrap').style.width = w;
+  ['pvDesk','pvTab','pvMob'].forEach(id=>{
+    document.getElementById(id).classList.remove('primary');
+  });
+  btn.classList.add('primary');
+}
+</script>
+
+<script>
+// ===== STATE =====
+// v2 — força dados frescos (remova esta linha após usar pela primeira vez)
+if(localStorage.getItem('igence_version') !== 'v2'){ localStorage.removeItem('igence_clients'); localStorage.setItem('igence_version','v2'); }
+let clients = JSON.parse(localStorage.getItem('igence_clients')||'[]');
+let currentGenData = null;
+
+// Sample data if empty — limpe o localStorage para recarregar
+if(clients.length === 0) {
+  clients = [
+    { id:'c001', empresa:'Dr. Roberto Alves Advocacia', whats:'(11)98765-4321', nicho:'adv', template:'1', plano:'pro', servicos:'Direito trabalhista, civil e empresarial, consultoria jurídica', clientes:'500+', anos:'15', cta:'Agendar Consulta Gratuita', cores:'gold', domain:'drroberto.com.br', status:'pending', pageUrl:'', date:'08/03/2026', diff:'Consultoria gratuita, 98% de sucesso nos casos', clientPass:'' },
+    { id:'c002', empresa:'OdontoPrime — Dra. Mariana Costa', whats:'(31)97654-3210', nicho:'dent', template:'0', plano:'elite', servicos:'Implantes dentários, clareamento, ortodontia, botox facial', clientes:'2000+', anos:'10', cta:'Agendar Avaliação Grátis', cores:'blue', domain:'odontoprime.com.br', status:'pending', pageUrl:'', date:'08/03/2026', diff:'Avaliação gratuita, parcelamento 12x sem juros', clientPass:'' },
+    { id:'c003', empresa:'Iron Gym — Felipe Ferreira', whats:'(21)96543-2109', nicho:'acad', template:'0', plano:'pro', servicos:'Musculação, crossfit, yoga, natação, personal trainer', clientes:'1200+', anos:'8', cta:'Quero Começar Agora', cores:'red', domain:'irongym.com.br', status:'pending', pageUrl:'', date:'08/03/2026', diff:'Primeira semana grátis, avaliação física incluída', clientPass:'' },
+    { id:'c004', empresa:'Dra. Beatriz Lima — Clínica Médica', whats:'(11)94567-8901', nicho:'med', template:'0', plano:'pro', servicos:'Clínico geral, check-up completo, telemedicina, acompanhamento nutricional', clientes:'3000+', anos:'18', cta:'Agendar Consulta', cores:'green', domain:'drabeatrizlima.com.br', status:'pending', pageUrl:'', date:'08/03/2026', diff:'Atendimento online e presencial, sem fila de espera', clientPass:'' },
+    { id:'c005', empresa:'Prime Imóveis — Carlos Mendes', whats:'(51)93456-7890', nicho:'imob', template:'1', plano:'elite', servicos:'Venda e aluguel residencial e comercial, lançamentos, financiamento caixa', clientes:'800+', anos:'12', cta:'Ver Imóveis Disponíveis', cores:'gold', domain:'primeimoveis.com.br', status:'pending', pageUrl:'', date:'08/03/2026', diff:'CRECI ativo, atendimento 7 dias por semana, financiamento na hora', clientPass:'' },
+    { id:'c006', empresa:'Bella Estética — Amanda Souza', whats:'(85)92345-6789', nicho:'est', template:'0', plano:'basico', servicos:'Botox, preenchimento labial, harmonização facial, skincare, limpeza de pele profunda', clientes:'400+', anos:'6', cta:'Agendar Avaliação Gratuita', cores:'purple', domain:'', status:'pending', pageUrl:'', date:'08/03/2026', diff:'Primeira consulta grátis, resultados naturais e duradouros', clientPass:'' },
+    { id:'c007', empresa:'Paulo Henrique — Business Coach', whats:'(11)91234-5678', nicho:'coach', template:'1', plano:'pro', servicos:'Mentoria empresarial, coaching de vida, programa 90 dias, palestras corporativas', clientes:'2500+', anos:'11', cta:'Agendar Sessão Gratuita', cores:'gold', domain:'paulocoach.com.br', status:'pending', pageUrl:'', date:'08/03/2026', diff:'Certificado ICF, mais de 2500 vidas transformadas, método exclusivo', clientPass:'' },
+    { id:'c008', empresa:'Fogão do Norte — Restaurante', whats:'(92)98765-1234', nicho:'rest', template:'0', plano:'basico', servicos:'Culinária regional amazônica, churrasco, marmita executiva, delivery, buffet para eventos', clientes:'5000+', anos:'9', cta:'Fazer Pedido Agora', cores:'orange', domain:'', status:'pending', pageUrl:'', date:'08/03/2026', diff:'Delivery em 40 minutos, ingredientes frescos, receitas de família', clientPass:'' }
+  ];
+  saveClients();
+}
+
+function saveClients(){localStorage.setItem('igence_clients',JSON.stringify(clients));}
+
+// ===== LOGIN =====
+function doLogin(){
+  const u=document.getElementById('loginUser').value;
+  const p=document.getElementById('loginPass').value;
+  if(u==='admin'&&p==='igence2025'){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    init();
+  } else { alert('Credenciais inválidas!'); }
+}
+document.getElementById('loginPass').addEventListener('keyup',e=>{if(e.key==='Enter')doLogin();});
+
+// ===== INIT =====
+function init(){
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('pt-BR');
+  updateStats();
+  renderDashRecent();
+  renderOrdersTable();
+  renderClientes();
+  renderPaginas();
+  populateOrderSelect();
+  renderPlanos();
+  renderPlansMini();
+}
+
+// ===== NAVIGATION =====
+function goPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  if(id === 'fotos') initFotosPage();
+}
+
+// ===== STATS =====
+function updateStats(){
+  const total = clients.length;
+  const pending = clients.filter(c=>c.status==='pending').length;
+  const active = clients.filter(c=>c.status==='active').length;
+  const revenue = clients.filter(c=>c.status==='active').reduce((acc,c)=>{
+    return acc + (c.plano==='basico'?47.9:c.plano==='pro'?97:197);
+  },0);
+  document.getElementById('sTotal').textContent = total;
+  document.getElementById('sPending').textContent = pending;
+  document.getElementById('sActive').textContent = active;
+  document.getElementById('sRevenue').textContent = 'R$'+revenue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  document.getElementById('pendBadge').textContent = pending;
+}
+
+// ===== RENDER DASHBOARD RECENT =====
+function renderDashRecent(){
+  const tbody = document.getElementById('dashRecentOrders');
+  const recent = [...clients].slice(-5).reverse();
+  if(!recent.length){ tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#444;padding:30px;">Nenhum pedido</td></tr>'; return; }
+  tbody.innerHTML = recent.map(c => `
+    <tr>
+      <td><b>${c.empresa}</b><br><span style="font-size:11px;color:#666;">${c.whats}</span></td>
+      <td>${nichoLabel(c.nicho)}</td>
+      <td><span class="badge badge-${c.plano}">${planoLabel(c.plano)}</span></td>
+      <td>${c.template==='0'?'Dark Impact':'Gold Premium'}</td>
+      <td><span class="badge badge-${c.status}">${statusLabel(c.status)}</span></td>
+      <td>
+        ${c.status==='pending'?`<button class="action-btn primary" onclick="quickGenerate('${c.id}')">⚡ Gerar</button>`:
+          `<button class="action-btn" onclick="showClientModal('${c.id}')">👁 Ver</button>`}
+      </td>
+    </tr>`).join('');
+}
+
+// ===== ORDERS TABLE =====
+let ordersFilter = 'all';
+function filterOrders(v){ ordersFilter=v; renderOrdersTable(); }
+function renderOrdersTable(){
+  const tbody = document.getElementById('ordersTableBody');
+  let list = ordersFilter==='all' ? clients : clients.filter(c=>c.status===ordersFilter);
+  if(!list.length){ tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:#444;padding:30px;">Nenhum resultado</td></tr>'; return; }
+  tbody.innerHTML = list.map(c=>`
+    <tr>
+      <td><b>${c.empresa}</b></td>
+      <td>${c.empresa}</td>
+      <td>${nichoLabel(c.nicho)}</td>
+      <td><span class="badge badge-${c.plano}">${planoLabel(c.plano)}</span></td>
+      <td>${c.template==='0'?'Dark Impact':'Gold Premium'}</td>
+      <td><a href="https://wa.me/55${c.whats.replace(/\D/g,'')}" target="_blank" style="color:#4ade80;font-size:12px;">${c.whats}</a></td>
+      <td style="font-size:12px;color:#666;">${c.date}</td>
+      <td><span class="badge badge-${c.status}">${statusLabel(c.status)}</span></td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${c.status==='pending'?`<button class="action-btn primary" onclick="quickGenerate('${c.id}')">⚡ Gerar</button>`:''}
+        <button class="action-btn" onclick="showClientModal('${c.id}')">👁</button>
+        <button class="action-btn red" onclick="deleteClient('${c.id}')">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+// ===== CLIENTES =====
+function renderClientes(){
+  const container = document.getElementById('clientesContainer');
+  if(!clients.length){ container.innerHTML='<div class="empty-state"><div>👥</div><p>Nenhum cliente cadastrado ainda.</p></div>'; return; }
+  container.innerHTML = clients.map(c=>`
+    <div class="client-card">
+      <div class="client-header">
+        <div>
+          <div class="client-name">${c.empresa}</div>
+          <div class="client-meta">${nichoLabel(c.nicho)} • ${c.whats} • desde ${c.date}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="badge badge-${c.plano}">${planoLabel(c.plano)}</span>
+          <span class="badge badge-${c.status}">${statusLabel(c.status)}</span>
+          ${c.status==='pending'?`<button class="action-btn primary" onclick="quickGenerate('${c.id}')">⚡ Gerar Página</button>`:''}
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-label">Template</div><div class="info-val">${c.template==='0'?'Dark Impact':'Gold Premium'}</div></div>
+        <div class="info-item"><div class="info-label">Clientes/Casos</div><div class="info-val">${c.clientes||'—'}</div></div>
+        <div class="info-item"><div class="info-label">Experiência</div><div class="info-val">${c.anos||'—'}</div></div>
+        <div class="info-item"><div class="info-label">Cores</div><div class="info-val">${c.cores||'—'}</div></div>
+        ${c.pageUrl?`<div class="info-item"><div class="info-label">URL da Página</div><div class="info-val" style="font-size:11px;color:#4ade80;">${c.pageUrl}</div></div>`:''}
+        ${c.plano!=='basico'?`<div class="info-item"><div class="info-label">Senha Painel Cliente</div><div class="info-val" style="font-family:monospace;">${c.clientPass||'—'}</div></div>`:''}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="action-btn" onclick="showClientModal('${c.id}')">👁 Detalhes</button>
+        ${c.status==='active'&&c.plano!=='basico'?`<button class="action-btn green" onclick="copyClientPanel('${c.id}')">📋 Copiar Acesso Painel</button>`:''}
+        ${c.pageUrl?`<button class="action-btn" onclick="showPagePreviewModal(clients.find(cl=>cl.id==='${c.id}'))">👁 Ver Página</button>`:''}
+        <button class="action-btn red" onclick="deleteClient('${c.id}')">🗑 Excluir</button>
+      </div>
+    </div>`).join('');
+}
+
+// ===== PÁGINAS =====
+function renderPaginas(){
+  const tbody = document.getElementById('paginasTableBody');
+  const active = clients.filter(c=>c.status==='active'&&c.pageUrl);
+  if(!active.length){ tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:#444;padding:30px;">Nenhuma página gerada ainda</td></tr>'; return; }
+  tbody.innerHTML = active.map(c=>`
+    <tr>
+      <td><b>${c.empresa}</b><br><span style="font-size:11px;color:#666;">${c.whats}</span></td>
+      <td><span style="color:#4ade80;font-family:monospace;font-size:12px;">${c.domain||c.pageUrl}</span></td>
+      <td>${nichoLabel(c.nicho)}</td>
+      <td>${c.template==='0'?'Dark Impact':'Gold Premium'}</td>
+      <td><span class="badge badge-${c.plano}">${planoLabel(c.plano)}</span></td>
+      <td style="color:#666;font-size:12px;">${c.date}</td>
+      <td style="display:flex;gap:6px;">
+        <button class="action-btn primary" onclick="showPagePreviewModal(clients.find(cl=>cl.id==='${c.id}'))">👁 Ver</button>
+        ${c.plano!=='basico'?`<button class="action-btn green" onclick="copyClientPanel('${c.id}')">📋 Painel</button>`:''}
+      </td>
+    </tr>`).join('');
+}
+
+// ===== POPULATE ORDER SELECT =====
+function populateOrderSelect(){
+  const sel = document.getElementById('selectOrderToGenerate');
+  const pending = clients.filter(c=>c.status==='pending');
+  sel.innerHTML = '<option value="">-- Selecione --</option>' +
+    pending.map(c=>`<option value="${c.id}">${c.empresa} (${nichoLabel(c.nicho)} · ${planoLabel(c.plano)})</option>`).join('');
+}
+
+function loadOrderData(){
+  const id = document.getElementById('selectOrderToGenerate').value;
+  const preview = document.getElementById('orderDataPreview');
+  const grid = document.getElementById('orderInfoGrid');
+  if(!id){ preview.style.display='none'; return; }
+  const c = clients.find(cl=>cl.id===id);
+  if(!c){ preview.style.display='none'; return; }
+  preview.style.display='block';
+  grid.innerHTML = `
+    <div class="info-item"><div class="info-label">Empresa</div><div class="info-val">${c.empresa}</div></div>
+    <div class="info-item"><div class="info-label">WhatsApp</div><div class="info-val">${c.whats}</div></div>
+    <div class="info-item"><div class="info-label">Nicho</div><div class="info-val">${nichoLabel(c.nicho)}</div></div>
+    <div class="info-item"><div class="info-label">Template</div><div class="info-val">${c.template==='0'?'Dark Impact':'Gold Premium'}</div></div>
+    <div class="info-item"><div class="info-label">Plano</div><div class="info-val">${planoLabel(c.plano)}</div></div>
+    <div class="info-item"><div class="info-label">Cores</div><div class="info-val">${c.cores}</div></div>
+    <div class="info-item" style="grid-column:1/-1;"><div class="info-label">Serviços</div><div class="info-val">${c.servicos}</div></div>`;
+}
+
+// ===== GENERATE PAGE =====
+function generatePage(){
+  const fromOrder = document.getElementById('gerarFromPedido').style.display !== 'none';
+  let data;
+  if(fromOrder){
+    const id = document.getElementById('selectOrderToGenerate').value;
+    if(!id){ showNotif('Selecione um pedido!','error'); return; }
+    data = clients.find(c=>c.id===id);
+    currentGenData = data;
+  } else {
+    data = {
+      id: 'c'+Date.now(),
+      empresa: document.getElementById('m_empresa').value,
+      whats: document.getElementById('m_whats').value,
+      nicho: document.getElementById('m_nicho').value,
+      template: document.getElementById('m_template').value,
+      plano: document.getElementById('m_plano').value,
+      servicos: document.getElementById('m_servicos').value,
+      diff: document.getElementById('m_diff').value,
+      clientes: document.getElementById('m_clientes').value,
+      anos: document.getElementById('m_anos').value,
+      cta: document.getElementById('m_cta').value,
+      cores: document.getElementById('m_cores').value,
+      domain: document.getElementById('m_domain').value,
+      status: 'pending',
+      date: new Date().toLocaleDateString('pt-BR'),
+      clientPass: generatePass(document.getElementById('m_empresa').value)
+    };
+    if(!data.empresa||!data.whats){ showNotif('Preencha empresa e WhatsApp!','error'); return; }
+    clients.push(data);
+    saveClients();
+    currentGenData = data;
+  }
+
+  runGenerationAnimation(data);
+}
+
+function quickGenerate(id){
+  const data = clients.find(c=>c.id===id);
+  if(!data) return;
+  currentGenData = data;
+  goPage('gerar', document.querySelectorAll('.sb-item')[4]);
+  setTimeout(() => runGenerationAnimation(data), 200);
+}
+
+function runGenerationAnimation(data){
+  const wrap = document.getElementById('progressWrap');
+  const bar = document.getElementById('progressBar');
+  const log = document.getElementById('progressLog');
+  const result = document.getElementById('generatedResult');
+  wrap.style.display='block';
+  result.style.display='none';
+  bar.style.width='0%';
+  log.innerHTML='';
+
+  const steps = [
+    [300,'🔍 Analisando dados do cliente...'],
+    [600,'🎨 Aplicando template: '+(data.template==='0'?'Dark Impact':'Gold Premium')+'...'],
+    [900,'🖌 Configurando paleta de cores: '+data.cores+'...'],
+    [1200,'📝 Inserindo conteúdo personalizado...'],
+    [1500,'📱 Otimizando para mobile...'],
+    [1800,'⚡ Configurando velocidade de carregamento...'],
+    [2100,'💬 Integrando botão WhatsApp...'],
+    [2400,'🔒 Instalando certificado SSL...'],
+    [2700,'🌐 Configurando domínio: '+(data.domain||'subdomínio iGence')+'...'],
+    [3000,'✅ Página gerada com sucesso!']
+  ];
+  steps.forEach(([delay, msg], i) => {
+    setTimeout(()=>{
+      log.innerHTML += `<p>> ${msg}</p>`;
+      log.scrollTop = log.scrollHeight;
+      bar.style.width = ((i+1)/steps.length*100)+'%';
+    }, delay);
+  });
+
+  setTimeout(()=>{
+    // Update client status
+    const idx = clients.findIndex(c=>c.id===data.id);
+    if(idx>=0){
+      const url = data.domain ? 'https://'+data.domain : 'https://'+data.empresa.toLowerCase().replace(/[^a-z0-9]/g,'')+'.igence.com.br';
+      clients[idx].status = 'active';
+      clients[idx].pageUrl = url;
+      if(!clients[idx].clientPass) clients[idx].clientPass = generatePass(data.empresa);
+      saveClients();
+    }
+    const url = data.domain ? 'https://'+data.domain : 'https://'+data.empresa.toLowerCase().replace(/[^a-z0-9]/g,'')+'.igence.com.br';
+    document.getElementById('genLink').textContent = url;
+    document.getElementById('genLogin').textContent = 'Email: '+data.whats.replace(/\D/g,'')+'@cliente.igence.com.br | Senha: '+clients[clients.findIndex(c=>c.id===data.id)]?.clientPass;
+    result.style.display='block';
+    updateStats();
+    renderDashRecent();
+    renderOrdersTable();
+    renderClientes();
+    renderPaginas();
+    populateOrderSelect();
+    showNotif('✅ Página gerada com sucesso!','success');
+  }, 3200);
+}
+
+function generatePass(name){
+  return name.split(' ')[0].toLowerCase().replace(/[^a-z]/g,'') + Math.floor(1000+Math.random()*9000);
+}
+
+function copyClientAccess(){
+  const link = document.getElementById('genLink').textContent;
+  const login = document.getElementById('genLogin').textContent;
+  const msg = `🌐 Sua Landing Page iGence está no ar!\n\n🔗 Link: ${link}\n\n📊 Painel de edição:\n${login}\n\nAcesse: client.html\n\nQualquer dúvida, fale comigo! 😊`;
+  navigator.clipboard.writeText(msg).then(()=>showNotif('Acesso copiado!','success'));
+}
+
+function openClientPage(){
+  const c = currentGenData;
+  if(!c){ window.open('client.html','_blank'); return; }
+  // Open page preview modal
+  showPagePreviewModal(c);
+}
+
+function showPagePreviewModal(c){
+  const p = palettesAdmin[c.cores||'gold'];
+  const isDark = p.bg.startsWith('#0');
+  const services = (c.servicos||'Serviço 1, Serviço 2, Serviço 3').split(',').map(s=>s.trim());
+  const pageHTML = buildPageHTML(c, p, isDark, services);
+  
+  const modal = document.getElementById('pagePreviewModal');
+  document.getElementById('pagePreviewContent').innerHTML = pageHTML;
+  document.getElementById('previewModalTitle').textContent = c.empresa;
+  document.getElementById('previewModalUrl').textContent = c.pageUrl || 'Gerando URL...';
+  modal.classList.add('active');
+}
+
+const palettesAdmin = {
+  gold:{bg:'#0a0800',accent:'#F5A623',text:'#fff',card:'rgba(245,166,35,0.06)',cardBorder:'rgba(245,166,35,0.15)'},
+  blue:{bg:'#00060f',accent:'#38bdf8',text:'#fff',card:'rgba(56,189,248,0.06)',cardBorder:'rgba(56,189,248,0.15)'},
+  green:{bg:'#050f08',accent:'#34d399',text:'#fff',card:'rgba(52,211,153,0.06)',cardBorder:'rgba(52,211,153,0.15)'},
+  red:{bg:'#0f0000',accent:'#ef4444',text:'#fff',card:'rgba(239,68,68,0.06)',cardBorder:'rgba(239,68,68,0.15)'},
+  purple:{bg:'#0f0010',accent:'#e879f9',text:'#fff',card:'rgba(232,121,249,0.06)',cardBorder:'rgba(232,121,249,0.15)'},
+  orange:{bg:'#0f0800',accent:'#fb923c',text:'#fff',card:'rgba(251,146,60,0.06)',cardBorder:'rgba(251,146,60,0.15)'},
+  white:{bg:'#f8fafc',accent:'#0284c7',text:'#0f172a',card:'#fff',cardBorder:'#e0f2fe'}
+};
+
+function buildPageHTML(c, p, isDark, services){
+  const nichoHeadlines = {
+    adv:{h:'SEUS DIREITOS MERECEM A MELHOR DEFESA',sub:'Advocacia especializada com mais de '+c.anos+' anos de experiência',badge:'⚖️ ESCRITÓRIO JURÍDICO'},
+    dent:{h:'SORRIA COM MAIS CONFIANÇA',sub:'Tratamentos modernos com tecnologia de ponta para transformar seu sorriso',badge:'🦷 CLÍNICA ODONTOLÓGICA'},
+    med:{h:'SUA SAÚDE EM BOAS MÃOS',sub:'Atendimento humanizado com especialistas experientes para cuidar de você',badge:'👨‍⚕️ CLÍNICA MÉDICA'},
+    coach:{h:'MUDE SUA VIDA EM 90 DIAS',sub:'Método exclusivo que já transformou mais de '+c.clientes+' vidas',badge:'🎯 COACHING & MENTORIA'},
+    est:{h:'REALCE SUA BELEZA NATURAL',sub:'Procedimentos seguros com resultados naturais e duradouros',badge:'💆 CLÍNICA ESTÉTICA'},
+    imob:{h:'ENCONTRE O IMÓVEL DOS SEUS SONHOS',sub:'Mais de '+c.clientes+' imóveis disponíveis com financiamento facilitado',badge:'🏠 IMOBILIÁRIA'},
+    acad:{h:'NÃO É SÓ MUSCULAÇÃO. É TRANSFORMAÇÃO.',sub:'Estrutura completa com instrutores qualificados para seus objetivos',badge:'🏋️ ACADEMIA & FITNESS'},
+    rest:{h:'SABOR QUE AQUECE O CORAÇÃO',sub:'Culinária autêntica com ingredientes frescos e receitas exclusivas',badge:'🍽️ RESTAURANTE & DELIVERY'}
+  };
+  const nh = nichoHeadlines[c.nicho]||{h:c.empresa,sub:'Conheça nossos serviços',badge:'⭐ PROFISSIONAL'};
+  
+  return `<!DOCTYPE html><html><head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>*{margin:0;padding:0;box-sizing:border-box;}body{background:${p.bg};color:${p.text};font-family:'Montserrat',sans-serif;}
+  .btn{display:inline-block;padding:14px 30px;border-radius:3px;font-weight:900;font-size:14px;letter-spacing:1px;cursor:pointer;text-decoration:none;}
+  .whats-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;box-shadow:0 4px 20px rgba(37,211,102,0.4);z-index:99;text-decoration:none;}
+  </style></head><body>
+  <nav style="padding:16px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.06);background:${p.bg};">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${p.accent};letter-spacing:3px;">${c.empresa.toUpperCase().slice(0,20)}</div>
+    <a href="https://wa.me/55${(c.whats||'').replace(/\D/g,'')}" target="_blank" class="btn" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:${isDark?'#000':'#fff'};font-size:12px;padding:10px 20px;">${c.cta||'ENTRAR EM CONTATO'}</a>
+  </nav>
+  <section style="min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 40px;text-align:center;background:linear-gradient(180deg,${p.bg} 0%,rgba(0,0,0,0.15) 50%,${p.bg} 100%);">
+    <div style="display:inline-block;background:rgba(255,255,255,0.04);border:1px solid ${p.cardBorder};color:${p.accent};font-size:11px;font-weight:800;padding:6px 18px;border-radius:20px;margin-bottom:20px;letter-spacing:2px;">${nh.badge}</div>
+    <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,72px);line-height:0.95;max-width:800px;margin-bottom:16px;">${nh.h}</h1>
+    <p style="font-size:clamp(14px,1.5vw,18px);opacity:0.75;max-width:560px;line-height:1.7;margin-bottom:32px;">${nh.sub}</p>
+    <a href="https://wa.me/55${(c.whats||'').replace(/\D/g,'')}" target="_blank" class="btn" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:${isDark?'#000':'#fff'};font-size:16px;padding:18px 44px;box-shadow:0 0 40px ${p.accent}40;">${c.cta||'ENTRAR EM CONTATO'} →</a>
+    <p style="margin-top:14px;font-size:12px;opacity:0.4;">📱 ${c.whats}</p>
+  </section>
+  <section style="display:flex;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div style="flex:1;padding:28px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.05);"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:${p.accent};">${c.clientes||'500+'}</div><div style="font-size:11px;opacity:0.5;margin-top:4px;">CLIENTES ATENDIDOS</div></div>
+    <div style="flex:1;padding:28px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.05);"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:${p.accent};">${c.anos||'10'}+</div><div style="font-size:11px;opacity:0.5;margin-top:4px;">ANOS DE EXPERIÊNCIA</div></div>
+    <div style="flex:1;padding:28px 20px;text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:${p.accent};">★4.9</div><div style="font-size:11px;opacity:0.5;margin-top:4px;">AVALIAÇÃO MÉDIA</div></div>
+  </section>
+  <section style="padding:60px 40px;">
+    <div style="max-width:900px;margin:0 auto;">
+      <div style="font-size:10px;font-weight:800;color:${p.accent};letter-spacing:3px;margin-bottom:8px;">NOSSOS SERVIÇOS</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);margin-bottom:28px;">O QUE OFERECEMOS</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;">
+        ${services.map(s=>`<div style="background:${p.card};border:1px solid ${p.cardBorder};border-left:3px solid ${p.accent};border-radius:4px;padding:16px;font-size:13px;font-weight:600;">${s}</div>`).join('')}
+      </div>
+    </div>
+  </section>
+  ${c.diff?`<section style="padding:40px;background:${p.card};border-top:1px solid ${p.cardBorder};border-bottom:1px solid ${p.cardBorder};">
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;margin-bottom:16px;">POR QUE NOS ESCOLHER?</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        ${c.diff.split(',').map(d=>`<div style="background:rgba(255,255,255,0.04);border:1px solid ${p.cardBorder};border-radius:20px;padding:8px 18px;font-size:13px;color:${p.accent};font-weight:700;">✓ ${d.trim()}</div>`).join('')}
+      </div>
+    </div>
+  </section>`:''}
+  <section style="padding:60px 40px;background:linear-gradient(135deg,${p.card},rgba(0,0,0,0.2));">
+    <div style="max-width:700px;margin:0 auto;text-align:center;">
+      <div style="font-size:28px;color:${p.accent};margin-bottom:8px;">★★★★★</div>
+      <blockquote style="font-size:16px;line-height:1.8;font-style:italic;opacity:0.85;margin-bottom:12px;">"Profissionalismo e excelência em cada detalhe. Recomendo sem hesitar para todos que precisam!"</blockquote>
+      <cite style="font-size:12px;opacity:0.5;">— Cliente Satisfeito</cite>
+    </div>
+  </section>
+  ${buildPhotosSection(c, p, isDark)}
+  <section style="padding:80px 40px;text-align:center;">
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,56px);margin-bottom:14px;">PRONTO PARA COMEÇAR?</h2>
+    <p style="font-size:16px;opacity:0.6;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;">Entre em contato agora mesmo e descubra como podemos transformar o seu resultado.</p>
+    <a href="https://wa.me/55${(c.whats||'').replace(/\D/g,'')}" target="_blank" class="btn" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:${isDark?'#000':'#fff'};font-size:17px;padding:20px 50px;box-shadow:0 0 50px ${p.accent}40;">${c.cta||'ENTRAR EM CONTATO'} →</a>
+    <p style="margin-top:16px;font-size:13px;opacity:0.4;">📱 ${c.whats}</p>
+  </section>
+  <footer style="padding:20px 40px;text-align:center;font-size:11px;opacity:0.3;border-top:1px solid rgba(255,255,255,0.05);">
+    © 2025 ${c.empresa} · Desenvolvido por iGence Marketing Inteligente
+  </footer>
+  <a href="https://wa.me/55${(c.whats||'').replace(/\D/g,'')}" target="_blank" class="whats-btn" title="Falar no WhatsApp">💬</a>
+  </body></html>`;
+}
+
+function buildPhotosSection(c, p, isDark) {
+  const photos = c.photos || [];
+  if (!photos.length) return '';
+  const type = c.photoType || 'gallery';
+
+  if (type === 'banner') {
+    return `
+    <section style="position:relative;height:420px;overflow:hidden;">
+      <img src="${photos[0].src}" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.65));display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:40px;text-align:center;">
+        ${photos[0].caption ? `<p style="font-size:18px;color:rgba(255,255,255,0.9);font-style:italic;margin-bottom:20px;">${photos[0].caption}</p>` : ''}
+        <a href="https://wa.me/55${(c.whats||'').replace(/\D/g,'')}" target="_blank" class="btn" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:${isDark?'#000':'#fff'};font-size:14px;padding:14px 36px;">${c.cta||'ENTRAR EM CONTATO'} →</a>
+      </div>
+    </section>`;
+  }
+
+  if (type === 'before_after') {
+    const pairs = [];
+    for (let i = 0; i < photos.length - 1; i += 2) pairs.push([photos[i], photos[i+1]]);
+    if (!pairs.length) return '';
+    return `
+    <section style="padding:60px 40px;background:${p.bg};">
+      <div style="max-width:900px;margin:0 auto;">
+        <div style="font-size:10px;font-weight:800;color:${p.accent};letter-spacing:3px;margin-bottom:8px;">RESULTADOS REAIS</div>
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);margin-bottom:28px;">ANTES & DEPOIS</h2>
+        ${pairs.map(([a, b]) => `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid ${p.cardBorder};">
+            <div style="position:relative;">
+              <img src="${a.src}" style="width:100%;height:240px;object-fit:cover;display:block;">
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:#fff;font-size:12px;font-weight:800;padding:8px 12px;text-align:center;">ANTES${a.caption?` — ${a.caption}`:''}</div>
+            </div>
+            <div style="position:relative;">
+              <img src="${b.src}" style="width:100%;height:240px;object-fit:cover;display:block;">
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:${p.accent};font-size:12px;font-weight:800;padding:8px 12px;text-align:center;">DEPOIS${b.caption?` — ${b.caption}`:''}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </section>`;
+  }
+
+  // Gallery
+  return `
+    <section style="padding:60px 40px;background:${p.bg};">
+      <div style="max-width:960px;margin:0 auto;">
+        <div style="font-size:10px;font-weight:800;color:${p.accent};letter-spacing:3px;margin-bottom:8px;">PORTFÓLIO</div>
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);margin-bottom:28px;">NOSSO TRABALHO</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          ${photos.slice(0,9).map(ph => `
+            <div style="position:relative;border-radius:6px;overflow:hidden;aspect-ratio:1;border:1px solid ${p.cardBorder};">
+              <img src="${ph.src}" style="width:100%;height:100%;object-fit:cover;display:block;">
+              ${ph.caption ? `<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.72);color:#fff;font-size:11px;padding:7px 10px;">${ph.caption}</div>` : ''}
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function sendWhatsApp(){
+  const c = currentGenData;
+  if(!c) return;
+  const link = document.getElementById('genLink').textContent;
+  const pass = clients.find(cl=>cl.id===c.id)?.clientPass||'';
+  const msg = encodeURIComponent(`Olá ${c.empresa}! 🎉\n\nSua Landing Page está pronta!\n\n🔗 Acesse: ${link}\n\n${c.plano!=='basico'?`📊 Seu painel de edição:\nEmail: ${c.whats.replace(/\D/g,'')}@cliente.igence.com.br\nSenha: ${pass}\nLink do painel: https://igence.com.br/client.html`:''}\n\nQualquer dúvida estou aqui! 🚀`);
+  window.open(`https://wa.me/55${c.whats.replace(/\D/g,'')}?text=${msg}`,'_blank');
+}
+
+function copyClientPanel(id){
+  const c = clients.find(cl=>cl.id===id);
+  if(!c) return;
+  const msg = `📊 Acesso ao Painel iGence\n\nEmpresa: ${c.empresa}\nEmail: ${c.whats.replace(/\D/g,'')}@cliente.igence.com.br\nSenha: ${c.clientPass}\nLink: https://igence.com.br/client.html`;
+  navigator.clipboard.writeText(msg).then(()=>showNotif('Acesso copiado!','success'));
+}
+
+// ===== CLIENT MODAL =====
+function showClientModal(id){
+  const c = clients.find(cl=>cl.id===id);
+  if(!c) return;
+  document.getElementById('clientModalContent').innerHTML = `
+    <div class="section-tag">${nichoLabel(c.nicho)}</div>
+    <div class="m-title">${c.empresa}</div>
+    <div class="m-sub">${c.whats} • ${c.date} • <span class="badge badge-${c.status}">${statusLabel(c.status)}</span></div>
+    <div class="info-grid" style="margin:20px 0;">
+      <div class="info-item"><div class="info-label">Plano</div><div class="info-val"><span class="badge badge-${c.plano}">${planoLabel(c.plano)}</span></div></div>
+      <div class="info-item"><div class="info-label">Template</div><div class="info-val">${c.template==='0'?'Dark Impact':'Gold Premium'}</div></div>
+      <div class="info-item"><div class="info-label">Cores</div><div class="info-val">${c.cores}</div></div>
+      <div class="info-item"><div class="info-label">CTA</div><div class="info-val">${c.cta||'—'}</div></div>
+      <div class="info-item"><div class="info-label">Clientes</div><div class="info-val">${c.clientes||'—'}</div></div>
+      <div class="info-item"><div class="info-label">Experiência</div><div class="info-val">${c.anos||'—'}</div></div>
+    </div>
+    <div class="fg"><div class="info-label" style="font-size:10px;color:#555;margin-bottom:4px;">SERVIÇOS</div><div style="font-size:13px;color:#ccc;">${c.servicos||'—'}</div></div>
+    <div class="fg" style="margin-top:12px;"><div class="info-label" style="font-size:10px;color:#555;margin-bottom:4px;">DIFERENCIAIS</div><div style="font-size:13px;color:#ccc;">${c.diff||'—'}</div></div>
+    ${c.pageUrl?`<div class="page-link-box"><span class="page-link-url">🌐 ${c.pageUrl}</span><button class="action-btn green" onclick="closeModal('clientModal');showPagePreviewModal(clients.find(cl=>cl.id==='${c.id}'))">👁 Ver Prévia</button></div>`:''}
+    ${c.plano!=='basico'?`<div style="background:#141414;border:1px solid #2a2a2a;border-radius:6px;padding:14px;margin-top:12px;"><div style="font-size:11px;color:#666;margin-bottom:6px;">ACESSO PAINEL DO CLIENTE</div><div style="font-family:monospace;font-size:12px;color:#4ade80;">${c.whats.replace(/\D/g,'')}@cliente.igence.com.br / ${c.clientPass}</div></div>`:'<div style="background:#1a0a00;border:1px solid #3a1a00;border-radius:6px;padding:14px;margin-top:12px;font-size:12px;color:#888;">⚠️ Plano Básico: sem acesso ao painel de edição</div>'}
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+      ${c.status==='pending'?`<button class="action-btn primary" onclick="closeModal('clientModal');quickGenerate('${c.id}')">⚡ Gerar Página</button>`:''}
+      ${c.plano!=='basico'&&c.status==='active'?`<button class="action-btn green" onclick="copyClientPanel('${c.id}')">📋 Copiar Acesso</button>`:''}
+      ${c.pageUrl?`<button class="action-btn" onclick="closeModal('clientModal');showPagePreviewModal(clients.find(cl=>cl.id==='${c.id}'))">👁 Ver Página</button>`:''}
+    </div>`;
+  document.getElementById('clientModal').classList.add('active');
+}
+
+// ===== DELETE =====
+function deleteClient(id){
+  if(!confirm('Excluir este cliente?')) return;
+  clients = clients.filter(c=>c.id!==id);
+  saveClients();
+  updateStats();
+  renderDashRecent();
+  renderOrdersTable();
+  renderClientes();
+  renderPaginas();
+  populateOrderSelect();
+  showNotif('Cliente excluído.','success');
+}
+
+// ===== PLANOS =====
+function renderPlanos(){
+  const plans = [
+    { key:'basico', name:'BÁSICO', price:'R$47,90', period:'/mês', color:'#9ca3af', features:['Landing page profissional','Escolha de nicho e template','Personalização básica','SSL gratuito','Entrega em 48h'], noFeatures:['Sem painel de edição','Sem domínio próprio','Sem suporte prioritário'], desc:'Ideal para quem quer começar com o essencial, sem domínio.' },
+    { key:'pro', name:'PROFISSIONAL', price:'R$97', period:'/mês', color:'var(--gold)', features:['Landing page profissional','Painel de edição para o cliente','Domínio .com.br incluso','Hospedagem + SSL','Suporte WhatsApp','Entrega em 48h','Paleta de cores personalizada','Logo integrada'], noFeatures:[], desc:'O mais escolhido. Completo para profissionais que querem resultado.' },
+    { key:'elite', name:'ELITE', price:'R$197', period:'/mês', color:'#a855f7', features:['Tudo do Profissional','Domínio .com incluso','2 páginas (principal + captura)','Integração Google Analytics','Pixel Meta/Facebook','SEO básico configurado','Suporte prioritário 24h','Revisão mensal de textos','Relatório mensal de acessos'], noFeatures:[], desc:'Para profissionais que querem presença digital completa e dados.' }
+  ];
+  document.getElementById('planosDetailed').innerHTML = plans.map(p=>`
+    <div style="background:var(--dark2);border:2px solid ${p.key==='pro'?p.color:'#1a1a1a'};border-radius:12px;padding:32px;position:relative;">
+      ${p.key==='pro'?'<div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:10px;font-weight:900;padding:5px 16px;border-radius:20px;letter-spacing:1px;">⚡ MAIS VENDIDO</div>':''}
+      <div style="font-size:10px;font-weight:800;color:${p.color};letter-spacing:2px;margin-bottom:6px;">${p.name}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:${p.color};line-height:1;">${p.price}</div>
+      <div style="font-size:12px;color:#666;margin-bottom:16px;">${p.period}</div>
+      <div style="font-size:12px;color:#888;margin-bottom:20px;line-height:1.6;">${p.desc}</div>
+      <ul style="list-style:none;margin-bottom:20px;">
+        ${p.features.map(f=>`<li style="padding:7px 0;border-bottom:1px solid #1a1a1a;font-size:13px;display:flex;gap:8px;"><span style="color:${p.color}">✓</span>${f}</li>`).join('')}
+        ${p.noFeatures.map(f=>`<li style="padding:7px 0;border-bottom:1px solid #1a1a1a;font-size:13px;display:flex;gap:8px;color:#444;"><span>✗</span>${f}</li>`).join('')}
+      </ul>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid #2a2a2a;border-radius:6px;padding:12px;font-size:12px;color:#666;">
+        <b style="color:#fff">Clientes neste plano:</b> ${clients.filter(c=>c.plano===p.key).length}
+        <br><b style="color:${p.color}">Receita:</b> R$${(clients.filter(c=>c.plano===p.key&&c.status==='active').length * parseFloat(p.price.replace('R$',''))).toFixed(0)}
+      </div>
+    </div>`).join('');
+}
+
+function renderPlansMini(){
+  document.getElementById('plansRow').innerHTML = [
+    {key:'basico',name:'Básico',price:'47,90'},{key:'pro',name:'Profissional',price:'97,00'},{key:'elite',name:'Elite',price:'197,00'}
+  ].map(p=>`
+    <div class="plan-mini">
+      <div class="plan-mini-name" style="color:${p.key==='basico'?'#9ca3af':p.key==='pro'?'var(--gold)':'#a855f7'}">${p.name}</div>
+      <div class="plan-mini-price">R$${p.price}</div>
+      <div class="plan-mini-count">${clients.filter(c=>c.plano===p.key).length} clientes ativos</div>
+    </div>`).join('');
+}
+
+// ===== SWITCH GERAR MODE =====
+function switchGerar(mode, el){
+  document.querySelectorAll('#gerarToggle .toggle-opt').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('gerarFromPedido').style.display = mode==='pedido'?'block':'none';
+  document.getElementById('gerarManual').style.display = mode==='manual'?'block':'none';
+  document.getElementById('progressWrap').style.display='none';
+  document.getElementById('generatedResult').style.display='none';
+}
+
+// ===== HELPERS =====
+function nichoLabel(n){ return {adv:'⚖️ Advogado',dent:'🦷 Dentista',med:'👨‍⚕️ Médico',coach:'🎯 Coach',est:'💆 Estética',imob:'🏠 Imobiliária',acad:'🏋️ Academia',rest:'🍽️ Restaurante'}[n]||n; }
+function planoLabel(p){ return {basico:'Básico',pro:'Profissional',elite:'Elite'}[p]||p; }
+function statusLabel(s){ return {pending:'Pendente',active:'Ativo',done:'Entregue'}[s]||s; }
+
+function showNotif(msg, type='success'){
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.className = 'notif '+type;
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none', 3000);
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+
+// ===== FOTOS — ADMIN UPLOADS FLOW =====
+let fotosState = {
+  clientId: null,
+  photoType: 'gallery',
+  photos: [] // [{src, caption}]
+};
+
+function initFotosPage() {
+  // Populate client selector with active clients only
+  const sel = document.getElementById('fotosClientSelect');
+  sel.innerHTML = '<option value="">— Selecione um cliente —</option>' +
+    clients.filter(c => c.status === 'active' && c.pageUrl)
+           .map(c => `<option value="${c.id}">${c.empresa} (${planoLabel(c.plano)})</option>`)
+           .join('');
+  renderPublishedList();
+}
+
+function onFotosClientChange() {
+  const id = document.getElementById('fotosClientSelect').value;
+  if (!id) {
+    document.getElementById('fotosClientInfo').style.display = 'none';
+    document.getElementById('fotosWorkspace').style.display = 'none';
+    return;
+  }
+  const c = clients.find(cl => cl.id === id);
+  fotosState.clientId = id;
+  fotosState.photos = c.photos ? [...c.photos] : [];
+  fotosState.photoType = c.photoType || 'gallery';
+
+  // Show client info badge
+  const info = document.getElementById('fotosClientInfo');
+  info.style.display = 'block';
+  info.innerHTML = `📱 ${c.whats} &nbsp;•&nbsp; ${c.pageUrl} &nbsp;•&nbsp; <span class="badge badge-${c.plano}">${planoLabel(c.plano)}</span>`;
+
+  // Restore type selection
+  document.querySelectorAll('.fotos-type-card').forEach(el => {
+    el.classList.toggle('active', el.dataset.type === fotosState.photoType);
+  });
+
+  document.getElementById('fotosWorkspace').style.display = 'block';
+  document.getElementById('fotosPublishedMsg').style.display = 'none';
+  renderFotosGrid();
+  updateFotosPreview();
+}
+
+function selectFotosType(type, btn) {
+  fotosState.photoType = type;
+  document.querySelectorAll('.fotos-type-card').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fotosBeforeAfterHint').style.display = type === 'before_after' ? 'block' : 'none';
+  updateFotosPreview();
+}
+
+function handleAdminPhotoUpload(files) {
+  const maxPhotos = fotosState.photoType === 'banner' ? 1 : (fotosState.photoType === 'before_after' ? 6 : 9);
+  const remaining = maxPhotos - fotosState.photos.length;
+  if (remaining <= 0) { showNotif(`Limite de fotos atingido para este tipo! (máx ${maxPhotos})`); return; }
+
+  let processed = 0;
+  const toProcess = Math.min(files.length, remaining);
+
+  Array.from(files).slice(0, toProcess).forEach(file => {
+    if (file.size > 5 * 1024 * 1024) { showNotif(`"${file.name}" é maior que 5MB, pulando.`); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      fotosState.photos.push({ src: e.target.result, caption: '' });
+      processed++;
+      if (processed === toProcess) {
+        renderFotosGrid();
+        updateFotosPreview();
+        showNotif(`✅ ${processed} foto(s) adicionada(s)!`);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderFotosGrid() {
+  const grid = document.getElementById('fotosAdminGrid');
+  if (!fotosState.photos.length) { grid.innerHTML = ''; return; }
+
+  const isBA = fotosState.photoType === 'before_after';
+  grid.innerHTML = fotosState.photos.map((ph, i) => {
+    const label = isBA ? (i % 2 === 0 ? '📷 ANTES' : '✨ DEPOIS') : `Foto ${i + 1}`;
+    return `
+      <div class="fotos-img-card">
+        <img src="${ph.src}" alt="${label}" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;">
+        <button class="fotos-img-remove" onclick="removeFotoAdmin(${i})">×</button>
+        ${isBA ? `<div style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.75);color:${i%2===0?'#fff':'var(--gold)'};font-size:9px;font-weight:800;padding:3px 8px;border-radius:3px;">${label}</div>` : ''}
+        <div class="fotos-img-caption">
+          <input type="text" placeholder="${isBA ? (i%2===0?'Legenda Antes...':'Legenda Depois...') : 'Legenda (opcional)...'}" value="${ph.caption}"
+                 oninput="fotosState.photos[${i}].caption=this.value;updateFotosPreview()">
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function removeFotoAdmin(i) {
+  fotosState.photos.splice(i, 1);
+  renderFotosGrid();
+  updateFotosPreview();
+}
+
+function updateFotosPreview() {
+  const section = document.getElementById('fotosPreviewSection');
+  const preview = document.getElementById('fotosPagePreview');
+  if (!fotosState.photos.length) { section.style.display = 'none'; return; }
+
+  section.style.display = 'block';
+  const c = clients.find(cl => cl.id === fotosState.clientId);
+  if (!c) return;
+  const p = palettesAdmin[c.cores || 'gold'];
+
+  let html = '';
+  if (fotosState.photoType === 'banner') {
+    html = `<div style="position:relative;height:260px;overflow:hidden;border-radius:8px;">
+      <img src="${fotosState.photos[0].src}" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.2),rgba(0,0,0,0.6));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.5);">${c.empresa.toUpperCase().slice(0,25)}</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:6px;">${fotosState.photos[0].caption || ''}</div>
+      </div>
+    </div>`;
+  } else if (fotosState.photoType === 'before_after') {
+    const pairs = [];
+    for (let i = 0; i < fotosState.photos.length - 1; i += 2)
+      pairs.push([fotosState.photos[i], fotosState.photos[i+1]]);
+    html = `<div style="background:${p.bg};padding:24px;border-radius:8px;">
+      <div style="font-size:10px;font-weight:800;color:${p.accent};letter-spacing:2px;margin-bottom:6px;">RESULTADOS</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;margin-bottom:16px;">ANTES & DEPOIS</div>
+      ${pairs.map(([a, b]) => `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:12px;border-radius:6px;overflow:hidden;border:1px solid ${p.cardBorder};">
+          <div style="position:relative;">
+            <img src="${a.src}" style="width:100%;height:140px;object-fit:cover;display:block;">
+            <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.65);color:#fff;font-size:10px;font-weight:800;padding:5px;text-align:center;">
+              ANTES${a.caption?` — ${a.caption}`:''}
+            </div>
+          </div>
+          <div style="position:relative;">
+            <img src="${b.src}" style="width:100%;height:140px;object-fit:cover;display:block;">
+            <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.65);color:${p.accent};font-size:10px;font-weight:800;padding:5px;text-align:center;">
+              DEPOIS${b.caption?` — ${b.caption}`:''}
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  } else {
+    // Gallery
+    html = `<div style="background:${p.bg};padding:24px;border-radius:8px;">
+      <div style="font-size:10px;font-weight:800;color:${p.accent};letter-spacing:2px;margin-bottom:6px;">PORTFÓLIO</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;margin-bottom:14px;">NOSSO TRABALHO</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        ${fotosState.photos.slice(0,9).map(ph => `
+          <div style="position:relative;border-radius:6px;overflow:hidden;aspect-ratio:1;">
+            <img src="${ph.src}" style="width:100%;height:100%;object-fit:cover;display:block;">
+            ${ph.caption ? `<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:#fff;font-size:9px;padding:4px 6px;">${ph.caption}</div>` : ''}
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+  preview.innerHTML = html;
+}
+
+function fotosPreviewPage() {
+  const c = clients.find(cl => cl.id === fotosState.clientId);
+  if (!c) return;
+  const fakeClient = { ...c, photos: fotosState.photos.map(p => ({...p, approved: true})), photoType: fotosState.photoType };
+  showPagePreviewModal(fakeClient);
+}
+
+function publishClientPhotos() {
+  if (!fotosState.clientId) { showNotif('Selecione um cliente primeiro!'); return; }
+  if (!fotosState.photos.length) { showNotif('Adicione pelo menos uma foto!'); return; }
+
+  const idx = clients.findIndex(c => c.id === fotosState.clientId);
+  if (idx < 0) return;
+
+  // Save photos to client record (all approved)
+  clients[idx].photos = fotosState.photos.map(p => ({ ...p, approved: true }));
+  clients[idx].photoType = fotosState.photoType;
+  saveClients();
+
+  document.getElementById('fotosPublishedMsg').style.display = 'block';
+  showNotif(`✅ ${fotosState.photos.length} fotos publicadas para ${clients[idx].empresa}!`);
+  renderPublishedList();
+}
+
+function notifyClientPhotos() {
+  if (!fotosState.clientId) return;
+  const c = clients.find(cl => cl.id === fotosState.clientId);
+  const msg = encodeURIComponent(
+    `Olá, ${c.empresa}! 🎉\n\n` +
+    `Suas fotos foram adicionadas e publicadas na sua página com sucesso! ✅\n\n` +
+    `Tipo de exibição: *${fotosState.photoType === 'gallery' ? 'Galeria de Fotos' : fotosState.photoType === 'before_after' ? 'Antes & Depois' : 'Banner Hero'}*\n` +
+    `Fotos publicadas: *${fotosState.photos.length}*\n\n` +
+    `Acesse seu painel para visualizar: https://igence.com.br/client.html 🚀`
+  );
+  window.open(`https://wa.me/55${c.whats.replace(/\D/g,'')}?text=${msg}`, '_blank');
+}
+
+function clearFotosWorkspace() {
+  if (fotosState.photos.length && !confirm('Limpar todas as fotos carregadas?')) return;
+  fotosState.photos = [];
+  renderFotosGrid();
+  document.getElementById('fotosPreviewSection').style.display = 'none';
+  document.getElementById('fotosPublishedMsg').style.display = 'none';
+}
+
+function renderPublishedList() {
+  const list = document.getElementById('fotosPublishedList');
+  const withPhotos = clients.filter(c => c.photos && c.photos.length);
+  if (!withPhotos.length) {
+    list.innerHTML = '<div style="color:#444;font-size:13px;">Nenhuma página com fotos ainda.</div>';
+    return;
+  }
+  list.innerHTML = withPhotos.map(c => `
+    <div style="background:var(--dark2);border:1px solid #222;border-radius:8px;padding:16px 20px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-weight:700;font-size:14px;">${c.empresa}</div>
+        <div style="font-size:12px;color:#666;margin-top:3px;">
+          ${c.photos.length} foto(s) •
+          <span style="color:var(--gold)">${c.photoType === 'gallery' ? 'Galeria' : c.photoType === 'before_after' ? 'Antes & Depois' : 'Banner Hero'}</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="action-btn" onclick="editClientPhotos('${c.id}')">✏️ Editar Fotos</button>
+        <button class="action-btn" onclick="removeAllClientPhotos('${c.id}')">🗑 Remover</button>
+      </div>
+    </div>`).join('');
+}
+
+function editClientPhotos(id) {
+  document.getElementById('fotosClientSelect').value = id;
+  onFotosClientChange();
+  window.scrollTo(0, 0);
+}
+
+function removeAllClientPhotos(id) {
+  if (!confirm('Remover todas as fotos desta página?')) return;
+  const idx = clients.findIndex(c => c.id === id);
+  if (idx >= 0) { clients[idx].photos = []; clients[idx].photoType = 'gallery'; saveClients(); }
+  renderPublishedList();
+  showNotif('Fotos removidas.');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('active'); });
+});
+</script>
+</body>
+</html>
