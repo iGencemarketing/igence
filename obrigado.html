@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGence — Pagamento Confirmado!</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;color:#fff;font-family:'Montserrat',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.card{background:#111;border:1px solid #222;border-radius:16px;padding:56px 48px;max-width:600px;width:100%;text-align:center;}
+.emoji{font-size:72px;margin-bottom:20px;}
+.title{font-family:'Bebas Neue',sans-serif;font-size:48px;color:#F5A623;line-height:1;margin-bottom:10px;}
+.sub{font-size:15px;color:#888;line-height:1.7;margin-bottom:32px;}
+.info-box{background:#0d1a0d;border:1px solid rgba(34,197,94,0.25);border-radius:10px;padding:24px;margin-bottom:28px;text-align:left;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;}
+.info-row:last-child{border:none;}
+.info-label{color:#666;}
+.info-val{font-weight:700;color:#fff;}
+.steps{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:28px;text-align:left;}
+.step{display:flex;gap:14px;padding:10px 0;font-size:13px;align-items:flex-start;}
+.step-num{background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:#F5A623;font-weight:900;font-size:11px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-text{color:#aaa;line-height:1.5;}
+.step-text b{color:#fff;}
+.wa-btn{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#000;font-weight:900;font-size:14px;padding:16px 36px;border-radius:6px;text-decoration:none;letter-spacing:1px;transition:all .2s;}
+.wa-btn:hover{transform:translateY(-2px);filter:brightness(1.1);}
+.pending-banner{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:14px;margin-bottom:24px;font-size:13px;color:#fbbf24;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="content"></div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const status = params.get('status') || 'success';
+const paymentId = params.get('payment_id') || '';
+
+const content = document.getElementById('content');
+
+if(status === 'success'){
+  content.innerHTML = `
+    <div class="emoji">🎉</div>
+    <div class="title">PAGAMENTO CONFIRMADO!</div>
+    <p class="sub">Sua landing page está sendo criada. Em breve nossa equipe entrará em contato via WhatsApp.</p>
+    <div class="info-box">
+      <div style="font-size:11px;font-weight:800;color:#4ade80;letter-spacing:2px;margin-bottom:12px;">✅ RESUMO DO PEDIDO</div>
+      <div class="info-row"><span class="info-label">Status</span><span class="info-val" style="color:#4ade80;">✓ Aprovado</span></div>
+      <div class="info-row"><span class="info-label">Previsão de entrega</span><span class="info-val">Em até 3 horas</span></div>
+      <div class="info-row"><span class="info-label">ID do pagamento</span><span class="info-val" style="font-family:monospace;font-size:11px;">${paymentId||'—'}</span></div>
+    </div>
+    <div class="steps">
+      <div style="font-size:11px;font-weight:800;color:#888;letter-spacing:2px;margin-bottom:12px;">PRÓXIMOS PASSOS</div>
+      <div class="step"><div class="step-num">1</div><div class="step-text">Nossa equipe está <b>criando sua página</b> agora</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text">Você receberá o <b>link da sua página + dados de acesso</b> ao painel por WhatsApp</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text">Acesse o painel em <b>igence.vercel.app/client</b> e personalize tudo</div></div>
+    </div>
+    <a href="https://wa.me/5519974038092?text=Ol%C3%A1%21+Acabei+de+pagar+pelo+plano+iGence.+ID+do+pagamento%3A+${paymentId}" target="_blank" class="wa-btn">💬 FALAR COM A EQUIPE</a>
+    <p style="font-size:11px;color:#444;margin-top:16px;">Guarde o ID do pagamento como comprovante</p>`;
+
+} else if(status === 'pending'){
+  content.innerHTML = `
+    <div class="emoji">⏳</div>
+    <div class="title">PAGAMENTO EM ANÁLISE</div>
+    <p class="sub">Seu pagamento está sendo processado. Assim que confirmado, sua página será criada automaticamente.</p>
+    <div class="pending-banner">⚠️ Pagamentos via boleto levam até 3 dias úteis para compensar.</div>
+    <div class="steps">
+      <div style="font-size:11px;font-weight:800;color:#888;letter-spacing:2px;margin-bottom:12px;">O QUE ACONTECE AGORA</div>
+      <div class="step"><div class="step-num">1</div><div class="step-text">Aguardamos a <b>confirmação do pagamento</b></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text">Assim que aprovado, sua <b>página é criada automaticamente</b></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text">Você recebe os dados por <b>WhatsApp</b></div></div>
+    </div>
+    <a href="https://wa.me/5519974038092" target="_blank" class="wa-btn">💬 TIRAR DÚVIDAS</a>`;
+
+} else {
+  content.innerHTML = `
+    <div class="emoji">😕</div>
+    <div class="title">PAGAMENTO NÃO APROVADO</div>
+    <p class="sub">Houve um problema com seu pagamento. Nenhuma cobrança foi realizada.</p>
+    <div style="margin-bottom:24px;">
+      <div style="font-size:13px;color:#888;line-height:1.7;">Possíveis motivos: cartão sem limite, dados incorretos ou timeout. Tente novamente ou escolha outro método de pagamento.</div>
+    </div>
+    <a href="/" class="wa-btn" style="background:var(--gold,#F5A623);">↩ TENTAR NOVAMENTE</a>`;
+}
+</script>
+</body>
+</html>

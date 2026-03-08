@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carregando...</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;color:#fff;font-family:'Montserrat',sans-serif;}
+
+/* LOADING */
+#loadingScreen{position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
+.load-logo{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#F5A623;letter-spacing:4px;margin-bottom:16px;}
+.load-logo span{color:#fff;}
+.load-bar{width:200px;height:3px;background:#1a1a1a;border-radius:2px;overflow:hidden;}
+.load-bar-inner{height:100%;background:linear-gradient(90deg,#F5A623,#e8940a);width:0%;animation:loadAnim 1.5s ease forwards;}
+@keyframes loadAnim{to{width:100%}}
+
+/* NOT FOUND */
+#notFound{display:none;position:fixed;inset:0;background:#0a0a0a;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+#notFound h1{font-family:'Bebas Neue',sans-serif;font-size:80px;color:#F5A623;}
+#notFound p{font-size:16px;color:#555;margin-top:8px;}
+
+/* PAGE */
+#page{display:none;}
+
+/* NAV */
+.nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(0,0,0,0.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);padding:14px 40px;display:flex;justify-content:space-between;align-items:center;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;}
+.nav-cta{padding:10px 24px;border-radius:3px;font-weight:900;font-size:12px;letter-spacing:1px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s;}
+.nav-cta:hover{transform:translateY(-1px);filter:brightness(1.1);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;animation:pulse 8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.hero-badge{display:inline-block;font-size:11px;font-weight:800;padding:6px 20px;border-radius:20px;margin-bottom:24px;letter-spacing:2px;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,88px);line-height:0.92;max-width:900px;margin-bottom:20px;}
+.hero-sub{font-size:clamp(14px,1.8vw,20px);opacity:0.7;max-width:580px;line-height:1.7;margin-bottom:36px;}
+.hero-btn{padding:18px 48px;border-radius:3px;font-weight:900;font-size:16px;letter-spacing:2px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s;}
+.hero-btn:hover{transform:translateY(-2px);}
+.hero-phone{margin-top:16px;font-size:13px;opacity:0.4;}
+
+/* STATS BAR */
+.stats-bar{display:flex;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);}
+.stat{flex:1;padding:28px 16px;text-align:center;border-right:1px solid rgba(255,255,255,0.05);}
+.stat:last-child{border:none;}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;}
+.stat-l{font-size:10px;opacity:0.45;margin-top:4px;letter-spacing:1px;text-transform:uppercase;}
+
+/* SERVICES */
+.services{padding:80px 40px;}
+.services-inner{max-width:960px;margin:0 auto;}
+.section-tag{font-size:10px;font-weight:800;letter-spacing:3px;margin-bottom:8px;text-transform:uppercase;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);margin-bottom:32px;}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.service-item{padding:18px 20px;border-radius:4px;font-size:13px;font-weight:600;border-left:3px solid;}
+
+/* DIFERENCIAIS */
+.diffs{padding:60px 40px;}
+.diffs-inner{max-width:960px;margin:0 auto;text-align:center;}
+.diff-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px;}
+.diff-tag{padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;}
+
+/* TESTIMONIAL */
+.testi{padding:80px 40px;text-align:center;}
+.testi-inner{max-width:720px;margin:0 auto;}
+.testi-stars{font-size:32px;margin-bottom:16px;}
+.testi blockquote{font-size:clamp(16px,2vw,22px);line-height:1.7;font-style:italic;opacity:0.85;margin-bottom:16px;}
+.testi cite{font-size:13px;opacity:0.45;}
+
+/* PHOTOS */
+.photos-section{padding:60px 40px;}
+.photos-inner{max-width:960px;margin:0 auto;}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.gallery-item{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.gallery-item:hover img{transform:scale(1.05);}
+.gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:10px;font-size:12px;background:linear-gradient(transparent,rgba(0,0,0,0.8));}
+.ba-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}
+.ba-pair{border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+.ba-row{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.ba-img{position:relative;}
+.ba-img img{width:100%;height:220px;object-fit:cover;display:block;}
+.ba-label{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:11px;font-weight:800;padding:8px;background:rgba(0,0,0,0.75);}
+.banner-wrap{position:relative;height:460px;overflow:hidden;border-radius:12px;}
+.banner-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.banner-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:48px;text-align:center;background:linear-gradient(transparent 30%,rgba(0,0,0,0.75));}
+
+/* CTA FINAL */
+.cta-final{padding:100px 40px;text-align:center;}
+.cta-final h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,68px);margin-bottom:16px;}
+.cta-final p{font-size:16px;opacity:0.6;margin-bottom:40px;max-width:500px;margin-left:auto;margin-right:auto;}
+
+/* FOOTER */
+footer{padding:24px 40px;text-align:center;font-size:11px;opacity:0.25;border-top:1px solid rgba(255,255,255,0.05);}
+
+/* WHATSAPP FLOAT */
+.wa-btn{position:fixed;bottom:28px;right:28px;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;box-shadow:0 4px 24px rgba(37,211,102,0.5);z-index:99;text-decoration:none;transition:transform .2s;}
+.wa-btn:hover{transform:scale(1.1);}
+
+@media(max-width:768px){
+  .nav{padding:12px 20px;}
+  .hero{padding:100px 20px 60px;}
+  .services,.diffs,.testi,.cta-final,.photos-section{padding:60px 20px;}
+  .stats-bar{flex-wrap:wrap;}
+  .stat{min-width:50%;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div id="loadingScreen">
+  <div class="load-logo">iG<span>ence</span></div>
+  <div class="load-bar"><div class="load-bar-inner"></div></div>
+</div>
+
+<div id="notFound">
+  <h1>404</h1>
+  <p>Esta página não foi encontrada ou ainda não foi publicada.</p>
+  <p style="margin-top:8px;font-size:13px;color:#333;">igence.vercel.app</p>
+</div>
+
+<div id="page"></div>
+
+<script>
+const SUPABASE_URL = 'https://cfaitsaplpbanfzzaoxr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ogk89uALXDTeTvDwY11GmQ_CTtqNLTf';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const palettes = {
+  gold: {bg:'#0a0800',accent:'#F5A623',text:'#fff',card:'rgba(245,166,35,0.07)',cardBorder:'rgba(245,166,35,0.18)',glow:'rgba(245,166,35,0.12)'},
+  blue: {bg:'#00060f',accent:'#38bdf8',text:'#fff',card:'rgba(56,189,248,0.07)',cardBorder:'rgba(56,189,248,0.18)',glow:'rgba(56,189,248,0.12)'},
+  green:{bg:'#020f06',accent:'#34d399',text:'#fff',card:'rgba(52,211,153,0.07)',cardBorder:'rgba(52,211,153,0.18)',glow:'rgba(52,211,153,0.12)'},
+  red:  {bg:'#0f0000',accent:'#ef4444',text:'#fff',card:'rgba(239,68,68,0.07)',cardBorder:'rgba(239,68,68,0.18)',glow:'rgba(239,68,68,0.12)'},
+  purple:{bg:'#0a0010',accent:'#e879f9',text:'#fff',card:'rgba(232,121,249,0.07)',cardBorder:'rgba(232,121,249,0.18)',glow:'rgba(232,121,249,0.12)'},
+  orange:{bg:'#0f0600',accent:'#fb923c',text:'#fff',card:'rgba(251,146,60,0.07)',cardBorder:'rgba(251,146,60,0.18)',glow:'rgba(251,146,60,0.12)'}
+};
+
+const nichoData = {
+  adv:  {badge:'⚖️ ESCRITÓRIO JURÍDICO', h:'SEUS DIREITOS MERECEM A MELHOR DEFESA', testi:'"Recuperei meu FGTS e recebi indenização. Profissionalismo exemplar!"', testiAutor:'— Carlos R., cliente'},
+  dent: {badge:'🦷 CLÍNICA ODONTOLÓGICA', h:'SORRIA COM MAIS CONFIANÇA', testi:'"Meu sorriso mudou completamente. Resultado incrível e natural!"', testiAutor:'— Ana L., paciente'},
+  med:  {badge:'👨‍⚕️ CLÍNICA MÉDICA', h:'SUA SAÚDE EM BOAS MÃOS', testi:'"Atendimento humanizado e muito cuidadoso. Me sinto segura aqui."', testiAutor:'— Fernanda M., paciente'},
+  coach:{badge:'🎯 COACHING & MENTORIA', h:'MUDE SUA VIDA EM 90 DIAS', testi:'"Em 3 meses faturei 3x mais. O método realmente funciona!"', testiAutor:'— Ricardo S., mentorado'},
+  est:  {badge:'💆 CLÍNICA ESTÉTICA', h:'REALCE SUA BELEZA NATURAL', testi:'"Resultado natural e duradouro. Melhor investimento que já fiz!"', testiAutor:'— Juliana C., cliente'},
+  imob: {badge:'🏠 IMOBILIÁRIA', h:'ENCONTRE O IMÓVEL DOS SEUS SONHOS', testi:'"Encontrei meu apartamento em menos de 2 semanas. Atendimento nota 10!"', testiAutor:'— Paulo H., comprador'},
+  acad: {badge:'🏋️ ACADEMIA & FITNESS', h:'NÃO É SÓ MUSCULAÇÃO. É TRANSFORMAÇÃO.', testi:'"Perdi 18kg em 4 meses. Equipe incrível e estrutura completa!"', testiAutor:'— Marcos V., aluno'},
+  rest: {badge:'🍽️ RESTAURANTE & DELIVERY', h:'SABOR QUE AQUECE O CORAÇÃO', testi:'"O melhor restaurante da cidade. Delivery sempre pontual e gostoso!"', testiAutor:'— Beatriz N., cliente'}
+};
+
+async function loadPage(){
+  // Pega o ?id= da URL ou o subdomínio
+  const params = new URLSearchParams(window.location.search);
+  let slug = params.get('id');
+
+  // Se não tem ?id=, tenta usar o subdomínio (kasasegura.igence.com.br → kasasegura)
+  if(!slug){
+    const host = window.location.hostname;
+    const parts = host.split('.');
+    if(parts.length >= 3 && parts[1] === 'igence'){
+      slug = parts[0];
+    }
+  }
+
+  if(!slug){
+    showNotFound();return;
+  }
+
+  // Busca pelo slug (empresa normalizada) ou pelo domain
+  const slugNorm = slug.toLowerCase().replace(/[^a-z0-9]/g,'');
+
+  // Tenta buscar por domain ou page_url contendo o slug
+  const {data,error} = await sb
+    .from('clients')
+    .select('*')
+    .eq('status','active')
+    .or(`domain.ilike.%${slug}%,page_url.ilike.%${slugNorm}%`)
+    .single();
+
+  if(error || !data){
+    // Tenta buscar por empresa normalizada
+    const {data:d2,error:e2} = await sb
+      .from('clients')
+      .select('*')
+      .eq('status','active')
+      .limit(100);
+
+    const match = (d2||[]).find(c => {
+      const norm = (c.empresa||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+      return norm.includes(slugNorm) || slugNorm.includes(norm.slice(0,6));
+    });
+
+    if(!match){ showNotFound(); return; }
+    renderPage(match);
+  } else {
+    renderPage(data);
+  }
+}
+
+function showNotFound(){
+  document.getElementById('loadingScreen').style.display='none';
+  document.getElementById('notFound').style.display='flex';
+}
+
+function renderPage(c){
+  const p = palettes[c.cores||'gold'];
+  const nd = nichoData[c.nicho]||nichoData.adv;
+  const whatsNum = (c.whats||'').replace(/\D/g,'');
+  const waLink = `https://wa.me/55${whatsNum}`;
+
+  // Serviços
+  let services = [];
+  if(Array.isArray(c.services) && c.services.length) services = c.services;
+  else if(c.servicos) services = c.servicos.split(',').map(s=>s.trim()).filter(Boolean);
+
+  // Diferenciais
+  let diffs = [];
+  if(c.diff) diffs = c.diff.split(',').map(s=>s.trim()).filter(Boolean);
+
+  // Headline / sub
+  const headline = c.headline || nd.h;
+  const sub = c.slogan || (c.nicho === 'adv' ? `Advocacia especializada com ${c.anos||'anos'} de experiência`
+    : c.nicho === 'dent' ? 'Tratamentos modernos com tecnologia de ponta'
+    : c.nicho === 'med' ? 'Atendimento humanizado com especialistas experientes'
+    : c.nicho === 'coach' ? `Método exclusivo que já transformou ${c.clientes||'centenas'} de vidas`
+    : c.nicho === 'est' ? 'Procedimentos seguros com resultados naturais e duradouros'
+    : c.nicho === 'imob' ? `${c.clientes||'Centenas'} de imóveis disponíveis com financiamento facilitado`
+    : c.nicho === 'acad' ? 'Estrutura completa com instrutores qualificados para seus objetivos'
+    : 'Culinária autêntica com ingredientes frescos e receitas exclusivas');
+
+  const testi = c.testi || nd.testi;
+  const testiAutor = c.testi_autor || nd.testiAutor;
+  const cta = c.cta || 'Entrar em Contato';
+
+  // Meta tags dinâmicas
+  document.title = `${c.empresa} — ${nd.badge.replace(/[^\w\s]/g,'').trim()}`;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', sub);
+
+  // Fotos
+  const photos = Array.isArray(c.photos) ? c.photos.filter(ph=>ph.approved) : [];
+  const photoType = c.photo_type || 'gallery';
+
+  let photosHTML = '';
+  if(photos.length){
+    if(photoType === 'banner'){
+      photosHTML = `
+        <div class="photos-section">
+          <div class="photos-inner">
+            <div class="banner-wrap">
+              <img src="${photos[0].src}" alt="${c.empresa}">
+              <div class="banner-overlay" style="background:linear-gradient(transparent 30%,rgba(0,0,0,0.75));">
+                ${photos[0].caption?`<p style="font-size:18px;color:rgba(255,255,255,0.9);font-style:italic;margin-bottom:24px;">${photos[0].caption}</p>`:''}
+                <a href="${waLink}" target="_blank" class="hero-btn" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:#000;">${cta} →</a>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    } else if(photoType === 'before_after'){
+      const pairs=[];
+      for(let i=0;i<photos.length-1;i+=2) pairs.push([photos[i],photos[i+1]]);
+      photosHTML = `
+        <div class="photos-section" style="background:${p.bg};">
+          <div class="photos-inner">
+            <div class="section-tag" style="color:${p.accent};">RESULTADOS REAIS</div>
+            <div class="section-title">ANTES & DEPOIS</div>
+            <div class="ba-grid">
+              ${pairs.map(([a,b])=>`
+                <div class="ba-pair">
+                  <div class="ba-row">
+                    <div class="ba-img">
+                      <img src="${a.src}" alt="Antes">
+                      <div class="ba-label" style="color:#fff;">ANTES${a.caption?` — ${a.caption}`:''}</div>
+                    </div>
+                    <div class="ba-img">
+                      <img src="${b.src}" alt="Depois">
+                      <div class="ba-label" style="color:${p.accent};">DEPOIS${b.caption?` — ${b.caption}`:''}</div>
+                    </div>
+                  </div>
+                </div>`).join('')}
+            </div>
+          </div>
+        </div>`;
+    } else {
+      photosHTML = `
+        <div class="photos-section">
+          <div class="photos-inner">
+            <div class="section-tag" style="color:${p.accent};">PORTFÓLIO</div>
+            <div class="section-title">NOSSO TRABALHO</div>
+            <div class="gallery-grid">
+              ${photos.slice(0,9).map(ph=>`
+                <div class="gallery-item">
+                  <img src="${ph.src}" alt="${ph.caption||c.empresa}" loading="lazy">
+                  ${ph.caption?`<div class="gallery-caption">${ph.caption}</div>`:''}
+                </div>`).join('')}
+            </div>
+          </div>
+        </div>`;
+    }
+  }
+
+  document.getElementById('page').innerHTML = `
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="nav-logo" style="color:${p.accent};">${c.empresa.split(' ').slice(0,3).join(' ').toUpperCase()}</div>
+      <a href="${waLink}" target="_blank" class="nav-cta" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:#000;">${cta}</a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" style="background:radial-gradient(ellipse at 50% 0%,${p.glow} 0%,${p.bg} 65%),${p.bg};">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,${p.glow},transparent 70%);pointer-events:none;"></div>
+      <div class="hero-badge" style="background:${p.card};border:1px solid ${p.cardBorder};color:${p.accent};">${nd.badge}</div>
+      <h1 style="color:${p.text};">${headline}</h1>
+      <p class="hero-sub">${sub}</p>
+      <a href="${waLink}" target="_blank" class="hero-btn" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:#000;box-shadow:0 0 60px ${p.glow};">${cta} →</a>
+      <p class="hero-phone">📱 ${c.whats||''}</p>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-bar" style="background:${p.bg};">
+      <div class="stat">
+        <div class="stat-n" style="color:${p.accent};">${c.stat1n||c.clientes||'500+'}</div>
+        <div class="stat-l">${c.stat1l||'clientes atendidos'}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" style="color:${p.accent};">${c.stat2n||c.anos||'10'}+</div>
+        <div class="stat-l">${c.stat2l||'anos de experiência'}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" style="color:${p.accent};">${c.stat3n||'★4.9'}</div>
+        <div class="stat-l">${c.stat3l||'avaliação média'}</div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    ${services.length?`
+    <section class="services" style="background:${p.bg};">
+      <div class="services-inner">
+        <div class="section-tag" style="color:${p.accent};">NOSSOS SERVIÇOS</div>
+        <div class="section-title">O QUE OFERECEMOS</div>
+        <div class="services-grid">
+          ${services.map(s=>`<div class="service-item" style="background:${p.card};border-color:${p.cardBorder};border-left-color:${p.accent};">${s}</div>`).join('')}
+        </div>
+      </div>
+    </section>`:''}
+
+    <!-- DIFERENCIAIS -->
+    ${diffs.length?`
+    <section class="diffs" style="background:${p.card};border-top:1px solid ${p.cardBorder};border-bottom:1px solid ${p.cardBorder};">
+      <div class="diffs-inner">
+        <div class="section-tag" style="color:${p.accent};">POR QUE NOS ESCOLHER</div>
+        <div class="section-title">NOSSOS DIFERENCIAIS</div>
+        <div class="diff-tags">
+          ${diffs.map(d=>`<div class="diff-tag" style="background:${p.card};border:1px solid ${p.cardBorder};color:${p.accent};">✓ ${d}</div>`).join('')}
+        </div>
+      </div>
+    </section>`:''}
+
+    <!-- TESTIMONIAL -->
+    <section class="testi" style="background:${p.bg};">
+      <div class="testi-inner">
+        <div class="testi-stars" style="color:${p.accent};">★★★★★</div>
+        <blockquote>${testi}</blockquote>
+        <cite>${testiAutor}</cite>
+      </div>
+    </section>
+
+    <!-- PHOTOS -->
+    ${photosHTML}
+
+    <!-- CTA FINAL -->
+    <section class="cta-final" style="background:radial-gradient(ellipse at 50% 100%,${p.glow},${p.bg} 70%),${p.bg};">
+      <h2>PRONTO PARA COMEÇAR?</h2>
+      <p>Entre em contato agora e descubra como podemos transformar seus resultados.</p>
+      <a href="${waLink}" target="_blank" class="hero-btn" style="background:linear-gradient(135deg,${p.accent},${p.accent}cc);color:#000;font-size:17px;padding:20px 56px;box-shadow:0 0 60px ${p.glow};">${cta} →</a>
+      <p style="margin-top:20px;font-size:13px;opacity:0.35;">📱 ${c.whats||''}</p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background:${p.bg};">
+      © ${new Date().getFullYear()} ${c.empresa} · Desenvolvido por <span style="color:${p.accent};">iGence Marketing Inteligente</span>
+    </footer>
+
+    <!-- WHATSAPP FLOAT -->
+    <a href="${waLink}" target="_blank" class="wa-btn" title="Falar no WhatsApp">💬</a>
+  `;
+
+  // Aplica cor de fundo no body
+  document.body.style.background = p.bg;
+
+  // Mostra a página
+  document.getElementById('loadingScreen').style.display='none';
+  document.getElementById('page').style.display='block';
+}
+
+// Inicia
+loadPage();
+</script>
+</body>
+</html>

@@ -892,6 +892,10 @@
           <label>WhatsApp de Contato *</label>
           <input type="text" id="inp_whats" placeholder="(11) 99999-9999">
         </div>
+        <div class="form-group">
+          <label>Seu Email * (será seu login no painel)</label>
+          <input type="email" id="inp_email" placeholder="seuemail@gmail.com">
+        </div>
         <div class="form-group" style="grid-column:1/-1;">
           <label>O que você oferece? (Serviços principais) *</label>
           <textarea id="inp_servicos" placeholder="Ex: Defesa em processos trabalhistas, consultoria jurídica, rescisão de contrato..."></textarea>
@@ -1168,9 +1172,10 @@ function closeModal(id) {
 
 function proceedToPayment() {
   const empresa = document.getElementById('inp_empresa').value;
-  const whats = document.getElementById('inp_whats').value;
-  if (!empresa || !whats) {
-    alert('Por favor, preencha pelo menos o nome da empresa e o WhatsApp.');
+  const whats   = document.getElementById('inp_whats').value;
+  const email   = document.getElementById('inp_email').value;
+  if (!empresa || !whats || !email) {
+    alert('Por favor, preencha nome da empresa, WhatsApp e email.');
     return;
   }
   closeModal('createModal');
@@ -1178,13 +1183,53 @@ function proceedToPayment() {
   document.body.style.overflow = 'hidden';
 }
 
-function confirmPayment() {
-  const empresa = document.getElementById('inp_empresa').value || 'Empresa';
-  const whats = document.getElementById('inp_whats').value || '—';
-  document.getElementById('panelEmpresa').textContent = empresa;
-  document.getElementById('panelWhats').textContent = whats;
-  closeModal('paymentModal');
-  document.getElementById('successModal').classList.add('active');
+async function confirmPayment() {
+  const empresa = document.getElementById('inp_empresa').value.trim();
+  const whats   = document.getElementById('inp_whats').value.trim();
+  const email   = document.getElementById('inp_email').value.trim();
+
+  if (!empresa || !whats || !email) {
+    alert('Por favor, preencha nome da empresa, WhatsApp e email!');
+    return;
+  }
+
+  // Botões de confirmar
+  document.querySelectorAll('.confirm-btn').forEach(b => {
+    b.disabled = true;
+    b.textContent = '⏳ Aguarde...';
+  });
+
+  try {
+    // Chama a Edge Function do Supabase para criar preferência no Mercado Pago
+    const res = await fetch(
+      'https://cfaitsaplpbanfzzaoxr.supabase.co/functions/v1/create-payment',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plano: selectedPlanGlobal || 'pro',
+          empresa,
+          whats,
+          email,
+          nome: empresa,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error);
+
+    // Redireciona para o checkout do Mercado Pago
+    window.location.href = data.init_point;
+
+  } catch (err) {
+    alert('Erro ao processar pagamento: ' + err.message);
+    document.querySelectorAll('.confirm-btn').forEach(b => {
+      b.disabled = false;
+      b.textContent = '✅ CONFIRMAR PAGAMENTO';
+    });
+  }
 }
 
 function showPaymentMethod(m) {
