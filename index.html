@@ -1000,25 +1000,12 @@
 
     <!-- CARTÃO -->
     <div id="cartaoSection" style="display:none;">
-      <div class="form-grid">
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Número do Cartão</label>
-          <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
-        </div>
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Nome no Cartão</label>
-          <input type="text" placeholder="Como está impresso no cartão">
-        </div>
-        <div class="form-group">
-          <label>Validade</label>
-          <input type="text" placeholder="MM/AA" maxlength="5">
-        </div>
-        <div class="form-group">
-          <label>CVV</label>
-          <input type="text" placeholder="123" maxlength="4">
-        </div>
+      <div style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:24px;text-align:center;margin-bottom:16px;">
+        <div style="font-size:40px;margin-bottom:10px;">💳</div>
+        <div style="font-size:14px;color:#ccc;margin-bottom:6px;">Cartão de Crédito</div>
+        <div style="font-size:12px;color:#888;">Você será redirecionado ao checkout seguro do Mercado Pago para inserir os dados do cartão.</div>
       </div>
-      <button class="confirm-btn" style="margin-top:16px;" onclick="confirmPayment()">💳 PAGAR R$97,00</button>
+      <button class="confirm-btn" style="margin-top:8px;" onclick="confirmPayment()">💳 CONTINUAR PARA O PAGAMENTO</button>
     </div>
 
     <!-- BOLETO -->
