@@ -280,6 +280,28 @@
   .mini-section { padding:12px 16px; }
   .mini-cards { display:flex; gap:6px; margin-top:8px; }
   .mini-card { flex:1; padding:8px 6px; border-radius:4px; font-size:7px; text-align:center; }
+
+  /* UPLOAD GALLERY */
+  .upload-gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:8px; margin-top:12px; }
+  .gallery-thumb { position:relative; aspect-ratio:1; border-radius:6px; overflow:hidden; border:1px solid #333; }
+  .gallery-thumb img { width:100%; height:100%; object-fit:cover; }
+  .gallery-thumb .rm-btn { position:absolute; top:3px; right:3px; background:rgba(0,0,0,0.7); border:none; color:#fff; width:18px; height:18px; border-radius:50%; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .upload-add-btn { aspect-ratio:1; border:2px dashed #333; border-radius:6px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; font-size:22px; color:#555; transition:all .2s; }
+  .upload-add-btn:hover { border-color:var(--gold); color:var(--gold); }
+  .toggle-row { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .toggle-switch { position:relative; width:44px; height:24px; }
+  .toggle-switch input { opacity:0; width:0; height:0; }
+  .toggle-slider { position:absolute; inset:0; background:#333; border-radius:24px; cursor:pointer; transition:.3s; }
+  .toggle-slider:before { content:''; position:absolute; width:18px; height:18px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.3s; }
+  .toggle-switch input:checked + .toggle-slider { background:var(--gold); }
+  .toggle-switch input:checked + .toggle-slider:before { transform:translateX(20px); }
+
+  /* PREVIEW MODAL */
+  .preview-modal { background:#0a0a0a; border:1px solid #333; border-radius:12px; max-width:960px; width:100%; position:relative; animation:modalIn .4s ease; overflow:hidden; }
+  .preview-topbar { background:#111; border-bottom:1px solid #222; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; }
+  .preview-browser-bar { background:#1a1a1a; border-radius:6px; padding:6px 14px; font-size:11px; color:#555; font-family:monospace; flex:1; margin:0 16px; }
+  .preview-frame { height:65vh; overflow-y:auto; }
+  .preview-footer { background:#111; border-top:1px solid #222; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
   .mini-testi { padding:8px 16px; border-radius:4px; margin-top:6px; font-size:7px; font-style:italic; }
   .mini-cta { padding:12px 16px; text-align:center; }
   .mini-cta-h { font-family:'Bebas Neue',sans-serif; font-size:14px; margin-bottom:6px; }
@@ -940,7 +962,44 @@
       </div>
 
       <div style="margin-top:24px;">
-        <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">5. Paleta de Cores</div>
+        <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">5. Imagem de Banner (Opcional)</div>
+        <div style="font-size:12px;color:#666;margin-bottom:10px;">Foto principal do hero da sua página — foto sua, do escritório ou do produto.</div>
+        <div class="upload-area" onclick="document.getElementById('bannerInput').click()" id="bannerUploadArea">
+          <div style="font-size:40px;">🖼️</div>
+          <p>Clique para fazer upload do banner</p>
+          <p style="font-size:11px;margin-top:4px;">JPG ou PNG • Recomendado: 1200x600px</p>
+          <input type="file" id="bannerInput" style="display:none;" accept="image/*" onchange="previewBanner(this)">
+        </div>
+        <div id="bannerPreview" style="display:none;margin-top:12px;border-radius:8px;overflow:hidden;position:relative;">
+          <img id="bannerImg" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;">
+          <button onclick="removeBanner()" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);border:none;color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">✕ Remover</button>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">6. Galeria de Fotos</div>
+        <div class="toggle-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="useGalleryToggle" onchange="toggleGallery(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+          <span style="font-size:13px;color:#aaa;">Quero adicionar fotos na minha página <span style="color:#666;font-size:11px;">(depoimentos, equipe, estrutura...)</span></span>
+        </div>
+        <div id="gallerySection" style="display:none;">
+          <div style="font-size:12px;color:#666;margin-bottom:12px;">Adicione até 20 fotos. Elas aparecerão na galeria/depoimentos da sua página.</div>
+          <div class="upload-gallery-grid" id="galleryGrid">
+            <div class="upload-add-btn" onclick="document.getElementById('galleryInput').click()" id="galleryAddBtn">
+              <div>＋</div>
+              <div style="font-size:10px;margin-top:4px;">Adicionar</div>
+            </div>
+          </div>
+          <input type="file" id="galleryInput" style="display:none;" accept="image/*" multiple onchange="addGalleryPhotos(this)">
+          <div style="font-size:11px;color:#555;margin-top:8px;" id="galleryCount">0 / 20 fotos</div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">7. Paleta de Cores</div>
         <div style="font-size:13px;color:#777;margin-bottom:10px;">Escolha a combinação que representa sua marca:</div>
         <div class="color-options" id="colorOptions">
           <div class="color-opt active" style="background:linear-gradient(135deg,#F5A623,#e8940a);" data-palette="gold" title="Dourado Profissional"></div>
@@ -957,8 +1016,36 @@
 
     <div class="modal-footer">
       <div class="price-tag">Plano Mensal: <strong>R$97</strong><span style="font-size:11px;">/mês</span></div>
-      <button class="btn-primary" onclick="proceedToPayment()" style="font-size:15px;padding:16px 36px;">CONTINUAR PARA PAGAMENTO →</button>
+      <button class="btn-primary" onclick="openPreviewModal()" style="font-size:15px;padding:16px 36px;">👁️ VER PRÉVIA DA MINHA PÁGINA →</button>
     </div>
+  </div>
+</div>
+
+<!-- ======== MODAL: PREVIEW ======== -->
+<div class="modal-overlay" id="previewModal">
+  <div style="display:flex;align-items:flex-start;justify-content:center;min-height:100%;padding:20px;">
+  <div class="preview-modal">
+    <div class="preview-topbar">
+      <div style="display:flex;gap:6px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:#ff5f57;"></div>
+        <div style="width:12px;height:12px;border-radius:50%;background:#febc2e;"></div>
+        <div style="width:12px;height:12px;border-radius:50%;background:#28c840;"></div>
+      </div>
+      <div class="preview-browser-bar" id="previewUrl">igence.vercel.app/page?id=suaempresa</div>
+      <button onclick="closeModal('previewModal')" style="background:none;border:none;color:#666;font-size:22px;cursor:pointer;">×</button>
+    </div>
+    <div class="preview-frame" id="previewFrame"></div>
+    <div class="preview-footer">
+      <div>
+        <div style="font-size:13px;color:#aaa;">Gostou da prévia?</div>
+        <div style="font-size:11px;color:#555;">Nossa equipe finaliza tudo em até 3 horas após o pagamento</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="closeModal('previewModal')" style="background:transparent;border:1px solid #333;color:#888;padding:12px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;">✏️ Editar</button>
+        <button onclick="goToPayment()" style="background:var(--gold);color:#000;border:none;padding:12px 28px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:900;letter-spacing:1px;">✅ CONFIRMAR E PAGAR →</button>
+      </div>
+    </div>
+  </div>
   </div>
 </div>
 
@@ -990,8 +1077,8 @@
         <div style="font-size:12px;color:#4ade80;font-weight:700;margin-bottom:8px;">PAGAMENTO VIA PIX</div>
         <div class="pix-amount">R$ 97,00</div>
         <div style="font-size:12px;color:#888;margin-bottom:12px;">Primeiro mês • Cobrado mensalmente</div>
-        <div style="font-size:11px;color:#888;margin-bottom:6px;">Chave PIX (Telefone):</div>
-        <div class="pix-key" id="pixKey">19974038092 — Lucas Pereira Melgaço</div>
+        <div style="font-size:11px;color:#888;margin-bottom:6px;">Chave PIX (CNPJ):</div>
+        <div class="pix-key" id="pixKey">12.345.678/0001-99 — iGence Marketing Inteligente</div>
         <button class="copy-btn" onclick="copyPix()">📋 Copiar Chave PIX</button>
         <div style="font-size:11px;color:#555;margin-top:10px;">Após o pagamento, clique em "Confirmar Pagamento"</div>
       </div>
@@ -1000,12 +1087,25 @@
 
     <!-- CARTÃO -->
     <div id="cartaoSection" style="display:none;">
-      <div style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:24px;text-align:center;margin-bottom:16px;">
-        <div style="font-size:40px;margin-bottom:10px;">💳</div>
-        <div style="font-size:14px;color:#ccc;margin-bottom:6px;">Cartão de Crédito</div>
-        <div style="font-size:12px;color:#888;">Você será redirecionado ao checkout seguro do Mercado Pago para inserir os dados do cartão.</div>
+      <div class="form-grid">
+        <div class="form-group" style="grid-column:1/-1;">
+          <label>Número do Cartão</label>
+          <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label>Nome no Cartão</label>
+          <input type="text" placeholder="Como está impresso no cartão">
+        </div>
+        <div class="form-group">
+          <label>Validade</label>
+          <input type="text" placeholder="MM/AA" maxlength="5">
+        </div>
+        <div class="form-group">
+          <label>CVV</label>
+          <input type="text" placeholder="123" maxlength="4">
+        </div>
       </div>
-      <button class="confirm-btn" style="margin-top:8px;" onclick="confirmPayment()">💳 CONTINUAR PARA O PAGAMENTO</button>
+      <button class="confirm-btn" style="margin-top:16px;" onclick="confirmPayment()">💳 PAGAR R$97,00</button>
     </div>
 
     <!-- BOLETO -->
@@ -1253,6 +1353,169 @@ function previewLogo(input) {
     document.getElementById('logoPreview').style.display = 'block';
   };
   reader.readAsDataURL(file);
+}
+
+// Banner
+function previewBanner(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('bannerImg').src = e.target.result;
+    document.getElementById('bannerPreview').style.display = 'block';
+    document.getElementById('bannerUploadArea').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+function removeBanner() {
+  document.getElementById('bannerImg').src = '';
+  document.getElementById('bannerPreview').style.display = 'none';
+  document.getElementById('bannerUploadArea').style.display = 'block';
+  document.getElementById('bannerInput').value = '';
+}
+
+// Gallery
+let galleryPhotos = [];
+function toggleGallery(on) {
+  document.getElementById('gallerySection').style.display = on ? 'block' : 'none';
+}
+function addGalleryPhotos(input) {
+  const files = Array.from(input.files);
+  const remaining = 20 - galleryPhotos.length;
+  const toAdd = files.slice(0, remaining);
+  toAdd.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      galleryPhotos.push(e.target.result);
+      renderGalleryGrid();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+function removeGalleryPhoto(idx) {
+  galleryPhotos.splice(idx, 1);
+  renderGalleryGrid();
+}
+function renderGalleryGrid() {
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+  galleryPhotos.forEach((src, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'gallery-thumb';
+    thumb.innerHTML = `<img src="${src}"><button class="rm-btn" onclick="removeGalleryPhoto(${i})">✕</button>`;
+    grid.appendChild(thumb);
+  });
+  if(galleryPhotos.length < 20) {
+    const addBtn = document.createElement('div');
+    addBtn.className = 'upload-add-btn';
+    addBtn.onclick = () => document.getElementById('galleryInput').click();
+    addBtn.innerHTML = '<div>＋</div><div style="font-size:10px;margin-top:4px;">Adicionar</div>';
+    grid.appendChild(addBtn);
+  }
+  document.getElementById('galleryCount').textContent = `${galleryPhotos.length} / 20 fotos`;
+}
+
+// Preview Modal
+const paletteColors = {
+  gold: {primary:'#F5A623', secondary:'#e8940a', bg:'#0a0a0a', text:'#fff'},
+  blue: {primary:'#0ea5e9', secondary:'#0284c7', bg:'#020f1a', text:'#fff'},
+  green: {primary:'#059669', secondary:'#047857', bg:'#021a0f', text:'#fff'},
+  purple: {primary:'#9333ea', secondary:'#7c3aed', bg:'#0d0214', text:'#fff'},
+  red: {primary:'#dc2626', secondary:'#b91c1c', bg:'#1a0202', text:'#fff'},
+  navy: {primary:'#4a90d9', secondary:'#1e3a5f', bg:'#020810', text:'#fff'},
+  orange: {primary:'#fb923c', secondary:'#ea580c', bg:'#1a0800', text:'#fff'},
+  pink: {primary:'#ec4899', secondary:'#db2777', bg:'#1a0210', text:'#fff'},
+};
+
+function openPreviewModal() {
+  const empresa = document.getElementById('inp_empresa').value.trim();
+  const whats   = document.getElementById('inp_whats').value.trim();
+  const email   = document.getElementById('inp_email').value.trim();
+  if (!empresa || !whats || !email) {
+    alert('Por favor, preencha pelo menos: Nome da Empresa, WhatsApp e Email.');
+    return;
+  }
+  const servicos = document.getElementById('inp_servicos').value.trim();
+  const diff     = document.getElementById('inp_diff').value.trim();
+  const clientes = document.getElementById('inp_clientes').value.trim();
+  const anos     = document.getElementById('inp_anos').value.trim();
+  const cta      = document.getElementById('inp_cta').value;
+  const logoSrc  = document.getElementById('logoImg').src || '';
+  const bannerSrc= document.getElementById('bannerImg').src || '';
+  const activePalette = document.querySelector('.color-opt.active')?.dataset.palette || 'gold';
+  const colors   = paletteColors[activePalette] || paletteColors.gold;
+  const slug     = empresa.toLowerCase().replace(/[^a-z0-9]/g,'');
+  const nicho    = document.querySelector('.nicho-opt.active')?.dataset.nicho || '';
+
+  document.getElementById('previewUrl').textContent = `igence.vercel.app/page?id=${slug}`;
+
+  const servicosList = servicos ? servicos.split(',').map(s=>`<li style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;color:#ccc;">✓ ${s.trim()}</li>`).join('') : '<li style="font-size:13px;color:#ccc;padding:6px 0;">✓ Serviços profissionais</li>';
+
+  const galleryHtml = galleryPhotos.length > 0 ? `
+    <div style="padding:40px 30px;background:#111;">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:10px;letter-spacing:3px;color:${colors.primary};margin-bottom:8px;">GALERIA</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;">NOSSA ESTRUTURA</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">
+        ${galleryPhotos.slice(0,9).map(src=>`<img src="${src}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;">`).join('')}
+      </div>
+    </div>` : '';
+
+  const bannerHtml = bannerSrc && bannerSrc !== window.location.href ? `<img src="${bannerSrc}" style="width:100%;max-height:220px;object-fit:cover;">` : `<div style="width:100%;height:180px;background:linear-gradient(135deg,${colors.primary}22,${colors.secondary}44);display:flex;align-items:center;justify-content:center;font-size:40px;">🏢</div>`;
+
+  const logoHtml = logoSrc && logoSrc !== window.location.href ? `<img src="${logoSrc}" style="max-height:50px;max-width:160px;object-fit:contain;">` : `<div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${colors.primary};letter-spacing:2px;">${empresa.toUpperCase()}</div>`;
+
+  document.getElementById('previewFrame').innerHTML = `
+    <div style="font-family:'Montserrat',sans-serif;background:${colors.bg};color:${colors.text};min-height:100%;">
+      <!-- NAV -->
+      <div style="background:rgba(0,0,0,0.9);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:10;">
+        ${logoHtml}
+        <a href="https://wa.me/55${whats.replace(/\D/g,'')}" style="background:${colors.primary};color:#000;padding:8px 16px;border-radius:4px;font-size:11px;font-weight:900;text-decoration:none;letter-spacing:1px;">${cta.toUpperCase()}</a>
+      </div>
+      <!-- HERO -->
+      <div style="padding:50px 30px;text-align:center;background:linear-gradient(135deg,${colors.bg},${colors.primary}15);">
+        <div style="font-size:10px;letter-spacing:3px;color:${colors.primary};margin-bottom:12px;font-weight:700;">${anos ? anos + ' DE EXPERIÊNCIA' : 'PROFISSIONAL'}</div>
+        <h1 style="font-family:'Bebas Neue',sans-serif;font-size:42px;line-height:1.1;margin-bottom:16px;">${empresa.toUpperCase()}</h1>
+        <p style="font-size:13px;color:#aaa;max-width:500px;margin:0 auto 24px;line-height:1.7;">${diff || 'Atendimento profissional e personalizado para você'}</p>
+        ${clientes ? `<div style="display:inline-block;background:${colors.primary}22;border:1px solid ${colors.primary}44;border-radius:20px;padding:6px 16px;font-size:11px;color:${colors.primary};font-weight:700;margin-bottom:20px;">+${clientes} clientes atendidos</div>` : ''}
+        <br>
+        <a href="https://wa.me/55${whats.replace(/\D/g,'')}" style="display:inline-block;background:${colors.primary};color:#000;padding:14px 32px;border-radius:4px;font-size:13px;font-weight:900;text-decoration:none;letter-spacing:1px;">${cta.toUpperCase()} →</a>
+      </div>
+      <!-- BANNER -->
+      ${bannerHtml}
+      <!-- SERVIÇOS -->
+      <div style="padding:40px 30px;background:#0d0d0d;">
+        <div style="text-align:center;margin-bottom:24px;">
+          <div style="font-size:10px;letter-spacing:3px;color:${colors.primary};margin-bottom:8px;">O QUE OFERECEMOS</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;">NOSSOS SERVIÇOS</div>
+        </div>
+        <ul style="list-style:none;max-width:500px;margin:0 auto;">${servicosList}</ul>
+      </div>
+      <!-- GALERIA -->
+      ${galleryHtml}
+      <!-- CTA FINAL -->
+      <div style="padding:50px 30px;text-align:center;background:linear-gradient(135deg,${colors.primary}22,${colors.bg});">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;margin-bottom:12px;">PRONTO PARA COMEÇAR?</div>
+        <p style="font-size:13px;color:#aaa;margin-bottom:24px;">Entre em contato agora e transforme seu negócio</p>
+        <a href="https://wa.me/55${whats.replace(/\D/g,'')}" style="display:inline-block;background:#25D366;color:#000;padding:14px 32px;border-radius:4px;font-size:13px;font-weight:900;text-decoration:none;">💬 FALAR NO WHATSAPP</a>
+      </div>
+      <!-- FOOTER -->
+      <div style="padding:20px 30px;text-align:center;border-top:1px solid #222;font-size:11px;color:#444;">
+        © 2025 ${empresa} — Desenvolvido por iGence
+      </div>
+    </div>`;
+
+  closeModal('createModal');
+  document.getElementById('previewModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function goToPayment() {
+  closeModal('previewModal');
+  document.getElementById('paymentModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
 // Color selector
