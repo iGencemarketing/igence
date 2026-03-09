@@ -478,9 +478,10 @@ async function generatePage(){
 
   addLog('✅ Conta criada! Salvando dados...',45);await delay(300);
 
+  const slug=empresa.toLowerCase().replace(/[^a-z0-9]/g,'');
   const pageUrl=document.getElementById('m_domain').value.trim()
     ?'https://'+document.getElementById('m_domain').value.trim()
-    :'https://'+empresa.toLowerCase().replace(/[^a-z0-9]/g,'')+'.igence.com.br';
+    :'https://igence.vercel.app/page?id='+slug;
 
   const rec={
     user_id:signUpData.user?.id||null,
